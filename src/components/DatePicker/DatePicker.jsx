@@ -33,16 +33,15 @@ const DatePicker = (props) => {
   }
 
   return (
-    <View>
+    <View style={styles.dataPickerBody}>
       <TouchableOpacity style={styles.btnData} onPress={showDatePicker}>
         <Text style={{ color: "#b3b3b3", paddingLeft: 10 }}>
           {showDefaultText()}
         </Text>
 
         <DateTimePickerModal
-          {...props}
           isVisible={isDatePickerVisible}
-          mode="date"
+          mode="datetime"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
           display="spinner"
@@ -52,7 +51,7 @@ const DatePicker = (props) => {
           buttonTextColorIOS="#45C4B0"
           cancelTextIOS="Sair"
           confirmTextIOS="Confirmar"
-          isDarkModeEnabled={false}
+          isDarkModeEnabled={true}
         />
       </TouchableOpacity>
     </View>

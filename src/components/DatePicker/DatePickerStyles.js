@@ -4,7 +4,7 @@ import {
 
 const styles = StyleSheet.create({
     btnData: {
-        width: 330,
+        width: "100%",
         height: 50,
         backgroundColor: 'white',
         borderRadius: 10,
@@ -19,6 +19,12 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderWidth: 1,
     },
+    dataPickerBody: {
+        display: "flex",
+        width: "80%",
+        alignItems: "center",
+        justifyContent: "center",
+    }
 })
 
 export default styles;

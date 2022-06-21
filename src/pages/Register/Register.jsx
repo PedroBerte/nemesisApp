@@ -40,7 +40,7 @@ const Register = () => {
     return /\d/.test(_string);
   }
 
-  async function RegisterUser() {
+  function RegisterUser() {
     try {
       if ((name, email, password, confirmPassword == "")) {
         Toast.show({ type: "error", text1: "Não deixe campos vazios!" });
@@ -54,7 +54,15 @@ const Register = () => {
         Toast.show({ type: "error", text1: "As senhas não coincidem!" });
         return;
       }
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      console.warn("ue");
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.warn(errorCode);
+        });
       Toast.show({ type: "success", text1: "Apenas mais um passo..." });
       setIsCreated(true);
     } catch (error) {
@@ -65,7 +73,6 @@ const Register = () => {
   return (
     <>
       <Statusbar />
-
       <SafeAreaView style={styles.bar}>
         <ScrollView>
           <View style={styles.toast}>
