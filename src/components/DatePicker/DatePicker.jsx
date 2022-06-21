@@ -41,17 +41,15 @@ const DatePicker = (props) => {
 
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
-          mode="datetime"
+          mode="date"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
-          display="spinner"
-          textColor="black"
+          display="default"
           locale="pt-BR"
-          style={{ width: "100%" }}
           buttonTextColorIOS="#45C4B0"
           cancelTextIOS="Sair"
           confirmTextIOS="Confirmar"
-          isDarkModeEnabled={true}
+          isDarkModeEnabled="false"
         />
       </TouchableOpacity>
     </View>

@@ -34,7 +34,7 @@ const Register = () => {
   const [weight, setWeight] = useState("");
   const [goal, setGoal] = useState("");
 
-  const [isCreated, setIsCreated] = useState(true);
+  const [isCreated, setIsCreated] = useState(false);
 
   function stringContainsNumber(_string) {
     return /\d/.test(_string);
@@ -115,6 +115,7 @@ const Register = () => {
               </View>
             ) : (
               <View style={styles.containerInput}>
+                <Statusbar />
                 <DatePicker />
                 <InputSelect
                   onChange={(option) => setSex(option.label)}

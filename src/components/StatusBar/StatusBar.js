@@ -8,7 +8,7 @@ class Statusbar extends Component {
       <View style={styles.StatusBar}>
         <StatusBar
           animated={true}
-          backgroundColor="#C5DEC0"
+          backgroundColor="#9aeba3"
           barStyle="dark-content"
           hidden={false}
         />
@@ -22,7 +22,7 @@ class Statusbar extends Component {
 const styles = StyleSheet.create({
   StatusBar: {
     height: Constants.statusBarHeight,
-    backgroundColor: "#C5DEC0",
+    backgroundColor: "#9aeba3",
   },
 });
 
