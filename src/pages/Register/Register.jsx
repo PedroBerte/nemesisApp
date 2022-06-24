@@ -11,7 +11,8 @@ import {
 } from "react-native";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./../../services/firebase-config";
+import { auth, db } from "./../../services/firebase-config";
+import { setDoc, doc, updateDoc } from "firebase/firestore";
 
 import styles from "./RegisterStyles";
 
@@ -20,19 +21,25 @@ import InputSelect from "../../components/InputSelect/InputSelect";
 import DatePicker from "../../components/DatePicker/DatePicker";
 
 import Toast from "react-native-toast-message";
+import moment from "moment";
 
 import { heightList, sexList, weightList, goalList } from "./Wordlists";
 
 const Register = () => {
+  moment().format();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [bornDate, setBornDate] = useState("");
   const [sex, setSex] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [goal, setGoal] = useState("");
+
+  const [userUID, setUserUID] = useState("");
 
   const [isCreated, setIsCreated] = useState(false);
 
@@ -40,33 +47,164 @@ const Register = () => {
     return /\d/.test(_string);
   }
 
-  function RegisterUser() {
-    try {
-      if ((name, email, password, confirmPassword == "")) {
-        Toast.show({ type: "error", text1: "Não deixe campos vazios!" });
-        return;
+  function handleHeightNumber(height) {
+    if (height.indexOf(".") > -1) {
+      return height.replace(".", "");
+    } else {
+      return height;
+    }
+  }
+
+  function getCurrentDate(age) {
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    function formatMonth(month) {
+      if (String(month).length > 1) {
+        return month;
+      } else {
+        return `0${month}`;
       }
-      if (stringContainsNumber(name)) {
-        Toast.show({ type: "error", text1: "Insira um nome valido!" });
-        return;
+    }
+
+    function formatDay(day) {
+      if (String(day).length > 1) {
+        return day;
+      } else {
+        return `0${day}`;
       }
-      if (password != confirmPassword) {
-        Toast.show({ type: "error", text1: "As senhas não coincidem!" });
-        return;
+    }
+
+    if (age > 0) {
+      return `${year - age}-${formatMonth(month)}-${formatDay(day)}`;
+    } else {
+      return `${year}-${formatMonth(month)}-${formatDay(day)}`;
+    }
+  }
+
+  async function registerUser() {
+    if (!isCreated) {
+      try {
+        if ((name, email, password, confirmPassword == "")) {
+          Toast.show({ type: "error", text1: "Não deixe campos vazios!" });
+          return;
+        }
+        if (stringContainsNumber(name)) {
+          Toast.show({ type: "error", text1: "Insira um nome valido!" });
+          return;
+        }
+        if (password != confirmPassword) {
+          Toast.show({ type: "error", text1: "As senhas não coincidem!" });
+          return;
+        }
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        setUserUID(user.user.uid);
+        Toast.show({ type: "success", text1: "Apenas mais um passo..." });
+        setIsCreated(true);
+      } catch (error) {
+        if (error.code == "auth/weak-password") {
+          Toast.show({
+            type: "error",
+            text1: "Sua senha deve ter mais de 6 caracteres!",
+          });
+          return;
+        }
+        if (error.code == "auth/email-already-in-use") {
+          Toast.show({
+            type: "error",
+            text1: "Este e-mail já esta em uso!",
+          });
+          return;
+        }
       }
-      console.warn("ue");
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          console.warn(errorCode);
+    } else {
+      if ((bornDate, sex, height, weight, goal == "")) {
+        Toast.show({
+          type: "error",
+          text1: "Não deixe campos vazios!",
         });
-      Toast.show({ type: "success", text1: "Apenas mais um passo..." });
-      setIsCreated(true);
-    } catch (error) {
-      Toast.show({ type: "error", text1: error });
+        return;
+      }
+      try {
+        if (String(getCurrentDate()) == bornDate) {
+          Toast.show({
+            type: "error",
+            text1: "Insira uma data de nascimento válida!",
+          });
+          return;
+        }
+        if (moment(bornDate).isAfter(getCurrentDate())) {
+          Toast.show({
+            type: "error",
+            text1: "Insira uma data de nascimento válida!",
+          });
+          return;
+        }
+        if (moment(bornDate).isAfter(getCurrentDate(12))) {
+          Toast.show({
+            type: "error",
+            text1:
+              "Apenas pessoas com mais de 12 anos podem se cadastrar no Nemesis!",
+          });
+          return;
+        }
+        if (moment(bornDate).isBefore(getCurrentDate(80))) {
+          Toast.show({
+            type: "error",
+            text1: "A idade máxima é 80 anos!",
+          });
+          return;
+        }
+        if (weight < 40) {
+          Toast.show({
+            type: "error",
+            text1: "O peso mínimo é de 40Kg!",
+          });
+          return;
+        }
+        if (weight > 200) {
+          Toast.show({
+            type: "error",
+            text1: "O peso máximo é de 200Kg!",
+          });
+          return;
+        }
+        if (handleHeightNumber(height) < 145) {
+          Toast.show({
+            type: "error",
+            text1: "A altura mínima é de 1,45M!",
+          });
+          return;
+        }
+        if (handleHeightNumber(height) > 220) {
+          Toast.show({
+            type: "error",
+            text1: "A altura máxima é de 2,20M!",
+          });
+          return;
+        }
+        await setDoc(doc(db, "users", userUID), {
+          uid: userUID,
+          name: name,
+          email: email,
+          date: bornDate,
+          Sex: sex,
+          Height: handleHeightNumber(height),
+          Weight: weight,
+          Goal: goal,
+        });
+      } catch (error) {
+        Toast.show({
+          type: "error",
+          text1: error.message,
+        });
+      }
     }
   }
 
@@ -78,7 +216,6 @@ const Register = () => {
           <View style={styles.toast}>
             <Toast />
           </View>
-
           <View style={styles.container}>
             <Image
               style={styles.image}
@@ -115,8 +252,7 @@ const Register = () => {
               </View>
             ) : (
               <View style={styles.containerInput}>
-                <Statusbar />
-                <DatePicker />
+                <DatePicker onConfirm={(event) => setBornDate(event)} />
                 <InputSelect
                   onChange={(option) => setSex(option.label)}
                   data={sexList}
@@ -139,10 +275,9 @@ const Register = () => {
                 />
               </View>
             )}
-
             <TouchableOpacity
               style={styles.btnCadastro}
-              onPress={() => RegisterUser()}
+              onPress={() => registerUser()}
             >
               <Text
                 style={{

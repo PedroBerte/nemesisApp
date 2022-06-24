@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 
 import styles from "./InputSelectStyles";
 
@@ -43,7 +42,7 @@ const InputSelect = (props) => {
       }}
       optionStyle={{ height: 50, alignContent: "center", alignItems: "center" }}
       optionTextStyle={{ color: "#525252", fontSize: 20, paddingTop: 5 }}
-      backdropPressToClose="true"
+      backdropPressToClose={true}
     />
   );
 };
