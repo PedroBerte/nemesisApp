@@ -6,17 +6,17 @@ const styles = StyleSheet.create({
       marginTop: "-5%",
       alignItems: "center",
       justifyContent: "center",
-      paddingTop: "48%",
+      paddingTop: "25%",
       backgroundColor: "#EBEBEB",
 
     },
 
     container: {
       width: "100%",
-      marginTop: "-15%",
+      // marginTop: "-15%",
       alignItems: "center",
       justifyContent: "center",
-      paddingTop: "5%",
+      // paddingTop: "5%",
       backgroundColor: "#EBEBEB",
     },
 
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
       height: 100,
       resizeMode: "contain",
       marginBottom: 50,
+      marginTop: "10%"
     },
   
     textInput: {
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: "#EBEBEB",
       color: "#EBEBEB",
+      
     },
   });
 

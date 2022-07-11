@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -75,97 +76,99 @@ const Register = () => {
       <Statusbar />
       <SafeAreaView style={styles.bar}>
         <ScrollView>
-          <View style={styles.toast}>
-            <Toast />
-          </View>
+          <KeyboardAvoidingView behavior="position" enabled>
+            <View style={styles.toast}>
+              <Toast />
+            </View>
 
-          <View style={styles.container}>
-            <Image
-              style={styles.image}
-              source={require("../../assets/NemesisV1.1.png")}
-            />
-            {!isCreated ? (
-              <View style={styles.containerInput}>
-                <TextInput
-                  placeholder="Nome Completo"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setName(text)}
-                />
-                <TextInput
-                  placeholder="Email"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setEmail(text)}
-                />
-                <TextInput
-                  secureTextEntry={true}
-                  placeholder="Senha"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setPassword(text)}
-                />
-                <TextInput
-                  secureTextEntry={true}
-                  placeholder="Confirme Sua Senha"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setConfirmPassword(text)}
-                />
-              </View>
-            ) : (
-              <View style={styles.containerInput}>
-                <Statusbar />
-                <DatePicker />
-                <InputSelect
-                  onChange={(option) => setSex(option.label)}
-                  data={sexList}
-                  initValue="Sexo"
-                />
-                <InputSelect
-                  onChange={(option) => setWeight(option.label)}
-                  data={weightList}
-                  initValue="Peso"
-                />
-                <InputSelect
-                  onChange={(option) => setHeight(option.label)}
-                  data={heightList}
-                  initValue="Altura"
-                />
-                <InputSelect
-                  onChange={(option) => setGoal(option.label)}
-                  data={goalList}
-                  initValue="Objetivo"
-                />
-              </View>
-            )}
+            <View style={styles.container}>
+              <Image
+                style={styles.image}
+                source={require("../../assets/NemesisV1.1.png")}
+              />
+              {!isCreated ? (
+                <View style={styles.containerInput}>
+                  <TextInput
+                    placeholder="Nome Completo"
+                    placeholderTextColor="#b3b3b3"
+                    style={styles.textInput}
+                    onChangeText={(text) => setName(text)}
+                  />
+                  <TextInput
+                    placeholder="Email"
+                    placeholderTextColor="#b3b3b3"
+                    style={styles.textInput}
+                    onChangeText={(text) => setEmail(text)}
+                  />
+                  <TextInput
+                    secureTextEntry={true}
+                    placeholder="Senha"
+                    placeholderTextColor="#b3b3b3"
+                    style={styles.textInput}
+                    onChangeText={(text) => setPassword(text)}
+                  />
+                  <TextInput
+                    secureTextEntry={true}
+                    placeholder="Confirme Sua Senha"
+                    placeholderTextColor="#b3b3b3"
+                    style={styles.textInput}
+                    onChangeText={(text) => setConfirmPassword(text)}
+                  />
+                </View>
+              ) : (
+                <View style={styles.containerInput}>
+                  {/* <Statusbar /> */}
+                  <DatePicker />
+                  <InputSelect
+                    onChange={(option) => setSex(option.label)}
+                    data={sexList}
+                    initValue="Sexo"
+                  />
+                  <InputSelect
+                    onChange={(option) => setWeight(option.label)}
+                    data={weightList}
+                    initValue="Peso"
+                  />
+                  <InputSelect
+                    onChange={(option) => setHeight(option.label)}
+                    data={heightList}
+                    initValue="Altura"
+                  />
+                  <InputSelect
+                    onChange={(option) => setGoal(option.label)}
+                    data={goalList}
+                    initValue="Objetivo"
+                  />
+                </View>
+              )}
 
-            <TouchableOpacity
-              style={styles.btnCadastro}
-              onPress={() => RegisterUser()}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                }}
+              <TouchableOpacity
+                style={styles.btnCadastro}
+                onPress={() => RegisterUser()}
               >
-                Cadastrar
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnContaExistente}>
-              <Text
-                style={{
-                  color: "#1F67A9",
-                  textAlign: "center",
-                  fontStyle: "italic",
-                }}
-              >
-                Já tem uma conta? Faça Login
-              </Text>
-            </TouchableOpacity>
-          </View>
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Cadastrar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.btnContaExistente}>
+                <Text
+                  style={{
+                    color: "#1F67A9",
+                    textAlign: "center",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Já tem uma conta? Faça Login
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
         </ScrollView>
       </SafeAreaView>
     </>

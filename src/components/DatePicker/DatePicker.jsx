@@ -44,12 +44,11 @@ const DatePicker = (props) => {
           mode="date"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
-          display="default"
+          display="spinner"
           locale="pt-BR"
           buttonTextColorIOS="#45C4B0"
           cancelTextIOS="Sair"
           confirmTextIOS="Confirmar"
-          isDarkModeEnabled="false"
         />
       </TouchableOpacity>
     </View>
