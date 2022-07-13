@@ -214,7 +214,6 @@ const Register = () => {
       <Statusbar />
       <SafeAreaView style={styles.bar}>
         <ScrollView>
-<<<<<<< HEAD
           <KeyboardAvoidingView behavior="position" enabled>
             <View style={styles.toast}>
               <Toast />
@@ -284,80 +283,6 @@ const Register = () => {
               <TouchableOpacity
                 style={styles.btnCadastro}
                 onPress={() => RegisterUser()}
-=======
-          <View style={styles.toast}>
-            <Toast />
-          </View>
-          <View style={styles.container}>
-            <Image
-              style={styles.image}
-              source={require("../../assets/NemesisV1.1.png")}
-            />
-            {!isCreated ? (
-              <View style={styles.containerInput}>
-                <TextInput
-                  placeholder="Nome Completo"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setName(text)}
-                />
-                <TextInput
-                  placeholder="Email"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setEmail(text)}
-                />
-                <TextInput
-                  secureTextEntry={true}
-                  placeholder="Senha"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setPassword(text)}
-                />
-                <TextInput
-                  secureTextEntry={true}
-                  placeholder="Confirme Sua Senha"
-                  placeholderTextColor="#b3b3b3"
-                  style={styles.textInput}
-                  onChangeText={(text) => setConfirmPassword(text)}
-                />
-              </View>
-            ) : (
-              <View style={styles.containerInput}>
-                <DatePicker onConfirm={(event) => setBornDate(event)} />
-                <InputSelect
-                  onChange={(option) => setSex(option.label)}
-                  data={sexList}
-                  initValue="Sexo"
-                />
-                <InputSelect
-                  onChange={(option) => setWeight(option.label)}
-                  data={weightList}
-                  initValue="Peso"
-                />
-                <InputSelect
-                  onChange={(option) => setHeight(option.label)}
-                  data={heightList}
-                  initValue="Altura"
-                />
-                <InputSelect
-                  onChange={(option) => setGoal(option.label)}
-                  data={goalList}
-                  initValue="Objetivo"
-                />
-              </View>
-            )}
-            <TouchableOpacity
-              style={styles.btnCadastro}
-              onPress={() => registerUser()}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                }}
->>>>>>> 273bbfdfaa800e3d580659358975fdb462baa747
               >
                 <Text
                   style={{
