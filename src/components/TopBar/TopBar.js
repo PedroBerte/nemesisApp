@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function TopBar({ navigation }) {
+import { useNavigation } from "@react-navigation/native";
+
+export default function TopBar() {
+  const navigation = useNavigation();
   return (
     <>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("UserAccount")}>
+        <TouchableOpacity onPress={() => navigation.navigate("home")}>
           <Image
             source={require("../../assets/logo.png")}
             style={{ width: 40, height: 50 }}

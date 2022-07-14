@@ -17,7 +17,6 @@ import { setDoc, doc, updateDoc } from "firebase/firestore";
 
 import styles from "./RegisterStyles";
 
-import Statusbar from "../../components/StatusBar/StatusBar";
 import InputSelect from "../../components/InputSelect/InputSelect";
 import DatePicker from "../../components/DatePicker/DatePicker";
 
@@ -211,7 +210,6 @@ const Register = () => {
 
   return (
     <>
-      <Statusbar />
       <SafeAreaView style={styles.bar}>
         <ScrollView>
           <KeyboardAvoidingView behavior="position" enabled>
@@ -255,7 +253,6 @@ const Register = () => {
                 </View>
               ) : (
                 <View style={styles.containerInput}>
-                  {/* <Statusbar /> */}
                   <DatePicker />
                   <InputSelect
                     onChange={(option) => setSex(option.label)}
