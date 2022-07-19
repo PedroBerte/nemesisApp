@@ -13,14 +13,14 @@ export default function TopBar() {
   return (
     <>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate("home")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Image
             source={require("../../assets/logo.png")}
             style={{ width: 40, height: 50 }}
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("UserAccount")}>
           <Image
             source={require("../../assets/user.png")}
             style={{ width: 40, height: 40 }}
@@ -33,7 +33,7 @@ export default function TopBar() {
 }
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "white",
+    backgroundColor: "translucent",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

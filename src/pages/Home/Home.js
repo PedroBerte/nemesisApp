@@ -7,9 +7,6 @@ export default function Home({ navigation }) {
     <>
       <View style={styles.container}>
         <Text style={styles.text}>Página Inicial</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("UserAccount")}>
-          <Text>IBSSUH</Text>
-        </TouchableOpacity>
       </View>
     </>
   );
