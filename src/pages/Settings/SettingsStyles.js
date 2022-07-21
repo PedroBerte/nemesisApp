@@ -112,6 +112,47 @@ const SettingsStyles = StyleSheet.create({
     marginLeft: 25,
     marginTop: 20,
   },
+
+  modal: {
+    backgroundColor:'#fff',
+    borderRadius: 10,
+    paddingBottom: 50,
+    marginHorizontal: '4%'
+  },
+
+  modalTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between'
+  },
+
+  headerText: {
+    fontSize: 21,
+    marginLeft: 25,
+    marginTop: 25,
+    color: '#303030'
+  },
+
+  logo: {
+    width: 22,
+    height: 34,
+    marginRight: 25,
+    marginTop: 25
+  },
+
+  modalImage: {
+    alignItems: 'center',
+    marginTop: 25,
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  
+  modalData: {
+    marginLeft: 50,
+    flexDirection: 'row',
+    marginBottom: 5,    
+  }
+
 });
 
 export default SettingsStyles;

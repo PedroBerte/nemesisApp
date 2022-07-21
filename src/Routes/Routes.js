@@ -13,7 +13,7 @@ export default function NewRoutes() {
   const Stack = createNativeStackNavigator();
   return (
     <>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: "fade" }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="UserAccount" component={UserAccount} />
         <Stack.Screen name="Workouts" component={Workouts} />

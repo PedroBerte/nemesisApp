@@ -1,21 +1,87 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   TouchableOpacity,
-  SafeAreaView,
+
 } from "react-native";
 
-import TopBar from "../../components/TopBar/TopBar";
 import SettingsStyles from "./SettingsStyles";
 
+import Modal from "react-native-modal";
+
 export default function Settings() {
+
+  const [visible, setVisible] = useState(false)
+
   return (
     <>
-     
+    
+  
+     <Modal
+     isVisible={visible}
+     onBackdropPress={() => setVisible(false)}
+     onBackButtonPress={() => setVisible(false)}
+     hideModalContentWhileAnimating={true}
+     animationIn="fadeIn"
+     animationOut="fadeOut"
+     animationInTiming={500} 
+     animationOutTiming={500}
+     >
+
+     <View style={SettingsStyles.modal}>
+      <View style={SettingsStyles.modalTop}>
+      <Text style ={SettingsStyles.headerText}>Informações da conta:</Text>
+      <Image
+       source={require("../../assets/logo.png")}
+       style={SettingsStyles.logo}
+       resizeMode="contain"
+       />
+       </View>
+
+    <View style={SettingsStyles.modalImage}>
+      <Image
+            source={require("../../assets/PerfilIcon.png")}
+            style={{width: 105, height: 105, marginBottom: 5}}
+            resizeMode="contain"
+          />
+      <Text style={{marginBottom: 30}}>Leonardo Enrico Luccarelli</Text>
+    </View>
+      <View style={SettingsStyles.modalData}>
+        <Text style={{fontWeight: 'bold'}}>Email:  </Text>
+        <Text>leoluccarelli7@gmail.com</Text>
+      </View>
+
+      <View style={SettingsStyles.modalData}>
+        <Text style={{fontWeight: 'bold'}}>Data de nascimento:  </Text>
+        <Text>08/06/2005</Text>
+      </View>
+
+      <View style={SettingsStyles.modalData}>
+        <Text style={{fontWeight: 'bold'}}>Sexo:  </Text>
+        <Text>Masculino</Text>
+      </View>
+
+      <View style={SettingsStyles.modalData}>
+        <Text style={{fontWeight: 'bold'}}>Peso:  </Text>
+        <Text>83Kg</Text>
+      </View>
+
+      <View style={SettingsStyles.modalData}>
+        <Text style={{fontWeight: 'bold'}}>Objetivo:  </Text>
+        <Text>Perda de Peso</Text>
+      </View>
+
+      <View style={SettingsStyles.modalData}>
+        <Text style={{fontWeight: 'bold'}}>Altura:  </Text>
+        <Text>183cm</Text>
+      </View>
+      </View>
+     </Modal>
+
+
       <View style={SettingsStyles.container}>
         <Text style={SettingsStyles.text}>Configurações da Conta
         </Text>
@@ -39,7 +105,9 @@ export default function Settings() {
             Nascido em: 08/06/2005
           </Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {setVisible(true)}}
+          >
             <Text style={SettingsStyles.modalButton}>
               Ler mais...
             </Text>
