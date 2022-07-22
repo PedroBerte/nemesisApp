@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 
 import {
@@ -8,67 +7,10 @@ import {
   TouchableOpacity,
   SafeAreaView
 } from "react-native";
-=======
-import React, { useState } from "react";
-
-import { View, Text, Image, TouchableOpacity } from "react-native";
->>>>>>> c141249f6295996cbe79095347e6cbb8ad0054e6
 
 import SettingsStyles from "./SettingsStyles";
 
 import Modal from "react-native-modal";
-<<<<<<< HEAD
-import Toast from "react-native-toast-message";
-
-import { auth, db } from "./../../services/firebase-config";
-import { setDoc, getDoc, doc, updateDoc } from "firebase/firestore";
-import {
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  deleteUser,
-} from "firebase/auth";
-
-export default function Settings() {
-
-  const [accountVisible, setAccountVisible] = useState(false);
-  const changePassword = () => {
-    Toast.show({
-      type: 'success',
-      text1: 'Hello',
-      text2: 'This is some something 👋'
-    });
-  }
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [bornDate, setBornDate] = useState("");
-  const [sex, setSex] = useState("");
-  const [weight, setWeight] = useState("");
-  const [goal, setGoal] = useState("");
-  const [height, setHeight] = useState("");
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-  },[])
-
-  return (
-    <>
-    <SafeAreaView style={SettingsStyles.container}>
-    <View style={SettingsStyles.toast}>
-     <Toast/>
-     </View>
-     <Modal
-     isVisible={accountVisible}
-     onBackdropPress={() => setAccountVisible(false)}
-     onBackButtonPress={() => setAccountVisible(false)}
-     hideModalContentWhileAnimating={true}
-     animationIn="fadeIn"
-     animationOut="fadeOut"
-     animationInTiming={500} 
-     animationOutTiming={500}
-     >
-=======
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
 
@@ -97,7 +39,6 @@ export default function Settings() {
               resizeMode="contain"
             />
           </View>
->>>>>>> c141249f6295996cbe79095347e6cbb8ad0054e6
 
           <View style={SettingsStyles.modalImage}>
             <Image
@@ -158,13 +99,7 @@ export default function Settings() {
           </Text>
 
           <TouchableOpacity
-<<<<<<< HEAD
             onPress={() => {setAccountVisible(true)}}
-=======
-            onPress={() => {
-              setVisible(true);
-            }}
->>>>>>> c141249f6295996cbe79095347e6cbb8ad0054e6
           >
             <Text style={SettingsStyles.modalButton}>Ler mais...</Text>
           </TouchableOpacity>
@@ -174,15 +109,10 @@ export default function Settings() {
           <View style={SettingsStyles.changePasswordView}>
             <Text style={SettingsStyles.tittleText}>Alterar senha:</Text>
 
-<<<<<<< HEAD
             <TouchableOpacity onPress={changePassword} style={SettingsStyles.changeDeleteButton}>
               <Text style={SettingsStyles.buttonText}>
                 Alterar Senha
               </Text>
-=======
-            <TouchableOpacity style={SettingsStyles.changeDeleteButton}>
-              <Text style={SettingsStyles.buttonText}>Alterar Senha</Text>
->>>>>>> c141249f6295996cbe79095347e6cbb8ad0054e6
             </TouchableOpacity>
           </View>
 
@@ -211,11 +141,6 @@ export default function Settings() {
           </View>
         </View>
       </View>
-<<<<<<< HEAD
-      </SafeAreaView>
-=======
-      <TabBar />
->>>>>>> c141249f6295996cbe79095347e6cbb8ad0054e6
     </>
   );
 }
