@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <TopBar />
-      <Text>oi</Text>
+      <Text>PEDROOOOOOOOOOOOOOOO</Text>
       <View style={styles.container}>
         <Text style={styles.text}>Página Inicial</Text>
       </View>
