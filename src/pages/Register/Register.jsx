@@ -278,8 +278,8 @@ const Register = () => {
               )}
 
               <TouchableOpacity
-                style={styles.btnCadastro}
-                onPress={() => RegisterUser()}
+                style={styles.btnRegister}
+                onPress={() => registerUser()}
               >
                 <Text
                   style={{
@@ -291,7 +291,7 @@ const Register = () => {
                   Cadastrar
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btnContaExistente}>
+              <TouchableOpacity style={styles.btnAlreadyHaveAnAccount}>
                 <Text
                   style={{
                     color: "#1F67A9",

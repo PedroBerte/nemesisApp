@@ -11,22 +11,12 @@ import {onAuthStateChanged} from "firebase/auth";
 import { AuthContext } from "./src/context/AuthContext";
 
 export default function App() {
-  // const { user, setUser } = useContext(AuthContext);
-
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (currentUser) => {
-  //     setUser(currentUser);
-  //   });
-  //   console.warn(user);
-  // });
   return (
     <NavigationContainer>
-      <StatusBarComponent />
-      <TopBar />
-      <Routes />
-      <TabBar />
+      <AuthContextProvider>
+        <StatusBarComponent />
+        <Routes />
+      </AuthContextProvider>
     </NavigationContainer>
   );
 }
