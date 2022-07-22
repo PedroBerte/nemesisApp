@@ -1,7 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
-import TabBar from "../../components/TabBar/TabBar";
-import TopBar from "../../components/TopBar/TopBar";
 import UserAccount from "../UserAccount/UserAccount";
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
@@ -10,6 +8,7 @@ export default function Home() {
   return (
     <>
       <TopBar />
+      <Text>oi</Text>
       <View style={styles.container}>
         <Text style={styles.text}>Página Inicial</Text>
       </View>
