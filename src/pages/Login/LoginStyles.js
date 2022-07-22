@@ -30,14 +30,6 @@ const styles = StyleSheet.create({
     borderColor: "#C6C6C6",
     borderWidth: 1,
   },
-  btnRegister: {
-    width: "40%",
-    height: 50,
-    backgroundColor: "#45c4b0",
-    borderRadius: 10,
-    justifyContent: "center",
-    marginTop: 20,
-  },
   rightDiv: {
     width: "80%",
     marginTop: -15,

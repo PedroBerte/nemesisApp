@@ -7,6 +7,7 @@ import { collection, getDocs } from "firebase/firestore";
 import styles from "./LoginStyles.js";
 
 import { AuthContext } from "../../context/AuthContext";
+import Button from "../../components/Button/Button.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -52,21 +53,7 @@ export default function Login() {
               Esqueceu sua senha?
             </Text>
           </View>
-
-          <TouchableOpacity
-            style={styles.btnRegister}
-            onPress={() => trySignIn(email, password)}
-          >
-            <Text
-              style={{
-                color: "white",
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              Cadastrar
-            </Text>
-          </TouchableOpacity>
+          <Button onPress={() => trySignIn(email, password)}>Login</Button>
         </View>
       </View>
     </>
