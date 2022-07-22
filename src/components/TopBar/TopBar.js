@@ -31,7 +31,7 @@ export default function TopBar() {
 }
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "translucent",
+    backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

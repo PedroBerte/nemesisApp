@@ -24,6 +24,7 @@ import Toast from "react-native-toast-message";
 import moment from "moment";
 
 import { heightList, sexList, weightList, goalList } from "./Wordlists";
+import Button from "../../components/Button/Button";
 
 const Register = () => {
   moment().format();
@@ -276,21 +277,7 @@ const Register = () => {
                   />
                 </View>
               )}
-
-              <TouchableOpacity
-                style={styles.btnRegister}
-                onPress={() => registerUser()}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Cadastrar
-                </Text>
-              </TouchableOpacity>
+              <Button onPress={() => registerUser()}>Cadastre-se</Button>
               <TouchableOpacity style={styles.btnAlreadyHaveAnAccount}>
                 <Text
                   style={{
