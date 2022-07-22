@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import Toast from "react-native-toast-message";
 
 import { collection, getDocs } from "firebase/firestore";

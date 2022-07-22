@@ -8,7 +8,7 @@ import Register from './src/pages/Register/Register'
 import { auth, db } from "./src/services/firebase-config";
 import { setDoc, getDoc, doc, updateDoc } from "firebase/firestore";
 import {onAuthStateChanged} from "firebase/auth";
-import { AuthContext } from "./src/context/AuthContext";
+import  AuthContextProvider  from "./src/context/AuthContext";
 
 export default function App() {
   return (

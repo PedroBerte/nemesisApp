@@ -5,12 +5,15 @@ const SettingsStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingTop: 25,
     display: 'flex',
     justifyContent: 'flex-start'
   },
   toast: {
     backgroundColor: "#EBEBEB",
+    
+  },
+  content: {
+    marginTop: 35,
   },
   text: {
     fontSize: 23,

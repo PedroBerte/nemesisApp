@@ -14,12 +14,24 @@ import Modal from "react-native-modal";
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
 
+import Toast from "react-native-toast-message";
+
 export default function Settings() {
   const [visible, setVisible] = useState(false);
 
+  const changePassword = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Hello',
+      text2: 'This is some something 👋'
+    });
+  }
+
   return (
     <>
+    <SafeAreaView style={SettingsStyles.container}>
       <TopBar />
+    <Toast topOffset={15}/>
       <Modal
         isVisible={visible}
         onBackdropPress={() => setVisible(false)}
@@ -80,7 +92,7 @@ export default function Settings() {
         </View>
       </Modal>
 
-      <View style={SettingsStyles.container}>
+      <View style={SettingsStyles.content}>
         <Text style={SettingsStyles.text}>Configurações da Conta</Text>
 
         <View style={SettingsStyles.personalInformationView}>
@@ -99,7 +111,7 @@ export default function Settings() {
           </Text>
 
           <TouchableOpacity
-            onPress={() => {setAccountVisible(true)}}
+            onPress={() => {setVisible(true)}}
           >
             <Text style={SettingsStyles.modalButton}>Ler mais...</Text>
           </TouchableOpacity>
@@ -107,7 +119,7 @@ export default function Settings() {
 
         <View>
           <View style={SettingsStyles.changePasswordView}>
-            <Text style={SettingsStyles.tittleText}>Alterar senha:</Text>
+            <Text style={SettingsStyles.tittleText}>Alterar senha</Text>
 
             <TouchableOpacity onPress={changePassword} style={SettingsStyles.changeDeleteButton}>
               <Text style={SettingsStyles.buttonText}>
@@ -126,7 +138,7 @@ export default function Settings() {
 
           <View>
             <View style={SettingsStyles.deleteAccountView}>
-              <Text style={SettingsStyles.tittleText}>Excluir conta:</Text>
+              <Text style={SettingsStyles.tittleText}>Excluir conta</Text>
 
               <TouchableOpacity style={SettingsStyles.changeDeleteButton}>
                 <Text style={SettingsStyles.buttonText}>Excluir conta</Text>
@@ -139,8 +151,29 @@ export default function Settings() {
               </Text>
             </View>
           </View>
+
+          <View style={SettingsStyles.spacer} />
+
+          <View>
+            <View style={SettingsStyles.deleteAccountView}>
+              <Text style={SettingsStyles.tittleText}>Finalizar Sessão</Text>
+
+              <TouchableOpacity style={SettingsStyles.changeDeleteButton}>
+                <Text style={SettingsStyles.buttonText}>Finalizar Sessão</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ marginLeft: 25, width: "62%" }}>
+              <Text style={SettingsStyles.detailsText}>
+                Exclua todos os seus dados, preferências e acesso a conta.
+              </Text>
+            </View>
+          </View>
+
         </View>
       </View>
+    </SafeAreaView>
+  <TabBar/>
     </>
   );
 }

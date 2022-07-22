@@ -7,10 +7,17 @@ export const AuthContext = createContext({});
 
 function AuthContextProvider(props) {
   const [user, setUser] = useState("");
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  }, []);
   const signIn = (email, password) => {
     if ((email, password == "")) {
       return;
     }
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user);
