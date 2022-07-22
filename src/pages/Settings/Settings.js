@@ -1,29 +1,60 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
-
+  SafeAreaView
 } from "react-native";
 
 import SettingsStyles from "./SettingsStyles";
 
 import Modal from "react-native-modal";
+import Toast from "react-native-toast-message";
+
+import { auth, db } from "./../../services/firebase-config";
+import { setDoc, getDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  deleteUser,
+} from "firebase/auth";
 
 export default function Settings() {
 
-  const [visible, setVisible] = useState(false)
+  const [accountVisible, setAccountVisible] = useState(false);
+  const changePassword = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Hello',
+      text2: 'This is some something 👋'
+    });
+  }
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [bornDate, setBornDate] = useState("");
+  const [sex, setSex] = useState("");
+  const [weight, setWeight] = useState("");
+  const [goal, setGoal] = useState("");
+  const [height, setHeight] = useState("");
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  },[])
 
   return (
     <>
-    
-  
+    <SafeAreaView style={SettingsStyles.container}>
+    <View style={SettingsStyles.toast}>
+     <Toast/>
+     </View>
      <Modal
-     isVisible={visible}
-     onBackdropPress={() => setVisible(false)}
-     onBackButtonPress={() => setVisible(false)}
+     isVisible={accountVisible}
+     onBackdropPress={() => setAccountVisible(false)}
+     onBackButtonPress={() => setAccountVisible(false)}
      hideModalContentWhileAnimating={true}
      animationIn="fadeIn"
      animationOut="fadeOut"
@@ -106,7 +137,7 @@ export default function Settings() {
           </Text>
 
           <TouchableOpacity
-            onPress={() => {setVisible(true)}}
+            onPress={() => {setAccountVisible(true)}}
           >
             <Text style={SettingsStyles.modalButton}>
               Ler mais...
@@ -120,7 +151,7 @@ export default function Settings() {
               Alterar senha: 
             </Text>
 
-            <TouchableOpacity style={SettingsStyles.changeDeleteButton}>
+            <TouchableOpacity onPress={changePassword} style={SettingsStyles.changeDeleteButton}>
               <Text style={SettingsStyles.buttonText}>
                 Alterar Senha
               </Text>
@@ -156,6 +187,7 @@ export default function Settings() {
           </View>
         </View>
       </View>
+      </SafeAreaView>
     </>
   );
 }

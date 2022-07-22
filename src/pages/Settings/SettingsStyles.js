@@ -9,6 +9,9 @@ const SettingsStyles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start'
   },
+  toast: {
+    backgroundColor: "#EBEBEB",
+  },
   text: {
     fontSize: 23,
     fontWeight: "bold",
