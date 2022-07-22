@@ -1,19 +1,19 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
+import TabBar from "../../components/TabBar/TabBar";
+import TopBar from "../../components/TopBar/TopBar";
 import UserAccount from "../UserAccount/UserAccount";
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
 
-export default function Home({ navigation }) {
+export default function Home() {
   return (
     <>
-  <SafeAreaView style={styles.container}>
-    <TopBar />
+      <TopBar />
       <View style={styles.container}>
         <Text style={styles.text}>Página Inicial</Text>
       </View>
-      </SafeAreaView>
-      <TabBar/>
+      <TabBar />
     </>
   );
 }
@@ -21,6 +21,7 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
