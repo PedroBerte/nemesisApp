@@ -1,16 +1,29 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
-export const AuthContext = createContext();
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../services/firebase-config";
 
-export default function AuthContextProvider(props) {
-  const [user, setUser] = useState();
-  const [userInformation, setUserInformation] = useState();
+export const AuthContext = createContext({});
 
+function AuthContextProvider(props) {
+  const [user, setUser] = useState("");
+  const signIn = (email, password) => {
+    if ((email, password == "")) {
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        setUser(userCredential.user);
+      })
+      .catch((error) => {
+        console.error(error.code);
+        console.error(error.message);
+      });
+  };
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, userInformation, setUserInformation }}
-    >
+    <AuthContext.Provider value={{ user, setUser, signIn }}>
       {props.children}
     </AuthContext.Provider>
   );
 }
+export default AuthContextProvider;
