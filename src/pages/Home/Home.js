@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import UserAccount from "../UserAccount/UserAccount";
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
 
+import { AuthContext } from "../../context/AuthContext";
+
 export default function Home() {
+  const { logout } = useContext(AuthContext);
   return (
     <>
       <TopBar />

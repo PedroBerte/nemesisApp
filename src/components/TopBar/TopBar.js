@@ -5,14 +5,17 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 import { useNavigation } from "@react-navigation/native";
 
 export default function TopBar() {
+  const { logout } = useContext(AuthContext);
   const navigation = useNavigation();
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={() => logout()}>
         <Image
           source={require("../../assets/logo.png")}
           style={{ width: 40, height: 50 }}
