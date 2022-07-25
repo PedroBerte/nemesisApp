@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import { View } from "react-native";
+
 import LottieView from "lottie-react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -14,7 +16,19 @@ const SplashScreen = () => {
   }, []);
 
   return (
-    <LottieView source={require("../../assets/data.json")} autoPlay loop />
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <LinearGradient
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        colors={["#FFF", "#C5DEC0"]}
+        style={{ width: "100%", height: "100%" }}
+      />
+      <LottieView
+        source={require("../../assets/data.json")}
+        autoPlay
+        loop={false}
+      />
+    </View>
   );
 };
 

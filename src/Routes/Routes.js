@@ -15,13 +15,7 @@ import AuthContextProvider from "../context/AuthContext";
 import { AuthContext } from "../context/AuthContext";
 
 export default function NewRoutes() {
-  const {
-    user,
-    setUser,
-    userInformation,
-    animationIsEnded,
-    setAnimationIsEnded,
-  } = useContext(AuthContext);
+  const { user, animationIsEnded } = useContext(AuthContext);
 
   const Stack = createNativeStackNavigator();
 
@@ -32,7 +26,7 @@ export default function NewRoutes() {
       >
         {animationIsEnded ? (
           <>
-            {user.uid == undefined ? (
+            {user?.uid == undefined ? (
               <Stack.Screen name="Login" component={Login} />
             ) : (
               <>
