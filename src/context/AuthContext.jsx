@@ -7,12 +7,14 @@ export const AuthContext = createContext({});
 
 function AuthContextProvider(props) {
   const [user, setUser] = useState("");
+  const [animationIsEnded, setAnimationIsEnded] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
   }, []);
+
   const signIn = (email, password) => {
     if ((email, password == "")) {
       return;
@@ -28,7 +30,9 @@ function AuthContextProvider(props) {
       });
   };
   return (
-    <AuthContext.Provider value={{ user, setUser, signIn }}>
+    <AuthContext.Provider
+      value={{ user, setUser, signIn, animationIsEnded, setAnimationIsEnded }}
+    >
       {props.children}
     </AuthContext.Provider>
   );
