@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import {
   View,
@@ -14,10 +14,88 @@ import Modal from "react-native-modal";
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
 
-import Toast from "react-native-toast-message";
+import Toast, { BaseToast } from "react-native-toast-message";
+import moment from "moment";
+
+import { db } from "../../services/firebase-config";
+import { auth } from "../../services/firebase-config";
+import {
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  deleteUser,
+} from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+
+import { AuthContext } from "../../context/AuthContext";
+
 
 export default function Settings() {
   const [visible, setVisible] = useState(false);
+
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [workout, setWorkout] = useState("");
+  const [goal, setGoal] = useState("");
+  const [email, setEmail] = useState("");
+  const [sex, setSex] =useState("");
+
+  const { user, setUser } = useContext(AuthContext);
+    const userCollectionRef = collection(db, "users");
+  
+    useEffect(() => {
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+      });
+      if (user == undefined) {
+        navigateTo("/");
+      }
+      async function getUserDocs() {
+        if (user != undefined) {
+          const userDocs = await getDoc(doc(db, "users", user.uid));
+          setName(userDocs.data().name);
+          setEmail(userDocs.data().email);
+          setDate(userDocs.data().date);
+          setWeight(userDocs.data().weight);
+          setHeight(userDocs.data().height);
+          setWorkout(userDocs.data().workouts);
+          setGoal(userDocs.data().goal);
+          setSex(userDocs.data().sex);
+        }
+      }
+      getUserDocs();
+    }, [user]);
+
+    useEffect(() => {
+      if (sex == "M") {
+        setSex("Masculino");
+      }
+    }, [sex]);
+  
+
+
+  const toastConfig = {
+   
+
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: '#EBE143' }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: '400'
+        }}
+      />
+    )
+      }
 
   const changePassword = () => {
     Toast.show({
@@ -31,7 +109,7 @@ export default function Settings() {
     <>
     <SafeAreaView style={SettingsStyles.container}>
       <TopBar />
-    <Toast topOffset={15}/>
+    <Toast topOffset={10} config={toastConfig}/>
       <Modal
         isVisible={visible}
         onBackdropPress={() => setVisible(false)}
@@ -44,7 +122,7 @@ export default function Settings() {
       >
         <View style={SettingsStyles.modal}>
           <View style={SettingsStyles.modalTop}>
-            <Text style={SettingsStyles.headerText}>Informações da conta:</Text>
+            <Text style={SettingsStyles.headerText}>Informaçôes da conta:</Text>
             <Image
               source={require("../../assets/logo.png")}
               style={SettingsStyles.logo}
@@ -58,36 +136,36 @@ export default function Settings() {
               style={{ width: 105, height: 105, marginBottom: 5 }}
               resizeMode="contain"
             />
-            <Text style={{ marginBottom: 30 }}>Leonardo Enrico Luccarelli</Text>
+            <Text style={{ marginBottom: 30 }}>{name}</Text>
           </View>
           <View style={SettingsStyles.modalData}>
             <Text style={{ fontWeight: "bold" }}>Email: </Text>
-            <Text>leoluccarelli7@gmail.com</Text>
+            <Text>{email}</Text>
           </View>
 
           <View style={SettingsStyles.modalData}>
             <Text style={{ fontWeight: "bold" }}>Data de nascimento: </Text>
-            <Text>08/06/2005</Text>
+            <Text>{date}</Text>
           </View>
 
           <View style={SettingsStyles.modalData}>
             <Text style={{ fontWeight: "bold" }}>Sexo: </Text>
-            <Text>Masculino</Text>
+            <Text>{sex}</Text>
           </View>
 
           <View style={SettingsStyles.modalData}>
             <Text style={{ fontWeight: "bold" }}>Peso: </Text>
-            <Text>83Kg</Text>
+            <Text>{weight}Kg</Text>
           </View>
 
           <View style={SettingsStyles.modalData}>
             <Text style={{ fontWeight: "bold" }}>Objetivo: </Text>
-            <Text>Perda de Peso</Text>
+            <Text>{goal}</Text>
           </View>
 
           <View style={SettingsStyles.modalData}>
             <Text style={{ fontWeight: "bold" }}>Altura: </Text>
-            <Text>183cm</Text>
+            <Text>{height}cm</Text>
           </View>
         </View>
       </Modal>
@@ -102,12 +180,12 @@ export default function Settings() {
             resizeMode="contain"
           />
 
-          <Text style={SettingsStyles.userName}>Leonardo Luccarelli</Text>
+          <Text style={SettingsStyles.userName}>{name}</Text>
 
-          <Text style={SettingsStyles.userEmail}>leoluccarelli7@gmail.com</Text>
+          <Text style={SettingsStyles.userEmail}>{email}</Text>
 
           <Text style={SettingsStyles.userBornDate}>
-            Nascido em: 08/06/2005
+            Nascido em: {date}
           </Text>
 
           <TouchableOpacity
@@ -121,7 +199,7 @@ export default function Settings() {
           <View style={SettingsStyles.changePasswordView}>
             <Text style={SettingsStyles.tittleText}>Alterar senha</Text>
 
-            <TouchableOpacity onPress={changePassword} style={SettingsStyles.changeDeleteButton}>
+            <TouchableOpacity>
               <Text style={SettingsStyles.buttonText}>
                 Alterar Senha
               </Text>
