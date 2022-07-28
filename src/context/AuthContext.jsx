@@ -15,11 +15,15 @@ function AuthContextProvider(props) {
     });
   }, []);
 
+  function logout() {
+    setUser();
+    setAnimationIsEnded(false);
+  }
+
   const signIn = (email, password) => {
     if ((email, password == "")) {
       return;
     }
-
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user);
@@ -31,7 +35,14 @@ function AuthContextProvider(props) {
   };
   return (
     <AuthContext.Provider
-      value={{ user, setUser, signIn, animationIsEnded, setAnimationIsEnded }}
+      value={{
+        user,
+        setUser,
+        signIn,
+        animationIsEnded,
+        setAnimationIsEnded,
+        logout,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

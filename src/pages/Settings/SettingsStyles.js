@@ -25,41 +25,40 @@ const SettingsStyles = StyleSheet.create({
   personalInformationView: {
     flexDirection: "row",
     display: "flex",
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    marginTop: 30,
+    justifyContent: "space-around"
+
   },
   userImage: {
     width: 105,
-    height: 105,
-    marginTop: 30,
-    marginLeft: 25,
+    height: 105
+  },
+  data: {
+    alignItems: "flex-start"
   },
   userName: {
-    paddingLeft: 65,
-    marginTop: 35,
     fontSize: 20,
+    marginBottom: 7,
     fontWeight: "bold",
     textAlign: "center",
     color: "#303030",
   },
   userEmail: {
-    marginTop: 65,
-    marginLeft: -175,
     fontSize: 15,
+    marginBottom: 3,
     textAlign: "center",
     color: "#303030",
   },
   userBornDate: {
-    marginTop: 90,
-    marginLeft: -175,
+
     fontSize: 15,
     textAlign: "center",
     color: "#303030",
+    marginBottom: 7
   },
-  modalButton: {
-    marginTop: 115,
-    marginLeft: -60,
+  modalButton: {  
     fontSize: 15,
-    textAlign: "center",
     color: "#1E90C0",
   },
   changePasswordView: {
@@ -74,6 +73,7 @@ const SettingsStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#303030",
+    marginLeft: 15
   },
   changeDeleteButton: {
     backgroundColor: "#C44545",
