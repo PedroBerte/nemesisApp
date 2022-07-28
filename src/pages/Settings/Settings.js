@@ -34,6 +34,11 @@ import {
 
 import { AuthContext } from "../../context/AuthContext";
 
+import  Icon  from "react-native-vector-icons/FontAwesome5";
+import  IconAnt  from "react-native-vector-icons/Fontisto";
+
+
+
 
 export default function Settings() {
   const [visible, setVisible] = useState(false);
@@ -90,9 +95,14 @@ export default function Settings() {
         style={{ borderLeftColor: '#EBE143' }}
         contentContainerStyle={{ paddingHorizontal: 15 }}
         text1Style={{
-          fontSize: 15,
+          fontSize: 17,
+          fontWeight: 'bold'
+        }}
+        text2Style={{
+          fontSize: 13,
           fontWeight: '400'
         }}
+
       />
     )
       }
@@ -100,8 +110,8 @@ export default function Settings() {
   const changePassword = () => {
     Toast.show({
       type: 'success',
-      text1: 'Hello',
-      text2: 'This is some something 👋'
+      text1: 'Um email foi lhe enviado',
+      text2: 'Siga as instruçôes para alterar sua senha'
     });
   }
 
@@ -170,6 +180,8 @@ export default function Settings() {
         </View>
       </Modal>
 
+
+
       <View style={SettingsStyles.content}>
         <Text style={SettingsStyles.text}>Configurações da Conta</Text>
 
@@ -180,74 +192,51 @@ export default function Settings() {
             resizeMode="contain"
           />
 
+          <View style={SettingsStyles.data}>
+    
           <Text style={SettingsStyles.userName}>{name}</Text>
+
+          
 
           <Text style={SettingsStyles.userEmail}>{email}</Text>
 
-          <Text style={SettingsStyles.userBornDate}>
-            Nascido em: {date}
-          </Text>
+          <Text style={SettingsStyles.userBornDate}>Nascido em: {date}</Text>
 
+          <View style={{ alignSelf: "flex-end"}}>
           <TouchableOpacity
             onPress={() => {setVisible(true)}}
-          >
+            >
+            
             <Text style={SettingsStyles.modalButton}>Ler mais...</Text>
           </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
         <View>
           <View style={SettingsStyles.changePasswordView}>
+            <TouchableOpacity onPress={changePassword}>
+              <View style={{flexDirection: "row"}}>
+              <Icon name="lock" size={20}/> 
             <Text style={SettingsStyles.tittleText}>Alterar senha</Text>
-
-            <TouchableOpacity>
-              <Text style={SettingsStyles.buttonText}>
-                Alterar Senha
-              </Text>
+          </View>
             </TouchableOpacity>
           </View>
 
-          <View style={{ marginLeft: 25 }}>
-            <Text style={SettingsStyles.detailsText}>
-              Enviaremos um e-mail para você alterar a sua senha.
-            </Text>
-          </View>
-
           <View style={SettingsStyles.spacer} />
 
           <View>
             <View style={SettingsStyles.deleteAccountView}>
+              <TouchableOpacity>
+                <View style={{flexDirection: "row"}}>
+                <IconAnt name="close-a" size={20}/> 
               <Text style={SettingsStyles.tittleText}>Excluir conta</Text>
 
-              <TouchableOpacity style={SettingsStyles.changeDeleteButton}>
-                <Text style={SettingsStyles.buttonText}>Excluir conta</Text>
+    
+                </View>
               </TouchableOpacity>
             </View>
-
-            <View style={{ marginLeft: 25, width: "62%" }}>
-              <Text style={SettingsStyles.detailsText}>
-                Exclua todos os seus dados, preferências e acesso a conta.
-              </Text>
-            </View>
           </View>
-
-          <View style={SettingsStyles.spacer} />
-
-          <View>
-            <View style={SettingsStyles.deleteAccountView}>
-              <Text style={SettingsStyles.tittleText}>Finalizar Sessão</Text>
-
-              <TouchableOpacity style={SettingsStyles.changeDeleteButton}>
-                <Text style={SettingsStyles.buttonText}>Finalizar Sessão</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={{ marginLeft: 25, width: "62%" }}>
-              <Text style={SettingsStyles.detailsText}>
-                Exclua todos os seus dados, preferências e acesso a conta.
-              </Text>
-            </View>
-          </View>
-
         </View>
       </View>
     </SafeAreaView>
