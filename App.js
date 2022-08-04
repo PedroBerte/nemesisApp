@@ -7,9 +7,9 @@ import TabBar from "./src/components/TabBar/TabBar";
 import Register from "./src/pages/Register/Register";
 import { auth, db } from "./src/services/firebase-config";
 import { setDoc, getDoc, doc, updateDoc } from "firebase/firestore";
-import {onAuthStateChanged} from "firebase/auth";
-import  AuthContextProvider  from "./src/context/AuthContext";
-
+import { onAuthStateChanged } from "firebase/auth";
+import AuthContextProvider from "./src/context/AuthContext";
+// import { SignUpContext } from "./src/context/SignUpContext";
 
 export default function App() {
   return (

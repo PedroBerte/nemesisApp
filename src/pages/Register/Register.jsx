@@ -1,33 +1,24 @@
-import React, { Component, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-} from "react-native";
+import React, { useState, useContext } from "react";
+import { View, Image, SafeAreaView } from "react-native";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./../../services/firebase-config";
-import { setDoc, doc, updateDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 import styles from "./RegisterStyles";
 
-import InputSelect from "../../components/InputSelect/InputSelect";
-import DatePicker from "../../components/DatePicker/DatePicker";
-
 import Toast from "react-native-toast-message";
 import moment from "moment";
+import EmailStep from "./EmailStep/EmailStep";
+import UserStep from "./UserStep/UserStep";
 
-import { heightList, sexList, weightList, goalList } from "./Wordlists";
-import Button from "../../components/Button/Button";
+import { AuthContext } from "./../../context/AuthContext";
+import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
 const Register = () => {
   moment().format();
+
+  const { step } = useContext(AuthContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,10 +30,6 @@ const Register = () => {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [goal, setGoal] = useState("");
-
-  const [userUID, setUserUID] = useState("");
-
-  const [isCreated, setIsCreated] = useState(false);
 
   function stringContainsNumber(_string) {
     return /\d/.test(_string);
@@ -86,44 +73,21 @@ const Register = () => {
   }
 
   async function registerUser() {
-    if (!isCreated) {
-      try {
-        if ((name, email, password, confirmPassword == "")) {
-          Toast.show({ type: "error", text1: "Não deixe campos vazios!" });
-          return;
-        }
-        if (stringContainsNumber(name)) {
-          Toast.show({ type: "error", text1: "Insira um nome valido!" });
-          return;
-        }
-        if (password != confirmPassword) {
-          Toast.show({ type: "error", text1: "As senhas não coincidem!" });
-          return;
-        }
-        const user = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        setUserUID(user.user.uid);
-        Toast.show({ type: "success", text1: "Apenas mais um passo..." });
-        setIsCreated(true);
-      } catch (error) {
-        if (error.code == "auth/weak-password") {
-          Toast.show({
-            type: "error",
-            text1: "Sua senha deve ter mais de 6 caracteres!",
-          });
-          return;
-        }
-        if (error.code == "auth/email-already-in-use") {
-          Toast.show({
-            type: "error",
-            text1: "Este e-mail já esta em uso!",
-          });
-          return;
-        }
+    if (step == 0) {
+      if ((name, email, password, confirmPassword == "")) {
+        Toast.show({ type: "error", text1: "Não deixe campos vazios!" });
+        return;
       }
+      if (stringContainsNumber(name)) {
+        Toast.show({ type: "error", text1: "Insira um nome valido!" });
+        return;
+      }
+      if (password != confirmPassword) {
+        Toast.show({ type: "error", text1: "As senhas não coincidem!" });
+        return;
+      }
+      Toast.show({ type: "success", text1: "Apenas mais um passo..." });
+      setStep(1);
     } else {
       if ((bornDate, sex, height, weight, goal == "")) {
         Toast.show({
@@ -190,15 +154,20 @@ const Register = () => {
           });
           return;
         }
-        await setDoc(doc(db, "users", userUID), {
-          uid: userUID,
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
           name: name,
           email: email,
           date: bornDate,
-          Sex: sex,
-          Height: handleHeightNumber(height),
-          Weight: weight,
-          Goal: goal,
+          sex: sex,
+          height: handleHeightNumber(height),
+          weight: weight,
+          goal: goal,
         });
       } catch (error) {
         Toast.show({
@@ -211,87 +180,16 @@ const Register = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.bar}>
-        <ScrollView>
-          <KeyboardAvoidingView behavior="position" enabled>
-            <View style={styles.toast}>
-              <Toast />
-            </View>
-
-            <View style={styles.container}>
-              <Image
-                style={styles.image}
-                source={require("../../assets/NemesisV1.1.png")}
-              />
-              {!isCreated ? (
-                <View style={styles.containerInput}>
-                  <TextInput
-                    placeholder="Nome Completo"
-                    placeholderTextColor="#b3b3b3"
-                    style={styles.textInput}
-                    onChangeText={(text) => setName(text)}
-                  />
-                  <TextInput
-                    placeholder="Email"
-                    placeholderTextColor="#b3b3b3"
-                    style={styles.textInput}
-                    onChangeText={(text) => setEmail(text)}
-                  />
-                  <TextInput
-                    secureTextEntry={true}
-                    placeholder="Senha"
-                    placeholderTextColor="#b3b3b3"
-                    style={styles.textInput}
-                    onChangeText={(text) => setPassword(text)}
-                  />
-                  <TextInput
-                    secureTextEntry={true}
-                    placeholder="Confirme Sua Senha"
-                    placeholderTextColor="#b3b3b3"
-                    style={styles.textInput}
-                    onChangeText={(text) => setConfirmPassword(text)}
-                  />
-                </View>
-              ) : (
-                <View style={styles.containerInput}>
-                  <DatePicker />
-                  <InputSelect
-                    onChange={(option) => setSex(option.label)}
-                    data={sexList}
-                    initValue="Sexo"
-                  />
-                  <InputSelect
-                    onChange={(option) => setWeight(option.label)}
-                    data={weightList}
-                    initValue="Peso"
-                  />
-                  <InputSelect
-                    onChange={(option) => setHeight(option.label)}
-                    data={heightList}
-                    initValue="Altura"
-                  />
-                  <InputSelect
-                    onChange={(option) => setGoal(option.label)}
-                    data={goalList}
-                    initValue="Objetivo"
-                  />
-                </View>
-              )}
-              <Button onPress={() => registerUser()}>Cadastre-se</Button>
-              <TouchableOpacity style={styles.btnAlreadyHaveAnAccount}>
-                <Text
-                  style={{
-                    color: "#1F67A9",
-                    textAlign: "center",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Já tem uma conta? Faça Login
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </KeyboardAvoidingView>
-        </ScrollView>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Image
+              source={require("../../assets/NemesisV1.1.png")}
+              style={styles.logo}
+            />
+          </View>
+          {step == 0 ? <EmailStep /> : <UserStep />}
+        </View>
       </SafeAreaView>
     </>
   );

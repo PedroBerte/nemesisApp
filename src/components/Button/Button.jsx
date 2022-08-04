@@ -20,10 +20,9 @@ export default function Button(props) {
 const styles = {
   btnRegister: {
     width: "40%",
-    height: 50,
+    height: 40,
     backgroundColor: "#45c4b0",
     borderRadius: 10,
     justifyContent: "center",
-    marginTop: 20,
   },
 };
