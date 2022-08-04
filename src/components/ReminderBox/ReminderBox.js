@@ -1,32 +1,30 @@
-import React, {useState} from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity  } from "react-native";
-import { CheckBox } from "react-native-elements";
-import { Icon } from "react-native-vector-icons/EvilIcons";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
 const ReminderBox = (props) => {
-
-  const [isSelected, setSelected] = useState(false)
+  const [isSelected, setSelected] = useState(false);
 
   return (
-    <TouchableOpacity onPress={() => {
+    <TouchableOpacity
+      onPress={() => {
         setSelected(!isSelected);
-      }}>
-    <View style={styles.tasks}>
-      <Text style={styles.taskText}>{props.children}</Text>
+      }}
+    >
+      <View style={styles.tasks}>
+        <Text style={styles.taskText}>{props.children}</Text>
 
-
-    {isSelected == false ?(
-      <Image source={require("../../assets/grayCircle.png")}
-              resizeMode="contain"  
-              />
-      ):( 
-      <Image source={require("../../assets/check.png")}
-              resizeMode="contain"  
-              />
-)}
-     
-
-    </View>
+        {isSelected == false ? (
+          <Image
+            source={require("../../assets/grayCircle.png")}
+            resizeMode="contain"
+          />
+        ) : (
+          <Image
+            source={require("../../assets/check.png")}
+            resizeMode="contain"
+          />
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -41,10 +39,10 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "space-between",
     paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: 'rgba(29, 29, 29, 0.20)',
-    borderWidth: 1
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "rgba(29, 29, 29, 0.20)",
+    borderWidth: 1,
   },
   taskText: {
     fontSize: 15,
