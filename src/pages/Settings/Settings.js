@@ -28,6 +28,8 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+
+import Skeleton from "../../components/Skeleton/Skeleton";
 import { AuthContext } from "../../context/AuthContext";
 
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -46,6 +48,7 @@ export default function Settings() {
   const [goal, setGoal] = useState("");
   const [email, setEmail] = useState("");
   const [sex, setSex] = useState("");
+
 
   const toastConfig = {
     success: (props) => (
@@ -116,6 +119,8 @@ export default function Settings() {
       setGoal("Ganhar Massa");
     }
   }, [sex]);
+
+  
 
   return (
     <>
@@ -190,22 +195,26 @@ export default function Settings() {
           <Text style={SettingsStyles.text}>Configurações da Conta</Text>
 
           <View style={SettingsStyles.personalInformationView}>
-            <Image
+            {name == "" ? (<Skeleton/>):(<>
+              <Image
               source={require("../../assets/PerfilIcon.png")}
               style={SettingsStyles.userImage}
               resizeMode="contain"
             />
 
             <View style={SettingsStyles.data}>
+         
               <Text style={SettingsStyles.userName}>{name}</Text>
-
+          
+              
               <Text style={SettingsStyles.userEmail}>{email}</Text>
-
+       
+          
               <Text style={SettingsStyles.userBornDate}>
                 Nascido em:{" "}
                 {new Date(date.replace(/-/g, "/")).toLocaleDateString("pt-BR")}
               </Text>
-
+          
               <View style={{ alignSelf: "flex-end" }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -216,7 +225,12 @@ export default function Settings() {
                 </TouchableOpacity>
               </View>
             </View>
+            </>)}
+            
+            
+           
           </View>
+          
 
           <View>
             <View style={SettingsStyles.changePasswordView}>
