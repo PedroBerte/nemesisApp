@@ -1,9 +1,22 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+
+import { useNavigation } from "@react-navigation/native";
+
+import Modal from "react-native-modal";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 
 export default function UserAccount() {
+  
   return (
     <>
       <TopBar />
