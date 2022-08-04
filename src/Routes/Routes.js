@@ -7,6 +7,7 @@ import Diet from "../pages/Diet/Diet";
 import Reminder from "../pages/Reminder/Reminder";
 import Settings from "../pages/Settings/Settings";
 import Login from "../pages/Login/Login";
+import Register from "../pages/Register/Register";
 import SplashScreen from "../pages/SplashScreen/SplashScreen";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -27,7 +28,7 @@ export default function NewRoutes() {
         {animationIsEnded ? (
           <>
             {user?.uid == undefined ? (
-              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Register" component={Register} />
             ) : (
               <>
                 <Stack.Screen name="Home" component={Home} />
