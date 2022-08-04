@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../services/firebase-config";
@@ -8,6 +8,7 @@ export const AuthContext = createContext({});
 function AuthContextProvider(props) {
   const [user, setUser] = useState("");
   const [animationIsEnded, setAnimationIsEnded] = useState(false);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -42,6 +43,8 @@ function AuthContextProvider(props) {
         animationIsEnded,
         setAnimationIsEnded,
         logout,
+        step,
+        setStep,
       }}
     >
       {props.children}
