@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView,  } from "react-native";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 import TaskBox from "../../components/TaskBox/TaskBox";
+import ReminderBox from "../../components/ReminderBox/ReminderBox";
 
 export default function Reminder() {
   return (
@@ -36,9 +37,9 @@ export default function Reminder() {
         <Text style={styles.text}>Lembretes</Text>
       </View>
       <View style={{paddingBottom: 50}}>
-        <TaskBox hour={""}>Beber Água</TaskBox>
-        <TaskBox hour={""}>Refeições</TaskBox>
-        <TaskBox hour={""}>Treino</TaskBox>
+        <ReminderBox>Beber Água</ReminderBox>
+        <ReminderBox>Refeições</ReminderBox>
+        <ReminderBox>Treino</ReminderBox>
         </View>
 
 

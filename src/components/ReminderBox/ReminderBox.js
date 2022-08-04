@@ -3,21 +3,31 @@ import { View, StyleSheet, Text, Image, TouchableOpacity  } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { Icon } from "react-native-vector-icons/EvilIcons";
 
-// import { Container } from './styles';
-
-const TaskBox = (props) => {
+const ReminderBox = (props) => {
 
   const [isSelected, setSelected] = useState(false)
 
   return (
+    <TouchableOpacity onPress={() => {
+        setSelected(!isSelected);
+      }}>
     <View style={styles.tasks}>
       <Text style={styles.taskText}>{props.children}</Text>
-      <Text>{props.hour}</Text>
 
 
+    {isSelected == false ?(
+      <Image source={require("../../assets/grayCircle.png")}
+              resizeMode="contain"  
+              />
+      ):( 
+      <Image source={require("../../assets/check.png")}
+              resizeMode="contain"  
+              />
+)}
      
 
     </View>
+    </TouchableOpacity>
   );
 };
 
@@ -41,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TaskBox;
+export default ReminderBox;
