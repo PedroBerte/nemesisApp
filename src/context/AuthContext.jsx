@@ -8,7 +8,7 @@ export const AuthContext = createContext({});
 function AuthContextProvider(props) {
   const [user, setUser] = useState("");
   const [animationIsEnded, setAnimationIsEnded] = useState(false);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
