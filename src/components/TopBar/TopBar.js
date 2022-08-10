@@ -9,7 +9,6 @@ import {
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
-
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
 import {
@@ -25,13 +24,11 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-
 import { useNavigation } from "@react-navigation/native";
 
 import Modal from "react-native-modal";
 
 import UserAccount from "../../pages/UserAccount/UserAccount";
-
 
 export default function TopBar() {
   const [visible, setVisible] = useState(false);
@@ -39,7 +36,6 @@ export default function TopBar() {
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
-
 
   const { user, setUser } = useContext(AuthContext);
   const userCollectionRef = collection(db, "users");
@@ -60,7 +56,6 @@ export default function TopBar() {
     }
     getUserDocs();
   }, [user]);
-
 
   useEffect(() => {
     if (goal == "P") {
@@ -114,7 +109,7 @@ export default function TopBar() {
               paddingBottom: 10,
               flexDirection: "row",
             }}
-          > 
+          >
             <View style={{ paddingEnd: 10 }}>
               <Image
                 source={require("../../assets/PerfilIcon.png")}
@@ -135,9 +130,7 @@ export default function TopBar() {
                 {name}
               </Text>
 
-              <Text style={{ color: "#303030", fontSize: 11 }}>
-                {goal}
-              </Text>
+              <Text style={{ color: "#303030", fontSize: 11 }}>{goal}</Text>
             </View>
           </View>
 
@@ -150,12 +143,16 @@ export default function TopBar() {
             }}
           >
             <View style={{ paddingRight: 20 }}>
-            <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-              <Text style={{ color:'#45C4B0', fontSize: 12 }}>Configurações</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+                <Text style={{ color: "#45C4B0", fontSize: 12 }}>
+                  Configurações
+                </Text>
+              </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => logout()}>
-              <Text style={{ color:'#FF0000', fontSize: 12  }}>Finalizar Sessão</Text>
+              <Text style={{ color: "#FF0000", fontSize: 12 }}>
+                Finalizar Sessão
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
