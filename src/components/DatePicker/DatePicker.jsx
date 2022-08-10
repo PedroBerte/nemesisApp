@@ -44,7 +44,6 @@ const DatePicker = (props) => {
           mode="date"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
-          display="spinner"
           locale="pt-BR"
           buttonTextColorIOS="#45C4B0"
           cancelTextIOS="Sair"
