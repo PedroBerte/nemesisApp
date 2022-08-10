@@ -3,7 +3,7 @@ import { Text, TouchableOpacity } from "react-native";
 
 export default function Button(props) {
   return (
-    <TouchableOpacity {...props} style={styles.btnRegister}>
+    <TouchableOpacity {...props}>
       <Text
         style={{
           color: "white",
