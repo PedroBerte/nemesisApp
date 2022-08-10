@@ -18,6 +18,12 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 20,
   },
+  textAlreadyHaveAnAccount: {
+    fontStyle: "italic",
+    color: "#1F67A9",
+    marginTop: 20,
+    textAlign: "center",
+  },
 });
 
 export default styles;

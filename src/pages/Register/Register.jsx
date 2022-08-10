@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { View, Image, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import { View, Image, SafeAreaView, Text } from "react-native";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./../../services/firebase-config";
@@ -13,34 +13,57 @@ import EmailStep from "./EmailStep/EmailStep";
 import UserStep from "./UserStep/UserStep";
 
 import { AuthContext } from "./../../context/AuthContext";
+import { useSignUp } from "./../../context/SignUpContext";
+import { useAuthContext } from "./../../context/AuthContext";
 import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
+import { useNavigation } from "@react-navigation/native";
+
+import createWorkout from "./CreateWorkout";
+import createDiet from "./CreateDiet";
 
 const Register = () => {
   moment().format();
+  const navigation = useNavigation();
 
-  const { step } = useContext(AuthContext);
+  const { user, setUser } = useAuthContext();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [bornDate, setBornDate] = useState("");
-  const [sex, setSex] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [goal, setGoal] = useState("");
+  const {
+    registerName,
+    setRegisterName,
+    registerEmail,
+    setRegisterEmail,
+    registerConfirmEmail,
+    setRegisterConfirmEmail,
+    registerPassword,
+    setRegisterPassword,
+    registerConfirmPassword,
+    setRegisterConfirmPassword,
+    registerBornDate,
+    setRegisterBornDate,
+    registerSex,
+    setRegisterSex,
+    registerHeight,
+    setRegisterHeight,
+    registerWeight,
+    setRegisterWeight,
+    registerGoal,
+    setRegisterGoal,
+    gymAvailability,
+    setGymAvailability,
+    gymFreq,
+    gymDays,
+    setGymDays,
+    userRes,
+    setUserRes,
+    step,
+    setStep,
+    isLoggedWithGoogle,
+    setIsLoggedWithGoogle,
+    setGymFreq,
+  } = useSignUp();
 
   function stringContainsNumber(_string) {
     return /\d/.test(_string);
-  }
-
-  function handleHeightNumber(height) {
-    if (height.indexOf(".") > -1) {
-      return height.replace(".", "");
-    } else {
-      return height;
-    }
   }
 
   function getCurrentDate(age) {
@@ -74,106 +97,152 @@ const Register = () => {
 
   async function registerUser() {
     if (step == 0) {
-      if ((name, email, password, confirmPassword == "")) {
+      if (
+        (registerName,
+        registerEmail,
+        registerPassword,
+        registerConfirmPassword == "")
+      ) {
         Toast.show({ type: "error", text1: "Não deixe campos vazios!" });
         return;
       }
-      if (stringContainsNumber(name)) {
+      if (stringContainsNumber(registerName)) {
         Toast.show({ type: "error", text1: "Insira um nome valido!" });
         return;
       }
-      if (password != confirmPassword) {
+      if (registerPassword != registerConfirmPassword) {
         Toast.show({ type: "error", text1: "As senhas não coincidem!" });
         return;
       }
       Toast.show({ type: "success", text1: "Apenas mais um passo..." });
       setStep(1);
     } else {
-      if ((bornDate, sex, height, weight, goal == "")) {
+      if (
+        (registerBornDate,
+        registerSex,
+        registerHeight,
+        registerWeight,
+        registerGoal == "")
+      ) {
         Toast.show({
           type: "error",
           text1: "Não deixe campos vazios!",
         });
         return;
       }
+      if (String(getCurrentDate()) == registerBornDate) {
+        Toast.show({
+          type: "error",
+          text1: "Insira uma data de nascimento válida!",
+        });
+        return;
+      }
+      if (moment(registerBornDate).isAfter(getCurrentDate())) {
+        Toast.show({
+          type: "error",
+          text1: "Insira uma data de nascimento válida!",
+        });
+        return;
+      }
+      if (moment(registerBornDate).isAfter(getCurrentDate(12))) {
+        Toast.show({
+          type: "error",
+          text1:
+            "Apenas pessoas com mais de 12 anos podem se cadastrar no Nemesis!",
+        });
+        return;
+      }
+      if (moment(registerBornDate).isBefore(getCurrentDate(80))) {
+        Toast.show({
+          type: "error",
+          text1: "A idade máxima é 80 anos!",
+        });
+        return;
+      }
+      if (registerWeight < 40) {
+        Toast.show({
+          type: "error",
+          text1: "O peso mínimo é de 40Kg!",
+        });
+        return;
+      }
+      if (registerHeight < 145) {
+        Toast.show({
+          type: "error",
+          text1: "A altura mínima é de 1,45M!",
+        });
+        return;
+      }
+      if (registerHeight > 220) {
+        Toast.show({
+          type: "error",
+          text1: "A altura máxima é de 2,20M!",
+        });
+        return;
+      }
       try {
-        if (String(getCurrentDate()) == bornDate) {
-          Toast.show({
-            type: "error",
-            text1: "Insira uma data de nascimento válida!",
-          });
-          return;
-        }
-        if (moment(bornDate).isAfter(getCurrentDate())) {
-          Toast.show({
-            type: "error",
-            text1: "Insira uma data de nascimento válida!",
-          });
-          return;
-        }
-        if (moment(bornDate).isAfter(getCurrentDate(12))) {
-          Toast.show({
-            type: "error",
-            text1:
-              "Apenas pessoas com mais de 12 anos podem se cadastrar no Nemesis!",
-          });
-          return;
-        }
-        if (moment(bornDate).isBefore(getCurrentDate(80))) {
-          Toast.show({
-            type: "error",
-            text1: "A idade máxima é 80 anos!",
-          });
-          return;
-        }
-        if (weight < 40) {
-          Toast.show({
-            type: "error",
-            text1: "O peso mínimo é de 40Kg!",
-          });
-          return;
-        }
-        if (weight > 200) {
-          Toast.show({
-            type: "error",
-            text1: "O peso máximo é de 200Kg!",
-          });
-          return;
-        }
-        if (handleHeightNumber(height) < 145) {
-          Toast.show({
-            type: "error",
-            text1: "A altura mínima é de 1,45M!",
-          });
-          return;
-        }
-        if (handleHeightNumber(height) > 220) {
-          Toast.show({
-            type: "error",
-            text1: "A altura máxima é de 2,20M!",
-          });
-          return;
-        }
-        const user = await createUserWithEmailAndPassword(
+        const userTemp = await createUserWithEmailAndPassword(
           auth,
-          email,
-          password
+          registerEmail,
+          registerPassword
         );
-        await setDoc(doc(db, "users", user.uid), {
-          uid: user.uid,
-          name: name,
-          email: email,
-          date: bornDate,
-          sex: sex,
-          height: handleHeightNumber(height),
-          weight: weight,
-          goal: goal,
+        const uid = userTemp.user.uid;
+        await setDoc(doc(db, "users", uid), {
+          uid: uid,
+          name: registerName,
+          email: registerEmail,
+          date: moment(registerBornDate).format("YYYY-MM-DD"),
+          sex: registerSex,
+          height: registerHeight,
+          weight: registerWeight,
+          goal: registerGoal,
+          gymAvail: gymAvailability,
+          gymFreq: gymFreq,
+          gymDays: gymDays,
+          userRes: userRes,
+        });
+        createWorkout(gymAvailability, gymDays, uid);
+        createDiet(
+          moment(registerBornDate).format("YYYY-MM-DD"),
+          registerWeight,
+          registerHeight,
+          registerSex,
+          registerGoal,
+          userRes,
+          uid
+        );
+        setStep(0);
+        Toast.show({
+          type: "success",
+          text1: "Conta criada com sucesso! Aproveite!",
         });
       } catch (error) {
+        if (error.code == "auth/email-already-in-use") {
+          setStep(0);
+          Toast.show({
+            type: "error",
+            text1: "Este email já está sendo usado!",
+          });
+        }
+        if (error.code == "auth/weak-password") {
+          setStep(0);
+          Toast.show({
+            type: "error",
+            text1: "Sua senha deve ter mais de 6 caracteres!",
+          });
+        }
+        if (error.code == "auth/invalid-email") {
+          setStep(0);
+          Toast.show({
+            type: "error",
+            text1: "Insira um email válido!",
+          });
+        }
         Toast.show({
           type: "error",
           text1: error.message,
         });
+        throw error;
       }
     }
   }
@@ -181,6 +250,7 @@ const Register = () => {
   return (
     <>
       <SafeAreaView style={styles.safeArea}>
+        <Toast />
         <View style={styles.container}>
           <View style={styles.header}>
             <Image
@@ -188,7 +258,17 @@ const Register = () => {
               style={styles.logo}
             />
           </View>
-          {step == 0 ? <EmailStep /> : <UserStep />}
+          {step == 0 ? (
+            <EmailStep registerUser={registerUser} />
+          ) : (
+            <UserStep registerUser={registerUser} />
+          )}
+          <Text
+            onPress={() => navigation.navigate("Login")}
+            style={styles.textAlreadyHaveAnAccount}
+          >
+            Já tem uma conta? Faça Login
+          </Text>
         </View>
       </SafeAreaView>
     </>
