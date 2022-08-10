@@ -28,7 +28,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -36,8 +35,10 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import IconAnt from "react-native-vector-icons/Fontisto";
 import Modal from "react-native-modal";
 import Toast, { BaseToast } from "react-native-toast-message";
+import moment from "moment";
 
 export default function Settings() {
+  moment().format();
   const [visible, setVisible] = useState(false);
 
   const [name, setName] = useState("");
@@ -48,7 +49,6 @@ export default function Settings() {
   const [goal, setGoal] = useState("");
   const [email, setEmail] = useState("");
   const [sex, setSex] = useState("");
-
 
   const toastConfig = {
     success: (props) => (
@@ -120,8 +120,6 @@ export default function Settings() {
     }
   }, [sex]);
 
-  
-
   return (
     <>
       <SafeAreaView style={SettingsStyles.container}>
@@ -164,9 +162,7 @@ export default function Settings() {
 
             <View style={SettingsStyles.modalData}>
               <Text style={{ fontWeight: "bold" }}>Data de nascimento: </Text>
-              <Text>
-                {new Date(date.replace(/-/g, "/")).toLocaleDateString("pt-BR")}
-              </Text>
+              <Text>{moment(date).format("DD/MM/YYYY")}</Text>
             </View>
 
             <View style={SettingsStyles.modalData}>
@@ -195,42 +191,40 @@ export default function Settings() {
           <Text style={SettingsStyles.text}>Configurações da Conta</Text>
 
           <View style={SettingsStyles.personalInformationView}>
-            {name == "" ? (<Skeleton/>):(<>
-              <Image
-              source={require("../../assets/PerfilIcon.png")}
-              style={SettingsStyles.userImage}
-              resizeMode="contain"
-            />
+            {name == "" ? (
+              <Skeleton />
+            ) : (
+              <>
+                <Image
+                  source={require("../../assets/PerfilIcon.png")}
+                  style={SettingsStyles.userImage}
+                  resizeMode="contain"
+                />
 
-            <View style={SettingsStyles.data}>
-         
-              <Text style={SettingsStyles.userName}>{name}</Text>
-          
-              
-              <Text style={SettingsStyles.userEmail}>{email}</Text>
-       
-          
-              <Text style={SettingsStyles.userBornDate}>
-                Nascido em:{" "}
-                {new Date(date.replace(/-/g, "/")).toLocaleDateString("pt-BR")}
-              </Text>
-          
-              <View style={{ alignSelf: "flex-end" }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setVisible(true);
-                  }}
-                >
-                  <Text style={SettingsStyles.modalButton}>Ler mais...</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            </>)}
-            
-            
-           
+                <View style={SettingsStyles.data}>
+                  <Text style={SettingsStyles.userName}>{name}</Text>
+
+                  <Text style={SettingsStyles.userEmail}>{email}</Text>
+
+                  <Text style={SettingsStyles.userBornDate}>
+                    Nascido em: {moment(date).format("DD/MM/YYYY")}
+                  </Text>
+
+                  <View style={{ alignSelf: "flex-end" }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setVisible(true);
+                      }}
+                    >
+                      <Text style={SettingsStyles.modalButton}>
+                        Ler mais...
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </>
+            )}
           </View>
-          
 
           <View>
             <View style={SettingsStyles.changePasswordView}>

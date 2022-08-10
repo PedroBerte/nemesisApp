@@ -12,11 +12,10 @@ import SplashScreen from "../pages/SplashScreen/SplashScreen";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import AuthContextProvider from "../context/AuthContext";
-import { AuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function NewRoutes() {
-  const { user, animationIsEnded } = useContext(AuthContext);
+  const { user, animationIsEnded } = useAuthContext();
 
   const Stack = createNativeStackNavigator();
 
@@ -28,7 +27,10 @@ export default function NewRoutes() {
         {animationIsEnded ? (
           <>
             {user?.uid == undefined ? (
-              <Stack.Screen name="Login" component={Login} />
+              <>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Register" component={Register} />
+              </>
             ) : (
               <>
                 <Stack.Screen name="Home" component={Home} />

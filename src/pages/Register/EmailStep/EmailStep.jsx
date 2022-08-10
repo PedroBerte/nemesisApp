@@ -1,32 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, TextInput, Image, Text } from "react-native";
 
 import Button from "../../../components/Button/Button";
 
 import styles from "./EmailStepStyles";
 
-export default function EmailStep() {
+import { useSignUp } from "../../../context/SignUpContext";
+
+export default function EmailStep({ registerUser }) {
+  const {
+    setRegisterName,
+    setRegisterEmail,
+    setRegisterPassword,
+    setRegisterConfirmPassword,
+    isLoggedWithGoogle,
+    setIsLoggedWithGoogle,
+  } = useSignUp();
+
   return (
     <View style={styles.emailStepBody}>
       <TextInput
         placeholder="Nome Completo"
         placeholderTextColor="#b3b3b3"
         style={styles.textInput}
+        onChangeText={(text) => setRegisterName(text)}
       />
       <TextInput
         placeholder="Insira seu E-mail"
         placeholderTextColor="#b3b3b3"
         style={styles.textInput}
+        onChangeText={(text) => setRegisterEmail(text)}
       />
       <TextInput
         placeholder="Sua senha"
         placeholderTextColor="#b3b3b3"
         style={styles.textInput}
+        onChangeText={(text) => setRegisterPassword(text)}
       />
       <TextInput
         placeholder="Confirme sua senha"
         placeholderTextColor="#b3b3b3"
         style={styles.textInput}
+        onChangeText={(text) => setRegisterConfirmPassword(text)}
       />
       <View style={styles.buttonsContainer}>
         <View style={styles.googleButtonBody}>
@@ -37,7 +52,7 @@ export default function EmailStep() {
           <Text style={styles.googleButtonText}>Login</Text>
         </View>
         <View style={styles.line}></View>
-        <Button>Cadastrar</Button>
+        <Button onPress={() => registerUser()}>Cadastrar</Button>
       </View>
     </View>
   );

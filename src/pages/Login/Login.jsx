@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
+
 import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
 
 import { collection, getDocs } from "firebase/firestore";
 
@@ -17,6 +19,8 @@ import { AuthContext } from "../../context/AuthContext";
 import Button from "../../components/Button/Button.jsx";
 
 export default function Login() {
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signIn } = useContext(AuthContext);
@@ -61,6 +65,12 @@ export default function Login() {
             </Text>
           </View>
           <Button onPress={() => trySignIn(email, password)}>Login</Button>
+          <Text
+            style={styles.textNotAccount}
+            onPress={() => navigation.navigate("Register")}
+          >
+            Não tem uma conta? Crie aqui!
+          </Text>
         </View>
       </View>
     </>

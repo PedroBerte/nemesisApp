@@ -5,8 +5,15 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import styles from "./DatePickerStyles";
 
+import { useSignUp } from "../../context/SignUpContext";
+
+import moment from "moment";
+
 const DatePicker = (props) => {
+  moment().format();
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const { registerBornDate, setRegisterBornDate } = useSignUp();
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -17,24 +24,21 @@ const DatePicker = (props) => {
   };
 
   const handleConfirm = (userDate) => {
-    setDate(userDate.toLocaleDateString());
-    hideDatePicker();
-    console.warn(userDate.toLocaleDateString());
+    setRegisterBornDate(userDate.toLocaleDateString("en-GB"));
+    setDatePickerVisibility(false);
   };
 
-  const [date, setDate] = useState("");
-
   function showDefaultText() {
-    if (date == "") {
+    if (registerBornDate == "") {
       return "Data de Nascimento";
     } else {
-      return date;
+      return moment(registerBornDate).format("DD/MM/YYYY");
     }
   }
 
   return (
     <View style={styles.dataPickerBody}>
-      <TouchableOpacity style={styles.btnData} onPress={showDatePicker}>
+      <TouchableOpacity style={styles.btnData} onPress={() => showDatePicker()}>
         <Text style={{ color: "#b3b3b3", paddingLeft: 10 }}>
           {showDefaultText()}
         </Text>

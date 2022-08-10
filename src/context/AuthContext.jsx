@@ -1,6 +1,10 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 import { auth, db } from "../services/firebase-config";
 
 export const AuthContext = createContext({});
@@ -8,17 +12,17 @@ export const AuthContext = createContext({});
 function AuthContextProvider(props) {
   const [user, setUser] = useState("");
   const [animationIsEnded, setAnimationIsEnded] = useState(false);
-  const [step, setStep] = useState(1);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-  }, []);
+  }, [user]);
 
   function logout() {
     setUser();
     setAnimationIsEnded(false);
+    signOut(auth);
   }
 
   const signIn = (email, password) => {
@@ -43,12 +47,19 @@ function AuthContextProvider(props) {
         animationIsEnded,
         setAnimationIsEnded,
         logout,
-        step,
-        setStep,
       }}
     >
       {props.children}
     </AuthContext.Provider>
   );
 }
+
+export function useAuthContext() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useContext must be used within a AuthContextProvider");
+  }
+  return context;
+}
+
 export default AuthContextProvider;

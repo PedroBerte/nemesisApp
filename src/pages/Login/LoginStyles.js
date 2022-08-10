@@ -32,7 +32,14 @@ const styles = StyleSheet.create({
   },
   rightDiv: {
     width: "80%",
-    marginTop: -15,
+    marginTop: -18,
+    marginBottom: 20,
+  },
+  textNotAccount: {
+    fontStyle: "italic",
+    color: "#1F67A9",
+    marginTop: 20,
+    textAlign: "center",
   },
 });
 
