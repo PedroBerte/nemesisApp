@@ -14,15 +14,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   workoutSelectorBody: {
-    flexDirection: "row",
+    flexDirection: "column",
     display: "flex",
     justifyContent: "space-around",
-    alignItems: "center",
+    // alignItems: "center",
     marginTop: 25,
   },
   borderLine: {
-    backgroundColor: "#303030",
-    width: "100%",
+    backgroundColor: "#E3E3E3",
+    width: "80%",
+    height: 2,
+    alignSelf: "center",
+    marginTop: 10
+  },
+  workoutMenu: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around"
   },
 });
 

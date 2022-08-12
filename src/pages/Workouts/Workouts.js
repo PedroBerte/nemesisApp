@@ -22,7 +22,8 @@ import styles from "./WorkoutsStyles";
 export default function Workouts() {
   const { user } = useAuthContext();
 
-  const [userWorkouts, setUserWorkouts] = useState({});
+  const [userWorkouts, setUserWorkouts] = useState([]);
+  const [workoutIndex, setWorkoutIndex] = useState(0);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -36,6 +37,9 @@ export default function Workouts() {
     }
     getUserDocs();
   }, [user]);
+  useEffect(() => {
+    console.warn(workoutIndex);
+  }, [workoutIndex]);
 
   return (
     <>
@@ -43,14 +47,35 @@ export default function Workouts() {
       <View style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
         <View style={styles.workoutSelectorBody}>
-          {/* {userWorkouts.map((workouts) => {
-            return (
-              <View>
-                <Text>{workouts.name}</Text>
-              </View>
-            );
-          })} */}
+          {userWorkouts != [] ? (
+            <View style={styles.workoutMenu}>
+              {userWorkouts.map((workouts, i) => {
+                return (
+                  <Text onPress={() => setWorkoutIndex(i)}>
+                    {workouts.name}
+                  </Text>
+                );
+              })}
+            </View>
+          ) : (
+            <Text>oi</Text>
+          )}
           <View style={styles.borderLine}></View>
+          <View style={styles.workoutListBody}>
+            <View style={styles.workoutListHeader}>
+              <View>
+                <Text>
+                  {userWorkouts != [] ? (
+                    <>
+
+                    </>
+                  ) : (
+                    <Text>oi</Text>
+                  )}
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
       <TabBar />
