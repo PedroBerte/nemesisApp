@@ -214,7 +214,6 @@ export default function Home() {
           </View>
 
           <View style={styles.spacer} />
-
           <Text style={styles.title}>Central de Lembretes:</Text>
 
           <TaskBox hour={"6:30"}>

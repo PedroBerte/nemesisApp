@@ -41,6 +41,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
   },
+  loginButton: {
+    width: "40%",
+    height: 40,
+    backgroundColor: "#45c4b0",
+    borderRadius: 10,
+    justifyContent: "center",
+  }
 });
 
 export default styles;
