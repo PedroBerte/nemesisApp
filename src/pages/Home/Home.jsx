@@ -61,7 +61,7 @@ export default function Home() {
     "Sexta-Feira",
     "Sábado"
   );
-
+  const [name, setName] = useState("");
   const [bornDate, setBornDate] = useState(0);
   const [age, setAge] = useState(0);
   const [ageProgress, setAgeProgress] = useState(0);
@@ -90,6 +90,7 @@ export default function Home() {
         setWeight(userDocs.data().weight);
         setHeight(userDocs.data().height);
         setWorkout(userDocs.data().workouts);
+        setName(userDocs.data().name);
       }
     }
     getUserDocs();
@@ -179,7 +180,7 @@ export default function Home() {
       >
         <View style={styles.container}>
           <View style={{ paddingBottom: 30 }}>
-            <Text style={styles.text}>Olá, Leonardo</Text>
+            <Text style={styles.text}>{`Olá, ${name.split(" ")[0]}`}</Text>
             <Text style={styles.bottomText}>
               {dayWeeknd[now.getDay()]}, {dayMonth} de{" "}
               {monthName[now.getMonth()]} - Hoje é Leg Day!
@@ -214,53 +215,19 @@ export default function Home() {
           </View>
 
           <View style={styles.spacer} />
-
           <Text style={styles.title}>Central de Lembretes:</Text>
 
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Café da Manhã
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Treino
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Colação - Pós treino
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
-          <TaskBox hour={"6:30"}>
-            <Image source={require("../../assets/Bell.png")} />
-            {"  "} Almoço
-          </TaskBox>
+          <TaskBox hour={"6:30"}>Café da Manhã</TaskBox>
+          <TaskBox hour={"6:30"}>Treino</TaskBox>
+          <TaskBox hour={"6:30"}>Colação - Pós treino</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox hour={"6:30"}>Almoço</TaskBox>
         </View>
       </ScrollView>
       <TabBar />

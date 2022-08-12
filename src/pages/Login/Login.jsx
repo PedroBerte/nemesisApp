@@ -64,7 +64,7 @@ export default function Login() {
               Esqueceu sua senha?
             </Text>
           </View>
-          <Button onPress={() => trySignIn(email, password)}>Login</Button>
+          <Button style={styles.loginButton} onPress={() => trySignIn(email, password)}>Login</Button>
           <Text
             style={styles.textNotAccount}
             onPress={() => navigation.navigate("Register")}

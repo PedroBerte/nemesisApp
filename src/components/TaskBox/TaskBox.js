@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 
 const TaskBox = (props) => {
   return (
     <View style={styles.tasks}>
-      <Text style={styles.taskText}>{props.children}</Text>
+      <View style={styles.leftSide}>
+        <Image source={require("../../assets/Bell.png")} />
+        <Text style={styles.taskText}>{props.children}</Text>
+      </View>
       <Text>{props.hour}</Text>
     </View>
   );
@@ -27,6 +30,11 @@ const styles = StyleSheet.create({
   },
   taskText: {
     fontSize: 15,
+    marginLeft: 10,
+  },
+  leftSide: {
+    display: "flex",
+    flexDirection: "row",
   },
 });
 
