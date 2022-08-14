@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 
 import SettingsStyles from "./SettingsStyles";
@@ -39,7 +40,8 @@ import moment from "moment";
 
 export default function Settings() {
   moment().format();
-  const [visible, setVisible] = useState(false);
+  const [userVisible, setUserVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
 
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
@@ -48,6 +50,7 @@ export default function Settings() {
   const [workout, setWorkout] = useState("");
   const [goal, setGoal] = useState("");
   const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
   const [sex, setSex] = useState("");
 
   const toastConfig = {
@@ -126,9 +129,9 @@ export default function Settings() {
         <TopBar />
         <Toast topOffset={10} config={toastConfig} />
         <Modal
-          isVisible={visible}
-          onBackdropPress={() => setVisible(false)}
-          onBackButtonPress={() => setVisible(false)}
+          isVisible={userVisible}
+          onBackdropPress={() => setUserVisible(false)}
+          onBackButtonPress={() => setUserVisible(false)}
           hideModalContentWhileAnimating={true}
           animationIn="fadeIn"
           animationOut="fadeOut"
@@ -187,6 +190,42 @@ export default function Settings() {
           </View>
         </Modal>
 
+        <Modal
+          isVisible={deleteVisible}
+          onBackdropPress={() => setDeleteVisible(false)}
+          onBackButtonPress={() => setDeleteVisible(false)}
+          hideModalContentWhileAnimating={true}
+          animationIn="fadeIn"
+          animationOut="fadeOut"
+          animationInTiming={500}
+          animationOutTiming={500}
+        >
+          <View style={SettingsStyles.modal}>
+            <Text style={SettingsStyles.headerText}>
+              Você tem certeza disso?
+            </Text>
+            <Text style={SettingsStyles.modalSubtitle}>
+              Se você apagar a sua conta, nunca mais terá acesso à ela!
+            </Text>
+
+            <View style={{}}></View>
+            <View
+              style={{
+                alignContent: "center",
+                justifyContent: "center",
+                alignContent: "center",
+              }}
+            >
+              <TextInput
+                placeholder="Nome Completo"
+                placeholderTextColor="#b3b3b3"
+                style={SettingsStyles.textInput}
+                onChangeText={(text) => setConfirmEmail(text)}
+              />
+            </View>
+          </View>
+        </Modal>
+
         <View style={SettingsStyles.content}>
           <Text style={SettingsStyles.text}>Configurações da Conta</Text>
 
@@ -213,7 +252,7 @@ export default function Settings() {
                   <View style={{ alignSelf: "flex-end" }}>
                     <TouchableOpacity
                       onPress={() => {
-                        setVisible(true);
+                        setUserVisible(true);
                       }}
                     >
                       <Text style={SettingsStyles.modalButton}>
@@ -240,7 +279,11 @@ export default function Settings() {
 
             <View>
               <View style={SettingsStyles.deleteAccountView}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setDeleteVisible(true);
+                  }}
+                >
                   <View style={{ flexDirection: "row" }}>
                     <IconAnt name="close-a" size={20} />
                     <Text style={SettingsStyles.tittleText}>Excluir conta</Text>

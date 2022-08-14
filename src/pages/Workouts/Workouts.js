@@ -48,34 +48,30 @@ export default function Workouts() {
         <Text style={styles.title}>Treinos</Text>
         <View style={styles.workoutSelectorBody}>
           {userWorkouts != [] ? (
-            <View style={styles.workoutMenu}>
-              {userWorkouts.map((workouts, i) => {
-                return (
-                  <Text onPress={() => setWorkoutIndex(i)}>
-                    {workouts.name}
+            <>
+              <View style={styles.workoutMenu}>
+                {userWorkouts.map((workouts, i) => {
+                  return (
+                    <Text onPress={() => setWorkoutIndex(i)}>
+                      {workouts.name}
+                    </Text>
+                  );
+                })}
+              </View>
+              <View style={styles.borderLine}></View>
+              <View style={styles.workoutListBody}>
+                <View style={styles.workoutListHeader}>
+                  <Text>
+                    {userWorkouts.map((workouts, i) => {
+                      return workouts.muscles[i] == workoutIndex;
+                    })}
                   </Text>
-                );
-              })}
-            </View>
+                </View>
+              </View>
+            </>
           ) : (
             <Text>oi</Text>
           )}
-          <View style={styles.borderLine}></View>
-          <View style={styles.workoutListBody}>
-            <View style={styles.workoutListHeader}>
-              <View>
-                <Text>
-                  {userWorkouts != [] ? (
-                    <>
-
-                    </>
-                  ) : (
-                    <Text>oi</Text>
-                  )}
-                </Text>
-              </View>
-            </View>
-          </View>
         </View>
       </View>
       <TabBar />
