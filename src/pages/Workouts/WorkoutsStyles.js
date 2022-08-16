@@ -17,20 +17,47 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     display: "flex",
     justifyContent: "space-around",
-    // alignItems: "center",
     marginTop: 25,
   },
   borderLine: {
     backgroundColor: "#E3E3E3",
     width: "80%",
-    height: 2,
+    height: 1,
     alignSelf: "center",
-    marginTop: 10
+    marginTop: -2,
   },
   workoutMenu: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+  },
+  workoutListHeader: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  workoutListBody: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: 15,
+    marginLeft: 25,
+    marginRight: 25,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#D7D7D7",
+  },
+  workoutsSelector: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    maxHeight: 400,
+    overflow: "scroll",
+  },
+  active: {
+    color: "#45C4B0",
+    fontWeight: "bold",
+    borderBottomColor: "#45C4B0",
+    paddingBottom: 5,
+    borderBottomWidth: 3,
   },
 });
 
