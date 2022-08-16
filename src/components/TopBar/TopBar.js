@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
@@ -32,12 +32,11 @@ import UserAccount from "../../pages/UserAccount/UserAccount";
 
 export default function TopBar() {
   const [visible, setVisible] = useState(false);
-  const { logout } = useContext(AuthContext);
+  const { user, setUser, logout } = useAuthContext();
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
 
-  const { user, setUser } = useContext(AuthContext);
   const userCollectionRef = collection(db, "users");
 
   useEffect(() => {
