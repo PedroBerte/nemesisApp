@@ -18,8 +18,9 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 
 import styles from "./WorkoutsStyles";
-import { WorkoutBox } from "../../components/WorkoutBox/WorkoutBox";
+import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
 import WeekBox from "./WeekBox/WeekBox";
+import LineSpace from "../../components/LineSpace/LineSpace";
 
 export default function Workouts() {
   const { user } = useAuthContext();
@@ -60,7 +61,7 @@ export default function Workouts() {
   return (
     <>
       <TopBar />
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
         <View style={styles.workoutSelectorBody}>
           <View style={styles.workoutMenu}>
@@ -84,7 +85,7 @@ export default function Workouts() {
             )}
           </View>
 
-          <View style={styles.borderLine}></View>
+          <LineSpace lineWidth="80%" marginTop={-2} />
 
           <View style={styles.workoutListBody}>
             <View style={styles.workoutListHeader}>
@@ -96,8 +97,8 @@ export default function Workouts() {
                 <Text>skeleton</Text>
               )}
             </View>
-            <View style={styles.borderLine}></View>
-            <ScrollView style={styles.workoutsSelector}>
+            <LineSpace lineWidth="80%" />
+            <ScrollView nestedScrollEnabled style={styles.workoutsSelector}>
               {userWorkouts[workoutIndex] != undefined ? (
                 <>
                   {userWorkouts[workoutIndex].workoutsInfos.map(
@@ -105,7 +106,6 @@ export default function Workouts() {
                       return (
                         <WorkoutBox key={i} rep={workouts.rep}>
                           {workouts.name}
-                          {i}
                         </WorkoutBox>
                       );
                     }
@@ -127,18 +127,68 @@ export default function Workouts() {
               source={require("./../../assets/calendaryIcon.png")}
             />
           </View>
-          <View style={styles.borderLine}></View>
-          <View style={styles.workoutWeekList}>
-            <WeekBox>Segunda-Feira</WeekBox>
-            <WeekBox>Terça-Feira</WeekBox>
-            <WeekBox>Quarta-Feira</WeekBox>
-            <WeekBox>Quinta-Feira</WeekBox>
-            <WeekBox>Sexta-Feira</WeekBox>
-            <WeekBox>Sábado</WeekBox>
-            <WeekBox>Domingo</WeekBox>
-          </View>
+          <LineSpace marginBottom={10} lineWidth="80%" />
+          <ScrollView nestedScrollEnabled style={styles.workoutWeekList}>
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Segunda-Feira")
+                  ? true
+                  : false
+              }
+            >
+              Segunda-Feira
+            </WeekBox>
+            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Terça-Feira") ? true : false
+              }
+            >
+              Terça-Feira
+            </WeekBox>
+            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Quarta-Feira") ? true : false
+              }
+            >
+              Quarta-Feira
+            </WeekBox>
+            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Quinta-Feira") ? true : false
+              }
+            >
+              Quinta-Feira
+            </WeekBox>
+            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Sexta-Feira") ? true : false
+              }
+            >
+              Sexta-Feira
+            </WeekBox>
+            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Sábado") ? true : false
+              }
+            >
+              Sábado
+            </WeekBox>
+            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
+            <WeekBox
+              activeDay={
+                userWorkouts.find((e) => e.day == "Domingo") ? true : false
+              }
+            >
+              Domingo
+            </WeekBox>
+          </ScrollView>
         </View>
-      </View>
+      </ScrollView>
       <TabBar />
     </>
   );
