@@ -231,7 +231,8 @@ export default function Settings() {
 
           <View style={SettingsStyles.personalInformationView}>
             {name == "" ? (
-              <Skeleton />
+              // <Skeleton />
+              <Text style={SettingsStyles.text}>Nome</Text>
             ) : (
               <>
                 <Image
