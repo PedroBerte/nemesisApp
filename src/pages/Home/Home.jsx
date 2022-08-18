@@ -180,11 +180,25 @@ export default function Home() {
       >
         <View style={styles.container}>
           <View style={{ paddingBottom: 30 }}>
-            <Text style={styles.text}>{`Olá, ${name.split(" ")[0]}`}</Text>
-            <Text style={styles.bottomText}>
-              {dayWeeknd[now.getDay()]}, {dayMonth} de{" "}
-              {monthName[now.getMonth()]} - Hoje é Leg Day!
-            </Text>
+            {name == "" ? (
+              <>
+                <Skeleton
+                  width={170}
+                  height={30}
+                  marginBottom={10}
+                  borderRadius={8}
+                />
+                <Skeleton width={260} height={20} borderRadius={8} />
+              </>
+            ) : (
+              <>
+                <Text style={styles.text}>{`Olá, ${name.split(" ")[0]}`}</Text>
+                <Text style={styles.bottomText}>
+                  {dayWeeknd[now.getDay()]}, {dayMonth} de{" "}
+                  {monthName[now.getMonth()]} - Hoje é Leg Day!
+                </Text>
+              </>
+            )}
           </View>
 
           <View style={{ flexDirection: "row" }}>

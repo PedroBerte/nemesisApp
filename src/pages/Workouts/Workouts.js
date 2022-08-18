@@ -22,6 +22,8 @@ import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
 import WeekBox from "./WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
 
+import Skeleton from "../../components/Skeleton/Skeleton";
+
 export default function Workouts() {
   const { user } = useAuthContext();
 
@@ -58,6 +60,7 @@ export default function Workouts() {
     }
     getUserDocs();
   }, [user]);
+
   return (
     <>
       <TopBar />
@@ -65,23 +68,39 @@ export default function Workouts() {
         <Text style={styles.title}>Treinos</Text>
         <View style={styles.workoutSelectorBody}>
           <View style={styles.workoutMenu}>
-            {userWorkouts != undefined ? (
+            {userWorkouts != [] ? (
               <>
                 {userWorkouts.map((workouts, i) => {
                   return (
                     <Text
+                      key={i}
                       onPress={() => setWorkoutIndex(i)}
                       style={
                         workoutIndex == i ? styles.active : styles.inactive
                       }
                     >
-                      {workouts.name}
+                      {workouts.name == undefined ? (
+                        <Skeleton
+                          alignSelf="center"
+                          width={60}
+                          height={17}
+                          borderRadius={10}
+                          marginX={10}
+                        />
+                      ) : (
+                        workouts.name
+                      )}
                     </Text>
                   );
                 })}
               </>
             ) : (
-              <Text>skeleton</Text>
+              <Skeleton
+                width={350}
+                height={40}
+                borderRadius={10}
+                marginX={10}
+              />
             )}
           </View>
 
@@ -94,7 +113,12 @@ export default function Workouts() {
                   <Text>{userWorkouts[workoutIndex].muscles}</Text>
                 </>
               ) : (
-                <Text>skeleton</Text>
+                <Skeleton
+                  alignSelf="center"
+                  width={80}
+                  height={15}
+                  borderRadius={10}
+                />
               )}
             </View>
             <LineSpace lineWidth="80%" />
@@ -112,7 +136,43 @@ export default function Workouts() {
                   )}
                 </>
               ) : (
-                <Text>skeleton</Text>
+                <>
+                  <Skeleton
+                    alignSelf="center"
+                    width="90%"
+                    height={45}
+                    borderRadius={10}
+                    marginX={10}
+                  />
+                  <Skeleton
+                    alignSelf="center"
+                    width="90%"
+                    height={45}
+                    borderRadius={10}
+                    marginX={10}
+                  />
+                  <Skeleton
+                    alignSelf="center"
+                    width="90%"
+                    height={45}
+                    borderRadius={10}
+                    marginX={10}
+                  />
+                  <Skeleton
+                    alignSelf="center"
+                    width="90%"
+                    height={45}
+                    borderRadius={10}
+                    marginX={10}
+                  />
+                  <Skeleton
+                    alignSelf="center"
+                    width="90%"
+                    height={45}
+                    borderRadius={10}
+                    marginX={10}
+                  />
+                </>
               )}
             </ScrollView>
           </View>
