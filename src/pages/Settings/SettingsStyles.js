@@ -100,12 +100,13 @@ const SettingsStyles = StyleSheet.create({
     marginLeft: 25,
     marginTop: 25,
     color: "#303030",
+    fontWeight: "bold",
   },
   modalSubtitle: {
     fontSize: 10,
     marginLeft: 25,
     color: "#303030",
-    paddingBottom: 15,
+    paddingBottom: 25,
   },
   textInput: {
     width: "90%",
@@ -140,6 +141,55 @@ const SettingsStyles = StyleSheet.create({
     marginLeft: 50,
     flexDirection: "row",
     marginBottom: 5,
+  },
+  modalButtons: {
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 30,
+  },
+  modalTextConfirm: {
+    fontSize: 12,
+    alignSelf: "center",
+    paddingTop: 10,
+    fontWeight: "bold",
+  },
+  deleteAccountButton: {
+    backgroundColor: "#C44545",
+    width: "85%",
+    borderRadius: 12,
+    marginBottom: 20,
+    height: 35,
+    justifyContent: "center",
+    shadowOffset: {
+      width: 6,
+      height: 6,
+    },
+    elevation: 10,
+    shadowOpacity: 0.2,
+    borderColor: "#C6C6C6",
+    borderWidth: 1,
+  },
+
+  cancelText: {
+    alignSelf: "center",
+    fontWeight: "bold",
+    color: "#FFF",
+  },
+  cancelButton: {
+    backgroundColor: "#3AAE9C",
+    width: "85%",
+    borderRadius: 12,
+    height: 35,
+    justifyContent: "center",
+    shadowOffset: {
+      width: 6,
+      height: 6,
+    },
+    elevation: 10,
+    shadowOpacity: 0.2,
+    borderColor: "#C6C6C6",
+    borderWidth: 1,
   },
 });
 
