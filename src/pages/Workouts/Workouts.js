@@ -1,34 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
+import Skeleton from "../../components/Skeleton/Skeleton";
+import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
+import WeekBox from "./WeekBox/WeekBox";
+import LineSpace from "../../components/LineSpace/LineSpace";
+import ModalChangeParameters from "../../components/ModalChangeParameters/ModalChangeParameters";
 
 import { useAuthContext } from "../../context/AuthContext";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
 import styles from "./WorkoutsStyles";
-import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
-import WeekBox from "./WeekBox/WeekBox";
-import LineSpace from "../../components/LineSpace/LineSpace";
-
-import Skeleton from "../../components/Skeleton/Skeleton";
 
 export default function Workouts() {
   const { user } = useAuthContext();
 
   const [userWorkouts, setUserWorkouts] = useState([]);
   const [workoutIndex, setWorkoutIndex] = useState(0);
+
+  const [changeModalIsVisible, setChangeModalIsVisible] = useState(false);
 
   const monthNames = [
     "Janeiro",
@@ -63,6 +59,10 @@ export default function Workouts() {
 
   return (
     <>
+      <ModalChangeParameters
+        get={changeModalIsVisible}
+        set={setChangeModalIsVisible}
+      />
       <TopBar />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
@@ -182,10 +182,12 @@ export default function Workouts() {
             <Text style={styles.dateMonthAndYear}>
               {monthName}, {year}
             </Text>
-            <Image
-              style={{ marginRight: 20 }}
-              source={require("./../../assets/calendaryIcon.png")}
-            />
+            <TouchableOpacity onPress={() => setChangeModalIsVisible(true)}>
+              <Image
+                style={{ marginRight: 20 }}
+                source={require("./../../assets/calendaryIcon.png")}
+              />
+            </TouchableOpacity>
           </View>
           <LineSpace marginBottom={10} lineWidth="80%" />
           <ScrollView nestedScrollEnabled style={styles.workoutWeekList}>
