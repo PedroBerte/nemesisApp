@@ -235,13 +235,6 @@ export default function Home() {
           <TaskBox hour={"6:30"}>Treino</TaskBox>
           <TaskBox hour={"6:30"}>Colação - Pós treino</TaskBox>
           <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
         </View>
       </ScrollView>
       <TabBar />

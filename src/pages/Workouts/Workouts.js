@@ -18,16 +18,18 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 
 import styles from "./WorkoutsStyles";
+
 import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
 import WeekBox from "./WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
-
 import Skeleton from "../../components/Skeleton/Skeleton";
+import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
 
 export default function Workouts() {
   const { user } = useAuthContext();
 
   const [userWorkouts, setUserWorkouts] = useState([]);
+  const [gymDays, setGymDays] = useState("");
   const [workoutIndex, setWorkoutIndex] = useState(0);
 
   const monthNames = [
@@ -55,6 +57,7 @@ export default function Workouts() {
     async function getUserDocs() {
       if (user != undefined) {
         const userDocs = await getDoc(doc(db, "users", user.uid));
+        setGymDays(userDocs.data().gymDays);
         setUserWorkouts(userDocs.data().workouts);
       }
     }
@@ -64,6 +67,7 @@ export default function Workouts() {
   return (
     <>
       <TopBar />
+      <WorkoutDaysModal userWorkouts={userWorkouts} gymDays={gymDays} />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
         <View style={styles.workoutSelectorBody}>
