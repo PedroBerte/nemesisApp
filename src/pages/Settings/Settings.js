@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 import SettingsStyles from "./SettingsStyles";
@@ -71,13 +74,17 @@ export default function Settings() {
     ),
   };
 
-  const changePassword = () => {
-    Toast.show({
-      type: "success",
-      text1: "Um email foi lhe enviado",
-      text2: "Siga as instruçôes para alterar sua senha",
-    });
-  };
+  const [changePasswordBc, setChangePasswordBc] = useState(false);
+
+  useEffect(() => {
+    if (changePasswordBc == true) {
+      Toast.show({
+        type: "success",
+        text1: "Um email foi lhe enviado",
+        text2: "Siga as instruçôes para alterar sua senha",
+      });
+    }
+  });
 
   const { user, setUser } = useContext(AuthContext);
   const userCollectionRef = collection(db, "users");
@@ -137,6 +144,7 @@ export default function Settings() {
           animationOut="fadeOut"
           animationInTiming={500}
           animationOutTiming={500}
+          backdropOpacity={0.85}
         >
           <View style={SettingsStyles.modal}>
             <View style={SettingsStyles.modalTop}>
@@ -189,6 +197,11 @@ export default function Settings() {
             </View>
           </View>
         </Modal>
+        <Modal
+          isVisible={changePasswordBc}
+          onBackdropPress={() => setChangePasswordBc(false)}
+          onBackButtonPress={() => setChangePasswordBc(false)}
+        ></Modal>
 
         <Modal
           isVisible={deleteVisible}
@@ -199,31 +212,51 @@ export default function Settings() {
           animationOut="fadeOut"
           animationInTiming={500}
           animationOutTiming={500}
+          backdropOpacity={0.85}
         >
-          <View style={SettingsStyles.modal}>
-            <Text style={SettingsStyles.headerText}>
-              Você tem certeza disso?
-            </Text>
-            <Text style={SettingsStyles.modalSubtitle}>
-              Se você apagar a sua conta, nunca mais terá acesso à ela!
-            </Text>
+          <KeyboardAvoidingView behavior="position" enabled>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={SettingsStyles.modal}>
+                <Text style={SettingsStyles.headerText}>
+                  Você tem certeza disso?
+                </Text>
+                <Text style={SettingsStyles.modalSubtitle}>
+                  Se você apagar a sua conta, nunca mais terá acesso à ela!
+                </Text>
 
-            <View style={{}}></View>
-            <View
-              style={{
-                alignContent: "center",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <TextInput
-                placeholder="Nome Completo"
-                placeholderTextColor="#b3b3b3"
-                style={SettingsStyles.textInput}
-                onChangeText={(text) => setConfirmEmail(text)}
-              />
-            </View>
-          </View>
+                <View style={{}}></View>
+                <View
+                  style={{
+                    alignContent: "center",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <TextInput
+                    placeholder={email}
+                    placeholderTextColor="#b3b3b3"
+                    style={SettingsStyles.textInput}
+                    onChangeText={(text) => setConfirmEmail(text)}
+                  />
+                  <Text style={SettingsStyles.modalTextConfirm}>
+                    Insira seu Email para confirmar à exclusão
+                  </Text>
+                </View>
+
+                <View style={SettingsStyles.modalButtons}>
+                  <TouchableOpacity style={SettingsStyles.deleteAccountButton}>
+                    <Text style={SettingsStyles.cancelText}>Apagar Conta</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setDeleteVisible(false)}
+                    style={SettingsStyles.cancelButton}
+                  >
+                    <Text style={SettingsStyles.cancelText}>Cancelar</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </Modal>
 
         <View style={SettingsStyles.content}>
@@ -268,7 +301,7 @@ export default function Settings() {
 
           <View>
             <View style={SettingsStyles.changePasswordView}>
-              <TouchableOpacity onPress={changePassword}>
+              <TouchableOpacity onPress={() => setChangePasswordBc(true)}>
                 <View style={{ flexDirection: "row" }}>
                   <Icon name="lock" size={20} />
                   <Text style={SettingsStyles.tittleText}>Alterar senha</Text>
