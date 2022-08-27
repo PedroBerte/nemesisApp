@@ -6,6 +6,7 @@ import ModalSelector from "react-native-modal-selector";
 export default function WorkoutDay(props) {
   const [isSelected, setIsSelected] = useState(false);
   const [activeDay, setActiveDay] = useState(props.activeDay);
+  const [isDisabled, setIsDisabled] = useState(!props.activeDay);
 
   let index = 0;
   const typeList = [
@@ -17,12 +18,14 @@ export default function WorkoutDay(props) {
     { key: index++, label: "Treino E" },
   ];
 
+  function handleClick() {
+    setActiveDay(!activeDay);
+    setIsDisabled(!isDisabled);
+  }
+
   return (
     <View style={styles.daySelectorBody}>
-      <TouchableOpacity
-        style={styles.dayBody}
-        onPress={() => setActiveDay(!activeDay)}
-      >
+      <TouchableOpacity style={styles.dayBody} onPress={() => handleClick()}>
         <Image
           source={
             activeDay
@@ -31,17 +34,28 @@ export default function WorkoutDay(props) {
           }
           style={styles.dayCheckIcon}
         />
-        <Text>{props.children}</Text>
+        <Text style={styles.weekDay}>{props.children}</Text>
       </TouchableOpacity>
       <View style={styles.typeSelectorBody}>
-        <Text>Tipo: </Text>
+        <Text style={styles.dayCheck}>Tipo: </Text>
         <ModalSelector
-          initValue="texc"
+          initValue={
+            activeDay ? (
+              <>
+                {props.list[props.index]?.name == undefined
+                  ? "Treino A"
+                  : props.list[props.index].name}
+              </>
+            ) : (
+              "Descanso"
+            )
+          }
           selectStyle={styles.modalSelectStyle}
           style={styles.selectModal}
           animationType="fade"
           data={typeList}
           onChange={(v) => setRegisterSex(v.value)}
+          disabled={isDisabled}
         />
       </View>
     </View>
@@ -55,7 +69,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     width: "80%",
-    height: 40,
+    height: 45,
     backgroundColor: "#F5F5F5",
     borderColor: "#D7D7D7",
     borderWidth: 1,
@@ -65,6 +79,7 @@ const styles = {
   dayBody: {
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
   },
   typeSelectorBody: {
     display: "flex",
@@ -72,14 +87,21 @@ const styles = {
     alignItems: "center",
   },
   selectModal: {
-    color: "transparent",
+    borderWidth: 0,
   },
   modalSelectStyle: {
-    display: "flex",
-    justifyContent: "center",
+    borderWidth: 0,
   },
   dayCheckIcon: {
     marginLeft: 8,
     marginRight: 8,
+    width: 17,
+    height: 17,
+  },
+  weekDay: {
+    fontSize: 13,
+  },
+  dayCheck: {
+    fontSize: 13,
   },
 };
