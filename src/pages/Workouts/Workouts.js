@@ -8,6 +8,7 @@ import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
 import WeekBox from "./WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
 import ModalChangeParameters from "../../components/ModalChangeParameters/ModalChangeParameters";
+import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
 
 import { useAuthContext } from "../../context/AuthContext";
 
@@ -24,7 +25,11 @@ export default function Workouts() {
   const [userWorkouts, setUserWorkouts] = useState([]);
   const [workoutIndex, setWorkoutIndex] = useState(0);
 
+  const [gymDays, setGymDays] = useState("");
+
   const [changeModalIsVisible, setChangeModalIsVisible] = useState(false);
+  const [workoutDaysModalIsVisible, setWorkoutDaysModalIsVisible] =
+    useState(false);
 
   const monthNames = [
     "Janeiro",
@@ -51,6 +56,7 @@ export default function Workouts() {
     async function getUserDocs() {
       if (user != undefined) {
         const userDocs = await getDoc(doc(db, "users", user.uid));
+        setGymDays(userDocs.data().gymDays);
         setUserWorkouts(userDocs.data().workouts);
       }
     }
@@ -64,6 +70,12 @@ export default function Workouts() {
         set={setChangeModalIsVisible}
       />
       <TopBar />
+      <WorkoutDaysModal
+        userWorkouts={userWorkouts}
+        gymDays={gymDays}
+        set={setWorkoutDaysModalIsVisible}
+        get={workoutDaysModalIsVisible}
+      />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
         <View style={styles.workoutSelectorBody}>
@@ -182,7 +194,9 @@ export default function Workouts() {
             <Text style={styles.dateMonthAndYear}>
               {monthName}, {year}
             </Text>
-            <TouchableOpacity onPress={() => setChangeModalIsVisible(true)}>
+            <TouchableOpacity
+              onPress={() => setWorkoutDaysModalIsVisible(true)}
+            >
               <Image
                 style={{ marginRight: 20 }}
                 source={require("./../../assets/calendaryIcon.png")}
