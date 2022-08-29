@@ -120,7 +120,7 @@ export default function UserStep({ registerUser }) {
         <Slider
           style={styles.gymDaysSlider}
           minimumValue={3}
-          maximumValue={6}
+          maximumValue={5}
           step={1}
           minimumTrackTintColor="transparent"
           maximumTrackTintColor="transparent"
