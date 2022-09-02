@@ -144,40 +144,10 @@ export default function Home() {
 
   return (
     <>
-      <Animated.View
-        style={[
-          styles.header,
-          {
-            backgroundColor: "#FFF",
-            height: scrollY.interpolate({
-              inputRange: [0, 80],
-              outputRange: [90, 0],
-              extrapolate: "clamp",
-            }),
-            opacity: scrollY.interpolate({
-              inputRange: [0, 60, 80],
-              outputRange: [1, 1, 0],
-              extrapolate: "clamp",
-            }),
-          },
-        ]}
-      >
+      <View>
         <TopBar />
-      </Animated.View>
-      <ScrollView
-        style={{ flex: 1, backgroundColor: "#FFF" }}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: { y: scrollY },
-              },
-            },
-          ],
-          { useNativeDriver: false }
-        )}
-        scrollEventThrottle={16}
-      >
+      </View>
+      <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
         <View style={styles.container}>
           <View style={{ paddingBottom: 30 }}>
             {name == "" ? (

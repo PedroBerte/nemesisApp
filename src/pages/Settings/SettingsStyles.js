@@ -84,12 +84,6 @@ const SettingsStyles = StyleSheet.create({
     marginRight: 25,
     marginLeft: 25,
   },
-  modal: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingBottom: 50,
-    marginHorizontal: "4%",
-  },
   modalTop: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -107,23 +101,6 @@ const SettingsStyles = StyleSheet.create({
     marginLeft: 25,
     color: "#303030",
     paddingBottom: 25,
-  },
-  textInput: {
-    width: "90%",
-    height: 50,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    alignSelf: "center",
-    shadowColor: "#000000",
-    paddingLeft: 10,
-    shadowOffset: {
-      width: 6,
-      height: 6,
-    },
-    elevation: 10,
-    shadowOpacity: 0.2,
-    borderColor: "#C6C6C6",
-    borderWidth: 1,
   },
   logo: {
     width: 22,

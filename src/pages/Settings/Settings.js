@@ -24,13 +24,7 @@ import {
   sendPasswordResetEmail,
   deleteUser,
 } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc } from "firebase/firestore";
 
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { AuthContext } from "../../context/AuthContext";
@@ -46,6 +40,7 @@ export default function Settings() {
   const [userVisible, setUserVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
 
+  const userCollectionRef = collection(db, "users");
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [height, setHeight] = useState("");
@@ -55,6 +50,13 @@ export default function Settings() {
   const [email, setEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [sex, setSex] = useState("");
+
+  const [attentionText, setAttentionText] = useState(
+    "Insira seu Email para confirmar à exclusão"
+  );
+  const [shadowColor, setShadowColor] = useState("#b3b3b3");
+  const [textColor, setTextColor] = useState("#000");
+  const { user, setUser } = useContext(AuthContext);
 
   const toastConfig = {
     success: (props) => (
@@ -74,27 +76,12 @@ export default function Settings() {
     ),
   };
 
-  const [changePasswordBc, setChangePasswordBc] = useState(false);
-
-  useEffect(() => {
-    if (changePasswordBc == true) {
-      Toast.show({
-        type: "success",
-        text1: "Um email foi lhe enviado",
-        text2: "Siga as instruçôes para alterar sua senha",
-      });
-    }
-  });
-
-  const { user, setUser } = useContext(AuthContext);
-  const userCollectionRef = collection(db, "users");
-
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
     if (user == undefined) {
-      navigation.navigate("Login");
+      () => navigation.navigate("Login");
     }
     async function getUserDocs() {
       if (user != undefined) {
@@ -129,6 +116,54 @@ export default function Settings() {
       setGoal("Ganhar Massa");
     }
   }, [sex]);
+
+  async function handleDeleteUser() {
+    setUser(auth.currentUser);
+    // console.warn(user.uid);
+    const uid = user.uid;
+    if (confirmEmail == email) {
+      deleteUser(user)
+        .then(() => {
+          Toast.show({
+            type: "success",
+            text1: "Conta Apagada com Sucesso!",
+          });
+        })
+        .catch((error) => {
+          console.warn(error);
+          return;
+        });
+      await deleteDoc(doc(db, "users", uid));
+      setTimeout(() => {
+        () => navigation.navigate("Login");
+      }, 1500);
+    } else {
+      IncorrectEmail();
+    }
+  }
+
+  function changePassword() {
+    sendPasswordResetEmail(auth, email).then(() => {
+      Toast.show({
+        type: "success",
+        text1: "Um email foi lhe enviado",
+        text2: "Siga as instruçôes para alterar sua senha",
+      });
+    });
+  }
+
+  function closeModal() {
+    setAttentionText("Insira seu Email para confirmar à exclusão");
+    setDeleteVisible(false);
+    setShadowColor("#b3b3b3");
+    setTextColor("#000");
+  }
+
+  function IncorrectEmail() {
+    setAttentionText("Email Incorreto!");
+    setShadowColor("#C44545");
+    setTextColor("#C44545");
+  }
 
   return (
     <>
@@ -197,16 +232,11 @@ export default function Settings() {
             </View>
           </View>
         </Modal>
-        <Modal
-          isVisible={changePasswordBc}
-          onBackdropPress={() => setChangePasswordBc(false)}
-          onBackButtonPress={() => setChangePasswordBc(false)}
-        ></Modal>
 
         <Modal
           isVisible={deleteVisible}
-          onBackdropPress={() => setDeleteVisible(false)}
-          onBackButtonPress={() => setDeleteVisible(false)}
+          onBackdropPress={() => closeModal()}
+          onBackButtonPress={() => closeModal()}
           hideModalContentWhileAnimating={true}
           animationIn="fadeIn"
           animationOut="fadeOut"
@@ -216,7 +246,16 @@ export default function Settings() {
         >
           <KeyboardAvoidingView behavior="position" enabled>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={SettingsStyles.modal}>
+              <View
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: 12,
+                  paddingBottom: 50,
+                  marginHorizontal: "4%",
+                  borderWidth: 2,
+                  borderColor: shadowColor,
+                }}
+              >
                 <Text style={SettingsStyles.headerText}>
                   Você tem certeza disso?
                 </Text>
@@ -235,20 +274,47 @@ export default function Settings() {
                   <TextInput
                     placeholder={email}
                     placeholderTextColor="#b3b3b3"
-                    style={SettingsStyles.textInput}
+                    style={{
+                      width: "90%",
+                      height: 50,
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: 10,
+                      alignSelf: "center",
+                      shadowColor: shadowColor,
+                      paddingLeft: 10,
+                      shadowOffset: {
+                        width: 6,
+                        height: 6,
+                      },
+                      elevation: 10,
+                      shadowOpacity: 0.2,
+                      borderColor: shadowColor,
+                      borderWidth: 1,
+                    }}
                     onChangeText={(text) => setConfirmEmail(text)}
                   />
-                  <Text style={SettingsStyles.modalTextConfirm}>
-                    Insira seu Email para confirmar à exclusão
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      alignSelf: "center",
+                      paddingTop: 10,
+                      fontWeight: "bold",
+                      color: textColor,
+                    }}
+                  >
+                    {attentionText}
                   </Text>
                 </View>
 
                 <View style={SettingsStyles.modalButtons}>
-                  <TouchableOpacity style={SettingsStyles.deleteAccountButton}>
+                  <TouchableOpacity
+                    style={SettingsStyles.deleteAccountButton}
+                    onPress={() => handleDeleteUser()}
+                  >
                     <Text style={SettingsStyles.cancelText}>Apagar Conta</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => setDeleteVisible(false)}
+                    onPress={() => closeModal()}
                     style={SettingsStyles.cancelButton}
                   >
                     <Text style={SettingsStyles.cancelText}>Cancelar</Text>
@@ -264,8 +330,29 @@ export default function Settings() {
 
           <View style={SettingsStyles.personalInformationView}>
             {name == "" ? (
-              // <Skeleton />
-              <Text style={SettingsStyles.text}>Nome</Text>
+              <>
+                <Skeleton width={105} height={105} borderRadius={53} />
+                <View
+                  style={{
+                    flexDirection: "column",
+                    display: "flex",
+                  }}
+                >
+                  <Skeleton
+                    width={200}
+                    height={22}
+                    borderRadius={10}
+                    marginBottom={10}
+                  />
+                  <Skeleton
+                    width={160}
+                    height={17}
+                    borderRadius={10}
+                    marginBottom={10}
+                  />
+                  <Skeleton width={180} height={17} borderRadius={10} />
+                </View>
+              </>
             ) : (
               <>
                 <Image
@@ -301,7 +388,7 @@ export default function Settings() {
 
           <View>
             <View style={SettingsStyles.changePasswordView}>
-              <TouchableOpacity onPress={() => setChangePasswordBc(true)}>
+              <TouchableOpacity onPress={() => changePassword()}>
                 <View style={{ flexDirection: "row" }}>
                   <Icon name="lock" size={20} />
                   <Text style={SettingsStyles.tittleText}>Alterar senha</Text>
