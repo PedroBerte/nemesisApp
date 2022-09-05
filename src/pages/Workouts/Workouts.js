@@ -57,10 +57,14 @@ export default function Workouts() {
       if (user != undefined) {
         const userDocs = await getDoc(doc(db, "users", user.uid));
         setGymDays(userDocs.data().gymDays);
-        setUserWorkouts(userDocs.data().workouts);
       }
     }
+    async function getWorkouts() {
+      const userDocs = await getDoc(doc(db, "workouts", user.uid));
+      setUserWorkouts(userDocs.data().workouts);
+    }
     getUserDocs();
+    getWorkouts();
   }, [user]);
 
   return (
@@ -78,11 +82,12 @@ export default function Workouts() {
       />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
-        <View style={styles.workoutSelectorBody}>
-          <View style={styles.workoutMenu}>
-            {userWorkouts != [] ? (
-              <>
-                {userWorkouts.map((workouts, i) => {
+        <View style={styles.workoutMenu}>
+          {userWorkouts != [] ? (
+            <>
+              {userWorkouts
+                .filter((item) => item.workoutInfos.name != undefined)
+                .map((workoutDay, i) => {
                   return (
                     <Text
                       key={i}
@@ -91,103 +96,87 @@ export default function Workouts() {
                         workoutIndex == i ? styles.active : styles.inactive
                       }
                     >
-                      {workouts.name == undefined ? (
-                        <Skeleton
-                          alignSelf="center"
-                          width={60}
-                          height={17}
-                          borderRadius={10}
-                          marginX={10}
-                        />
-                      ) : (
-                        workouts.name
-                      )}
+                      {workoutDay.workoutInfos.name}
                     </Text>
                   );
                 })}
+            </>
+          ) : (
+            <Skeleton width={350} height={40} borderRadius={10} marginX={10} />
+          )}
+        </View>
+
+        <LineSpace lineWidth="80%" marginTop={-2} />
+
+        <View style={styles.workoutListBody}>
+          <View style={styles.workoutListHeader}>
+            {userWorkouts[workoutIndex] != undefined ? (
+              <>
+                <Text>{userWorkouts[workoutIndex].workoutInfos.muscles}</Text>
               </>
             ) : (
               <Skeleton
-                width={350}
-                height={40}
+                alignSelf="center"
+                width={80}
+                height={15}
                 borderRadius={10}
-                marginX={10}
               />
             )}
           </View>
-
-          <LineSpace lineWidth="80%" marginTop={-2} />
-
-          <View style={styles.workoutListBody}>
-            <View style={styles.workoutListHeader}>
-              {userWorkouts[workoutIndex] != undefined ? (
-                <>
-                  <Text>{userWorkouts[workoutIndex].muscles}</Text>
-                </>
-              ) : (
+          <LineSpace lineWidth="80%" />
+          <ScrollView nestedScrollEnabled style={styles.workoutsSelector}>
+            {userWorkouts[workoutIndex] != undefined ? (
+              <>
+                {userWorkouts[workoutIndex].workoutInfos.workoutsList.map(
+                  (workout, i) => {
+                    return (
+                      <WorkoutBox rep={workout.rep} key={i}>
+                        {workout.name}
+                      </WorkoutBox>
+                    );
+                  }
+                )}
+              </>
+            ) : (
+              <>
                 <Skeleton
                   alignSelf="center"
-                  width={80}
-                  height={15}
+                  width="90%"
+                  height={45}
                   borderRadius={10}
+                  marginX={10}
                 />
-              )}
-            </View>
-            <LineSpace lineWidth="80%" />
-            <ScrollView nestedScrollEnabled style={styles.workoutsSelector}>
-              {userWorkouts[workoutIndex] != undefined ? (
-                <>
-                  {userWorkouts[workoutIndex].workoutsInfos.map(
-                    (workouts, i) => {
-                      return (
-                        <WorkoutBox key={i} rep={workouts.rep}>
-                          {workouts.name}
-                        </WorkoutBox>
-                      );
-                    }
-                  )}
-                </>
-              ) : (
-                <>
-                  <Skeleton
-                    alignSelf="center"
-                    width="90%"
-                    height={45}
-                    borderRadius={10}
-                    marginX={10}
-                  />
-                  <Skeleton
-                    alignSelf="center"
-                    width="90%"
-                    height={45}
-                    borderRadius={10}
-                    marginX={10}
-                  />
-                  <Skeleton
-                    alignSelf="center"
-                    width="90%"
-                    height={45}
-                    borderRadius={10}
-                    marginX={10}
-                  />
-                  <Skeleton
-                    alignSelf="center"
-                    width="90%"
-                    height={45}
-                    borderRadius={10}
-                    marginX={10}
-                  />
-                  <Skeleton
-                    alignSelf="center"
-                    width="90%"
-                    height={45}
-                    borderRadius={10}
-                    marginX={10}
-                  />
-                </>
-              )}
-            </ScrollView>
-          </View>
+                <Skeleton
+                  alignSelf="center"
+                  width="90%"
+                  height={45}
+                  borderRadius={10}
+                  marginX={10}
+                />
+                <Skeleton
+                  alignSelf="center"
+                  width="90%"
+                  height={45}
+                  borderRadius={10}
+                  marginX={10}
+                />
+                <Skeleton
+                  alignSelf="center"
+                  width="90%"
+                  height={45}
+                  borderRadius={10}
+                  marginX={10}
+                />
+                <Skeleton
+                  alignSelf="center"
+                  width="90%"
+                  height={45}
+                  borderRadius={10}
+                  marginX={10}
+                />
+              </>
+            )}
+          </ScrollView>
         </View>
         <View style={styles.workoutDaysBody}>
           <View style={styles.workoutDaysHeader}>
@@ -205,63 +194,43 @@ export default function Workouts() {
           </View>
           <LineSpace marginBottom={10} lineWidth="80%" />
           <ScrollView nestedScrollEnabled style={styles.workoutWeekList}>
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Segunda-Feira")
-                  ? true
-                  : false
-              }
-            >
-              Segunda-Feira
-            </WeekBox>
-            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Terça-Feira") ? true : false
-              }
-            >
-              Terça-Feira
-            </WeekBox>
-            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Quarta-Feira") ? true : false
-              }
-            >
-              Quarta-Feira
-            </WeekBox>
-            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Quinta-Feira") ? true : false
-              }
-            >
-              Quinta-Feira
-            </WeekBox>
-            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Sexta-Feira") ? true : false
-              }
-            >
-              Sexta-Feira
-            </WeekBox>
-            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Sábado") ? true : false
-              }
-            >
-              Sábado
-            </WeekBox>
-            <LineSpace lineWidth="80%" marginX={10} borderStyle="dotted" />
-            <WeekBox
-              activeDay={
-                userWorkouts.find((e) => e.day == "Domingo") ? true : false
-              }
-            >
-              Domingo
-            </WeekBox>
+            {userWorkouts[workoutIndex] != undefined ? (
+              <>
+                {userWorkouts.map((workoutDay, i) => {
+                  return (
+                    <>
+                      <WeekBox
+                        activeDay={
+                          workoutDay.workoutInfos.name == undefined
+                            ? false
+                            : true
+                        }
+                        key={i}
+                      >
+                        {workoutDay.day}
+                      </WeekBox>
+                      {userWorkouts.lastIndexOf(workoutDay) ==
+                      userWorkouts.length - 1 ? (
+                        <></>
+                      ) : (
+                        <LineSpace
+                          lineWidth="80%"
+                          marginX={10}
+                          borderStyle="dotted"
+                        />
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            ) : (
+              <Skeleton
+                alignSelf="center"
+                width={80}
+                height={15}
+                borderRadius={10}
+              />
+            )}
           </ScrollView>
         </View>
       </ScrollView>

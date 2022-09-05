@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 20,
     marginLeft: 25,
+    marginBottom: 15,
     fontSize: 30,
     color: "#303030",
     fontWeight: "bold",
@@ -15,13 +16,12 @@ const styles = StyleSheet.create({
   workoutSelectorBody: {
     flexDirection: "column",
     display: "flex",
-    justifyContent: "space-around",
     marginTop: 25,
   },
   workoutMenu: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
+    zIndex: 1,
   },
   workoutListHeader: {
     marginTop: 10,
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     minHeight: 270,
     overflow: "scroll",
   },
+
   active: {
     color: "#45C4B0",
     fontWeight: "bold",
@@ -53,7 +54,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     zIndex: 1,
   },
-  inactive: {},
+  inactive: {
+    paddingBottom: 5,
+  },
   workoutDaysBody: {
     display: "flex",
     alignItems: "center",
