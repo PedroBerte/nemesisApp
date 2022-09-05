@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import ModalSelector from "react-native-modal-selector";
 
@@ -9,6 +9,7 @@ export default function WorkoutDay(props) {
   const [isDisabled, setIsDisabled] = useState(!props.activeDay);
 
   let index = 0;
+
   const typeList = [
     { key: index++, section: true, label: "Selecione o treino" },
     { key: index++, label: "Treino A" },
@@ -17,6 +18,13 @@ export default function WorkoutDay(props) {
     { key: index++, label: "Treino D" },
     { key: index++, label: "Treino E" },
   ];
+
+  function returnTypeList() {
+    const days = 5 - props.gymDays.replace("GYM-DAYS-", "");
+    for (let i = 0; i < days; i++) {
+      typeList.pop();
+    }
+  }
 
   function handleClick() {
     setActiveDay(!activeDay);
@@ -42,9 +50,9 @@ export default function WorkoutDay(props) {
           initValue={
             activeDay ? (
               <>
-                {props.list[props.index]?.name == undefined
+                {props.list[props.index]?.workoutInfos.name == undefined
                   ? "Treino A"
-                  : props.list[props.index].name}
+                  : props.list[props.index].workoutInfos.name}
               </>
             ) : (
               "Descanso"

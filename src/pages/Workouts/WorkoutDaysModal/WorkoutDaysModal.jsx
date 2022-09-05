@@ -31,76 +31,21 @@ export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
           />
         </View>
         <View style={styles.modalDays}>
-          <WorkoutDay
-            list={userWorkouts}
-            index={0}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Segunda-Feira") ? true : false
-            }
-          >
-            Segunda-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={1}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Terça-Feira") ? true : false
-            }
-          >
-            Terça-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={2}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Quarta-Feira") ? true : false
-            }
-          >
-            Quarta-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={3}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Quinta-Feira") ? true : false
-            }
-          >
-            Quinta-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={4}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Sexta-Feira") ? true : false
-            }
-          >
-            Sexta-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={5}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Sábado") ? true : false
-            }
-          >
-            Sábado
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={6}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Domingo") ? true : false
-            }
-          >
-            Domingo
-          </WorkoutDay>
+          {userWorkouts.map((workoutDay, i) => {
+            return (
+              <WorkoutDay
+                list={userWorkouts}
+                index={i}
+                workoutList={userWorkouts}
+                gymDays={gymDays}
+                activeDay={
+                  workoutDay.workoutInfos.name != undefined ? true : false
+                }
+              >
+                {workoutDay.day}
+              </WorkoutDay>
+            );
+          })}
         </View>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity>
