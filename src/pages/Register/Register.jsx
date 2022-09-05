@@ -18,8 +18,8 @@ import { useAuthContext } from "./../../context/AuthContext";
 import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 import { useNavigation } from "@react-navigation/native";
 
-import createWorkout from "./CreateWorkout";
-import createDiet from "./CreateDiet";
+import createWorkout from "./utils/CreateWorkout";
+import createDiet from "./utils/CreateDiet";
 
 const Register = () => {
   moment().format();
