@@ -91,6 +91,7 @@ export default function WorkoutDay(props) {
     const days = props.gymDays.replace("GYM-DAYS-", "");
     for (let i = 0; i < days; i++) {
       typeList.pop();
+      return typeList;
     }
   }
 
@@ -143,7 +144,7 @@ export default function WorkoutDay(props) {
           selectStyle={styles.modalSelectStyle}
           style={styles.selectModal}
           animationType="fade"
-          data={typeList}
+          data={returnTypeList()}
           onChange={(v) => handleChangeWorkout(v)}
           disabled={isDisabled}
         />
