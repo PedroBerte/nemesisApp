@@ -26,6 +26,7 @@ export default function Workouts() {
   const [workoutIndex, setWorkoutIndex] = useState(0);
 
   const [gymDays, setGymDays] = useState("");
+  const [gymAvail, setGymAvail] = useState("");
 
   const [changeModalIsVisible, setChangeModalIsVisible] = useState(false);
   const [workoutDaysModalIsVisible, setWorkoutDaysModalIsVisible] =
@@ -57,6 +58,7 @@ export default function Workouts() {
       if (user != undefined) {
         const userDocs = await getDoc(doc(db, "users", user.uid));
         setGymDays(userDocs.data().gymDays);
+        setGymAvail(userDocs.data().gymAvail);
       }
     }
     async function getWorkouts() {
@@ -77,6 +79,7 @@ export default function Workouts() {
       <WorkoutDaysModal
         userWorkouts={userWorkouts}
         gymDays={gymDays}
+        gymAvail={gymAvail}
         set={setWorkoutDaysModalIsVisible}
         get={workoutDaysModalIsVisible}
       />

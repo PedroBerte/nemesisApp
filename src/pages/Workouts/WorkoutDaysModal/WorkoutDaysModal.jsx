@@ -1,11 +1,23 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Modal from "react-native-modal";
 import WorkoutDay from "./WorkoutDay";
 
-export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
-  const [dayInfos, setDayInfos] = useState({});
+export default function WorkoutDaysModal({
+  gymDays,
+  userWorkouts,
+  get,
+  set,
+  gymAvail,
+}) {
+  const [dayInfos, setDayInfos] = useState(userWorkouts);
+  const [newDayInfos, setNewDayInfos] = useState();
+
+  useEffect(() => {
+    setDayInfos(userWorkouts);
+  }, [userWorkouts]);
+
   return (
     <Modal
       isVisible={get}
@@ -34,10 +46,11 @@ export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
           {userWorkouts.map((workoutDay, i) => {
             return (
               <WorkoutDay
-                list={userWorkouts}
+                list={dayInfos}
+                setNewList={setNewDayInfos}
                 index={i}
-                workoutList={userWorkouts}
                 gymDays={gymDays}
+                gymAvail={gymAvail}
                 activeDay={
                   workoutDay.workoutInfos.name != undefined ? true : false
                 }
@@ -53,7 +66,13 @@ export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
               Alterar
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              console.log(
+                newDayInfos.filter((element) => element.day != undefined)
+              )
+            }
+          >
             <Text style={{ color: "#45C4B0", fontSize: 18 }}>Confirmar</Text>
           </TouchableOpacity>
         </View>
