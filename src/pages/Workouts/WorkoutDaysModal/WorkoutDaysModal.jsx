@@ -1,11 +1,23 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Modal from "react-native-modal";
 import WorkoutDay from "./WorkoutDay";
 
-export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
-  const [dayInfos, setDayInfos] = useState({});
+export default function WorkoutDaysModal({
+  gymDays,
+  userWorkouts,
+  get,
+  set,
+  gymAvail,
+}) {
+  const [dayInfos, setDayInfos] = useState(userWorkouts);
+  const [newDayInfos, setNewDayInfos] = useState();
+
+  useEffect(() => {
+    setDayInfos(userWorkouts);
+  }, [userWorkouts]);
+
   return (
     <Modal
       isVisible={get}
@@ -31,76 +43,22 @@ export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
           />
         </View>
         <View style={styles.modalDays}>
-          <WorkoutDay
-            list={userWorkouts}
-            index={0}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Segunda-Feira") ? true : false
-            }
-          >
-            Segunda-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={1}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Terça-Feira") ? true : false
-            }
-          >
-            Terça-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={2}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Quarta-Feira") ? true : false
-            }
-          >
-            Quarta-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={3}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Quinta-Feira") ? true : false
-            }
-          >
-            Quinta-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={4}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Sexta-Feira") ? true : false
-            }
-          >
-            Sexta-Feira
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={5}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Sábado") ? true : false
-            }
-          >
-            Sábado
-          </WorkoutDay>
-          <WorkoutDay
-            list={userWorkouts}
-            index={6}
-            workoutList={userWorkouts}
-            activeDay={
-              userWorkouts.find((e) => e.day == "Domingo") ? true : false
-            }
-          >
-            Domingo
-          </WorkoutDay>
+          {userWorkouts.map((workoutDay, i) => {
+            return (
+              <WorkoutDay
+                list={dayInfos}
+                setNewList={setNewDayInfos}
+                index={i}
+                gymDays={gymDays}
+                gymAvail={gymAvail}
+                activeDay={
+                  workoutDay.workoutInfos.name != undefined ? true : false
+                }
+              >
+                {workoutDay.day}
+              </WorkoutDay>
+            );
+          })}
         </View>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity>
@@ -108,7 +66,13 @@ export default function WorkoutDaysModal({ gymDays, userWorkouts, get, set }) {
               Alterar
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              console.log(
+                newDayInfos.filter((element) => element.day != undefined)
+              )
+            }
+          >
             <Text style={{ color: "#45C4B0", fontSize: 18 }}>Confirmar</Text>
           </TouchableOpacity>
         </View>
