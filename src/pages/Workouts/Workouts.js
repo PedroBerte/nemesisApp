@@ -82,6 +82,7 @@ export default function Workouts() {
         gymAvail={gymAvail}
         set={setWorkoutDaysModalIsVisible}
         get={workoutDaysModalIsVisible}
+        uid={user.uid}
       />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
@@ -91,6 +92,7 @@ export default function Workouts() {
               {userWorkouts
                 .filter((item) => item.workoutInfos.name != undefined)
                 .map((workoutDay, i) => {
+                  console.warn(workoutDay.workoutInfos, i);
                   return (
                     <Text
                       key={i}
@@ -130,15 +132,15 @@ export default function Workouts() {
           <ScrollView nestedScrollEnabled style={styles.workoutsSelector}>
             {userWorkouts[workoutIndex] != undefined ? (
               <>
-                {userWorkouts[workoutIndex].workoutInfos.workoutsList.map(
-                  (workout, i) => {
+                {userWorkouts
+                  .filter((item) => item.workoutInfos.name != undefined)
+                  [workoutIndex].workoutInfos.workoutsList.map((workout, i) => {
                     return (
                       <WorkoutBox rep={workout.rep} key={i}>
                         {workout.name}
                       </WorkoutBox>
                     );
-                  }
-                )}
+                  })}
               </>
             ) : (
               <>

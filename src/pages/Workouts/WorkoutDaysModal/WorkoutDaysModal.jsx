@@ -4,12 +4,16 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-native-modal";
 import WorkoutDay from "./WorkoutDay";
 
+import { auth, db } from "../../../services/firebase-config";
+import { setDoc, doc, updateDoc } from "firebase/firestore";
+
 export default function WorkoutDaysModal({
   gymDays,
   userWorkouts,
   get,
   set,
   gymAvail,
+  uid,
 }) {
   const [dayInfos, setDayInfos] = useState(userWorkouts);
   const [newDayInfos, setNewDayInfos] = useState();
@@ -17,6 +21,13 @@ export default function WorkoutDaysModal({
   useEffect(() => {
     setDayInfos(userWorkouts);
   }, [userWorkouts]);
+
+  async function handleChangeWorkout() {
+    await updateDoc(doc(db, "workouts", uid), {
+      workouts: newDayInfos.filter((element) => element.day != undefined),
+    });
+    set(false);
+  }
 
   return (
     <Modal
@@ -66,13 +77,7 @@ export default function WorkoutDaysModal({
               Alterar
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              console.log(
-                newDayInfos.filter((element) => element.day != undefined)
-              )
-            }
-          >
+          <TouchableOpacity onPress={() => handleChangeWorkout()}>
             <Text style={{ color: "#45C4B0", fontSize: 18 }}>Confirmar</Text>
           </TouchableOpacity>
         </View>
