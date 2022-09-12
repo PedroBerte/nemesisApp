@@ -181,10 +181,16 @@ export default function Settings() {
           animationOutTiming={500}
           backdropOpacity={0.85}
         >
-          <View style={SettingsStyles.modal}>
+          <View
+            style={{
+              backgroundColor: "white",
+              paddingBottom: 30,
+              borderRadius: 10,
+            }}
+          >
             <View style={SettingsStyles.modalTop}>
               <Text style={SettingsStyles.headerText}>
-                Informaçôes da conta:
+                Informações da conta:
               </Text>
               <Image
                 source={require("../../assets/logo.png")}
@@ -199,7 +205,11 @@ export default function Settings() {
                 style={{ width: 105, height: 105, marginBottom: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ marginBottom: 30 }}>{name}</Text>
+              <Text
+                style={{ marginBottom: 30, fontSize: 17, fontWeight: "bold" }}
+              >
+                {name}
+              </Text>
             </View>
             <View style={SettingsStyles.modalData}>
               <Text style={{ fontWeight: "bold" }}>Email: </Text>

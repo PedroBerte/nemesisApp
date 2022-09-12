@@ -15,6 +15,7 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Button from "../../components/Button/Button";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import { AuthContext } from "../../context/AuthContext";
+import UpdateModal from "./UpdateModal";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
@@ -70,6 +71,8 @@ export default function Home() {
   const [weight, setWeight] = useState(0);
   const [weightProgress, setWeightProgress] = useState(0);
   const [workout, setWorkout] = useState([]);
+
+  const [updateModalIsVisible, setUpdateModalIsVisible] = useState(false);
 
   const { user, setUser } = useContext(AuthContext);
   const userCollectionRef = collection(db, "users");
@@ -146,6 +149,7 @@ export default function Home() {
     <>
       <View>
         <TopBar />
+        <UpdateModal set={setUpdateModalIsVisible} get={updateModalIsVisible} />
       </View>
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
         <View style={styles.container}>
@@ -194,7 +198,13 @@ export default function Home() {
               />
               <Text style={styles.dtText}>Peso {weight} Kg</Text>
               <ProgressBar value={weightProgress} color="yellow" width="100%" />
-              <Button style={styles.btnHome}>Atualize suas Medidas</Button>
+
+              <Button
+                style={styles.btnHome}
+                onPress={() => setUpdateModalIsVisible(true)}
+              >
+                Atualize suas Medidas
+              </Button>
             </View>
           </View>
 
