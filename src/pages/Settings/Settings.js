@@ -51,9 +51,6 @@ export default function Settings() {
   const [confirmEmail, setConfirmEmail] = useState("");
   const [sex, setSex] = useState("");
 
-  const [attentionText, setAttentionText] = useState(
-    "Insira seu Email para confirmar à exclusão"
-  );
   const [shadowColor, setShadowColor] = useState("#b3b3b3");
   const [textColor, setTextColor] = useState("#000");
   const { user, setUser } = useContext(AuthContext);
@@ -152,14 +149,12 @@ export default function Settings() {
   }
 
   function closeModal() {
-    setAttentionText("Insira seu Email para confirmar à exclusão");
     setDeleteVisible(false);
     setShadowColor("#b3b3b3");
     setTextColor("#000");
   }
 
   function IncorrectEmail() {
-    setAttentionText("Email Incorreto!");
     setShadowColor("#C44545");
     setTextColor("#C44545");
   }
@@ -261,8 +256,6 @@ export default function Settings() {
                   borderRadius: 12,
                   paddingBottom: 50,
                   marginHorizontal: "4%",
-                  borderWidth: 2,
-                  borderColor: shadowColor,
                 }}
               >
                 <Text style={SettingsStyles.headerText}>
@@ -305,30 +298,28 @@ export default function Settings() {
                   <Text
                     style={{
                       fontSize: 12,
-                      alignSelf: "center",
-                      paddingTop: 10,
-                      fontWeight: "bold",
+                      marginLeft: 20,
+                      paddingTop: 3,
                       color: textColor,
                     }}
                   >
-                    {attentionText}
+                    Insira seu Email para confirmar a exclusão.
                   </Text>
                 </View>
-
-                <View style={SettingsStyles.modalButtons}>
-                  <TouchableOpacity
-                    style={SettingsStyles.deleteAccountButton}
-                    onPress={() => handleDeleteUser()}
+                <TouchableOpacity onPress={() => handleDeleteUser()}>
+                  <Text
+                    style={{
+                      color: "#45C4B0",
+                      fontSize: 18,
+                      alignSelf: "flex-end",
+                      marginTop: 20,
+                      marginBottom: -25,
+                      marginRight: 20,
+                    }}
                   >
-                    <Text style={SettingsStyles.cancelText}>Apagar Conta</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => closeModal()}
-                    style={SettingsStyles.cancelButton}
-                  >
-                    <Text style={SettingsStyles.cancelText}>Cancelar</Text>
-                  </TouchableOpacity>
-                </View>
+                    Confirmar
+                  </Text>
+                </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
