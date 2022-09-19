@@ -15,7 +15,7 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Button from "../../components/Button/Button";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import { AuthContext } from "../../context/AuthContext";
-import UpdateModal from "./UpdateModal";
+import UpdateModal from "../../components/UpdateModal/UpdateModal";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
