@@ -90,9 +90,9 @@ export default function Workouts() {
           {userWorkouts != [] ? (
             <>
               {userWorkouts
-                .filter((item) => item.workoutInfos.name != undefined)
+                .filter((e) => e.workoutInfos.name != undefined)
+                .filter((e, i) => userWorkouts.indexOf(e) === i)
                 .map((workoutDay, i) => {
-                  console.warn(workoutDay.workoutInfos, i);
                   return (
                     <Text
                       key={i}
