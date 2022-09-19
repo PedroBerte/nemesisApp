@@ -48,10 +48,12 @@ export default function WorkoutDaysModal({
               Dias selecionados para treino: {gymDays.replace("GYM-DAYS-", "")}
             </Text>
           </View>
-          <Image
-            style={styles.modalCloseIcon}
-            source={require("../../../assets/closeIcon.png")}
-          />
+          <TouchableOpacity onPress={() => set(false)}>
+            <Image
+              style={styles.modalCloseIcon}
+              source={require("../../../assets/closeIcon.png")}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.modalDays}>
           {userWorkouts.map((workoutDay, i) => {
