@@ -8,7 +8,6 @@ import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
 import WeekBox from "./WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
-import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
 
 import { useAuthContext } from "../../context/AuthContext";
 

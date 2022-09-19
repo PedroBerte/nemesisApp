@@ -90,15 +90,14 @@ const SettingsStyles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerText: {
-    fontSize: 21,
-    marginLeft: 25,
-    marginTop: 25,
+    fontSize: 20,
+    marginLeft: 20,
+    marginTop: 20,
     color: "#303030",
-    fontWeight: "bold",
   },
   modalSubtitle: {
-    fontSize: 10,
-    marginLeft: 25,
+    fontSize: 12,
+    marginLeft: 20,
     color: "#303030",
     paddingBottom: 25,
   },
@@ -167,6 +166,10 @@ const SettingsStyles = StyleSheet.create({
     shadowOpacity: 0.2,
     borderColor: "#C6C6C6",
     borderWidth: 1,
+  },
+  buttonContainer: {
+    width: "100%",
+    left: 0,
   },
 });
 

@@ -22,7 +22,6 @@ import {
 } from "../../Register/utils/workouts";
 
 export default function WorkoutDay(props) {
-  const [isSelected, setIsSelected] = useState(false);
   const [activeDay, setActiveDay] = useState(props.activeDay);
   const [isDisabled, setIsDisabled] = useState(!props.activeDay);
 
