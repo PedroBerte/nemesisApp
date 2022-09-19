@@ -13,7 +13,7 @@ import {
   weightList,
   gymAvail,
   gymFreq,
-} from "../Register/UserStep/Wordlists";
+} from "../../pages/Register/UserStep/Wordlists";
 import {
   collection,
   getDocs,
@@ -24,20 +24,23 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
-import {
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  deleteUser,
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 function UpdateModal({ get, set }) {
   const [height, setHeight] = useState(0);
+  const [newHeight, setNewHeight] = useState(0);
+
   const [weight, setWeight] = useState(0);
+  const [newWeight, setNewWeight] = useState(0);
+
   const [freq, setFreq] = useState(0);
   const [rightFreq, setRightFreq] = useState(0);
+  const [newFreq, setNewFreq] = useState(0);
 
   const { user, setUser } = useContext(AuthContext);
+
   const userCollectionRef = collection(db, "users");
+
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -53,13 +56,16 @@ function UpdateModal({ get, set }) {
         setFreq(userDocs.data().gymFreq);
       }
     }
-    if (gymFreq == "GYM-FREQ-N") {
-      setRightFreq("Não");
-    } else {
-      setRightFreq("Sim");
-    }
     getUserDocs();
   }, [user]);
+
+  useEffect(() => {
+    if (freq == "GYM-FREQ-S") {
+      setRightFreq("Sim");
+    } else {
+      setRightFreq("Não");
+    }
+  });
 
   return (
     <Modal
