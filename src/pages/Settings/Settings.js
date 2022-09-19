@@ -119,7 +119,6 @@ export default function Settings() {
 
   async function handleDeleteUser() {
     setUser(auth.currentUser);
-    // console.warn(user.uid);
     const uid = user.uid;
     if (confirmEmail == email) {
       deleteUser(user)
