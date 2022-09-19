@@ -11,6 +11,8 @@ import UpdateModal from "../../components/UpdateModal/UpdateModal";
 
 import { useAuthContext } from "../../context/AuthContext";
 
+import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
+
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
