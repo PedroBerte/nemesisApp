@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import ModalSelector from "react-native-modal-selector";
+import Slider from "@react-native-community/slider";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   heightList,
   weightList,
@@ -37,6 +39,8 @@ function UpdateModal({ get, set }) {
   const [rightFreq, setRightFreq] = useState(0);
   const [newFreq, setNewFreq] = useState(0);
 
+  const [gymDays, setGymDays] = useState("GYM-DAYS-3");
+
   const { user, setUser } = useContext(AuthContext);
 
   const userCollectionRef = collection(db, "users");
@@ -54,6 +58,7 @@ function UpdateModal({ get, set }) {
         setWeight(userDocs.data().weight);
         setHeight(userDocs.data().height);
         setFreq(userDocs.data().gymFreq);
+        setGymDays(userDocs.data().gymDays);
       }
     }
     getUserDocs();
@@ -133,10 +138,43 @@ function UpdateModal({ get, set }) {
           data={gymAvail}
           onChange={(v) => setGymAvailability(v.value)}
         />
-        <View style={{ paddingLeft: "7%" }}>
-          <View style={{ flexDirection: "row", paddingLeft: 5 }}>
+        <View style={{}}>
+          <View style={{ flexDirection: "row", paddingLeft: "8%" }}>
             <Text>Atual: </Text>
             <Text style={{ fontWeight: "bold" }}> {rightFreq}</Text>
+          </View>
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ paddingLeft: "8%", paddingBottom: 15 }}>
+            Número de treinos: {gymDays.replace("GYM-DAYS-", "")}
+          </Text>
+          <View style={{ alignItems: "center" }}>
+            <LinearGradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              colors={["#4DFD7E", "#EFFD4D", "#FD4D4D"]}
+              style={{
+                width: "90%",
+                height: 15,
+                borderRadius: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 20,
+              }}
+            >
+              <Slider
+                style={styles.gymDaysSlider}
+                minimumValue={3}
+                maximumValue={5}
+                step={1}
+                minimumTrackTintColor="transparent"
+                maximumTrackTintColor="transparent"
+                thumbTintColor="#808080"
+                thumbImage={require("../../assets/thumbImage.png")}
+                onValueChange={(value) => setGymDays(`GYM-DAYS-${value}`)}
+              />
+            </LinearGradient>
           </View>
         </View>
         <TouchableOpacity
@@ -194,6 +232,9 @@ const styles = {
     height: 50,
     display: "flex",
     justifyContent: "center",
+  },
+  gymDaysSlider: {
+    width: "100%",
   },
 };
 

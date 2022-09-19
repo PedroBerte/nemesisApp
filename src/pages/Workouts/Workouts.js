@@ -7,7 +7,7 @@ import Skeleton from "../../components/Skeleton/Skeleton";
 import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
 import WeekBox from "./WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
-import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
+import UpdateModal from "../../components/UpdateModal/UpdateModal";
 
 import { useAuthContext } from "../../context/AuthContext";
 
@@ -70,6 +70,7 @@ export default function Workouts() {
 
   return (
     <>
+      <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
       <TopBar />
       <WorkoutDaysModal
         userWorkouts={userWorkouts}
