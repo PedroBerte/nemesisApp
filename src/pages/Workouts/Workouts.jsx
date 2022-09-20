@@ -4,8 +4,8 @@ import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 import Skeleton from "../../components/Skeleton/Skeleton";
-import { WorkoutBox } from "./WorkoutBox/WorkoutBox";
-import WeekBox from "./WeekBox/WeekBox";
+import { WorkoutBox } from "./Components/WorkoutBox/WorkoutBox";
+import WeekBox from "./Components/WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
 
@@ -90,6 +90,7 @@ export default function Workouts() {
               {userWorkouts
                 .filter((e) => e.workoutInfos.name != undefined)
                 .filter((e, i) => userWorkouts.indexOf(e) === i)
+                .sort((a, b) => a.workoutInfos.name > b.workoutInfos.name)
                 .map((workoutDay, i) => {
                   return (
                     <Text
