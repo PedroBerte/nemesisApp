@@ -6,9 +6,9 @@ export default function WeekBox(props) {
     <View style={styles.WeekBoxBody}>
       <Text>{props.children}</Text>
       {props.activeDay ? (
-        <Image source={require("../../../assets/weightIcon.png")} />
+        <Image source={require("../../../../assets/weightIcon.png")} />
       ) : (
-        <Image source={require("../../../assets/zzzIcon.png")} />
+        <Image source={require("../../../../assets/zzzIcon.png")} />
       )}
     </View>
   );
