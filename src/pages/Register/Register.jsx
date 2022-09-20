@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Image, SafeAreaView, Text } from "react-native";
+import {
+  View,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./../../services/firebase-config";
@@ -249,28 +256,31 @@ const Register = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
-        <Toast />
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Image
-              source={require("../../assets/NemesisV1.1.png")}
-              style={styles.logo}
-            />
+      <StatusBarComponent color={"#EBEBEB"} style={"dark-content"} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={styles.safeArea}>
+          <Toast />
+          <View style={styles.container}>
+            <View style={styles.header}>
+              <Image
+                source={require("../../assets/NemesisV1.1.png")}
+                style={styles.logo}
+              />
+            </View>
+            {step == 0 ? (
+              <EmailStep registerUser={registerUser} />
+            ) : (
+              <UserStep registerUser={registerUser} />
+            )}
+            <Text
+              onPress={() => navigation.navigate("Login")}
+              style={styles.textAlreadyHaveAnAccount}
+            >
+              Já tem uma conta? Faça Login
+            </Text>
           </View>
-          {step == 0 ? (
-            <EmailStep registerUser={registerUser} />
-          ) : (
-            <UserStep registerUser={registerUser} />
-          )}
-          <Text
-            onPress={() => navigation.navigate("Login")}
-            style={styles.textAlreadyHaveAnAccount}
-          >
-            Já tem uma conta? Faça Login
-          </Text>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     </>
   );
 };

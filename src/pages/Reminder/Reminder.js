@@ -11,10 +11,15 @@ import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import ReminderBox from "../../components/ReminderBox/ReminderBox";
+import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
 export default function Reminder() {
   return (
     <>
+      <StatusBarComponent
+        color={"rgba(69, 196, 176, 0.44)"}
+        style={"dark-content"}
+      />
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
         <TopBar />
         <View style={styles.container}>
