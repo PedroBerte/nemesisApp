@@ -23,13 +23,23 @@ import {
 
 export default function WorkoutDay(props) {
   const [activeDay, setActiveDay] = useState(props.activeDay);
-  const [isDisabled, setIsDisabled] = useState(!props.activeDay);
 
   useEffect(() => {
     if (!activeDay) {
       handleDisableWorkout();
     }
   }, [activeDay]);
+
+  let index = 0;
+
+  const typeList = [
+    { key: index++, section: true, label: "Selecione o treino" },
+    { key: index++, label: "Treino A", value: getDayToWorkout("A") },
+    { key: index++, label: "Treino B", value: getDayToWorkout("B") },
+    { key: index++, label: "Treino C", value: getDayToWorkout("C") },
+    { key: index++, label: "Treino D", value: getDayToWorkout("D") },
+    { key: index++, label: "Treino E", value: getDayToWorkout("E") },
+  ];
 
   function getDayToWorkout(workoutLetter) {
     if (props.gymAvail == "GYM-S") {
@@ -75,17 +85,6 @@ export default function WorkoutDay(props) {
     }
   }
 
-  let index = 0;
-
-  const typeList = [
-    { key: index++, section: true, label: "Selecione o treino" },
-    { key: index++, label: "Treino A", value: getDayToWorkout("A") },
-    { key: index++, label: "Treino B", value: getDayToWorkout("B") },
-    { key: index++, label: "Treino C", value: getDayToWorkout("C") },
-    { key: index++, label: "Treino D", value: getDayToWorkout("D") },
-    { key: index++, label: "Treino E", value: getDayToWorkout("E") },
-  ];
-
   function returnTypeList() {
     const days = props.gymDays.replace("GYM-DAYS-", "");
     for (let i = 0; i < days; i++) {
@@ -96,7 +95,6 @@ export default function WorkoutDay(props) {
 
   function handleClick() {
     setActiveDay(!activeDay);
-    setIsDisabled(!isDisabled);
   }
 
   function handleChangeWorkout(v) {
@@ -145,7 +143,7 @@ export default function WorkoutDay(props) {
           animationType="fade"
           data={returnTypeList()}
           onChange={(v) => handleChangeWorkout(v)}
-          disabled={isDisabled}
+          disabled={!activeDay}
         />
       </View>
     </View>
