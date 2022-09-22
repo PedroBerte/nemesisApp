@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   },
   nextMealTitle: {
     fontWeight: "bold",
+    fontSize: 15,
   },
   nextMealContent: {
     display: "flex",
@@ -45,6 +46,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   nextMealText: {
+    fontSize: 15,
+  },
+  nextMealTime: {
     fontSize: 15,
   },
 });
