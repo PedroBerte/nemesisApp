@@ -25,6 +25,7 @@ import {
   deleteUser,
 } from "firebase/auth";
 import { collection, deleteDoc, doc, getDoc } from "firebase/firestore";
+import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { AuthContext } from "../../context/AuthContext";
@@ -161,6 +162,10 @@ export default function Settings() {
 
   return (
     <>
+      <StatusBarComponent
+        color={"rgba(69, 196, 176, 0.44)"}
+        style={"dark-content"}
+      />
       <SafeAreaView style={SettingsStyles.container}>
         <TopBar />
         <Toast topOffset={10} config={toastConfig} />

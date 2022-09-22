@@ -16,6 +16,7 @@ import Button from "../../components/Button/Button";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import { AuthContext } from "../../context/AuthContext";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
+import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
@@ -147,6 +148,10 @@ export default function Home() {
 
   return (
     <>
+      <StatusBarComponent
+        color={"rgba(69, 196, 176, 0.44)"}
+        style={"dark-content"}
+      />
       <View>
         <TopBar />
         <UpdateModal set={setUpdateModalIsVisible} get={updateModalIsVisible} />
