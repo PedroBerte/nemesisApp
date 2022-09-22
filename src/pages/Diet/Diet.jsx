@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 
@@ -17,8 +24,8 @@ export default function Diet() {
   moment().format();
   const { user } = useAuthContext();
 
-  const [userDiet, setUserDiet] = useState(null);
-  const [nextMeal, setNextMeal] = useState(null);
+  const [userDiet, setUserDiet] = useState("");
+  const [nextMeal, setNextMeal] = useState("");
   const [option, setOption] = useState(0);
 
   useEffect(() => {
@@ -30,11 +37,16 @@ export default function Diet() {
   }, [user]);
 
   useEffect(() => {
-    if (userDiet != null) {
-      console.log(userDiet, "oi leo, bão");
-      setNextMeal(
-        userDiet.filter((meal) => meal.time > moment().format("HH:mm"))
-      );
+    if (userDiet != "") {
+      if (
+        userDiet.filter((meal) => meal.time > moment().format("HH:mm")) == ""
+      ) {
+        setNextMeal(userDiet[0]);
+      } else {
+        setNextMeal(
+          userDiet.filter((meal) => meal.time > moment().format("HH:mm"))
+        );
+      }
     }
   }, [userDiet]);
 
@@ -44,20 +56,15 @@ export default function Diet() {
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Dieta</Text>
         <Text style={styles.text}>Próxima Refeição:</Text>
-        <View
-          style={styles.nextMealBody}
-          onPress={() => {
-            option == 0 ? option++ : option--;
-          }}
-        >
+        <View style={styles.nextMealBody}>
           <View style={styles.nextMealHeader}>
             <View style={{ flexDirection: "row", marginLeft: 15 }}>
               <Text style={styles.nextMealTitle}>
-                {nextMeal != null ? nextMeal[0].meal : <></>}
+                {nextMeal != "" ? nextMeal.meal : <></>}
               </Text>
               <Text style={styles.nextMealTime}>
                 {" "}
-                - {nextMeal != null ? nextMeal[0].time : <></>}
+                - {nextMeal != "" ? nextMeal.time : <></>}
               </Text>
             </View>
             <Image
@@ -67,9 +74,9 @@ export default function Diet() {
           </View>
           <View style={styles.nextMealContent}>
             <Text style={styles.nextMealText}>
-              {nextMeal != null ? (
+              {nextMeal != "" ? (
                 <>
-                  {nextMeal[0].option[option].foods.map((food, i) => {
+                  {nextMeal.option[option].foods.map((food, i) => {
                     return <Text key={i}>{food.name}, </Text>;
                   })}
                 </>
