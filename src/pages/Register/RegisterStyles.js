@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     justifyContent: "center",
+    backgroundColor: "#EBEBEB",
   },
   logo: {
     resizeMode: "center",

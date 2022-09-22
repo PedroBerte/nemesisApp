@@ -8,6 +8,8 @@ import { WorkoutBox } from "./Components/WorkoutBox/WorkoutBox";
 import WeekBox from "./Components/WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
+import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
+import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
 import { useAuthContext } from "../../context/AuthContext";
 
@@ -72,6 +74,10 @@ export default function Workouts() {
 
   return (
     <>
+      <StatusBarComponent
+        color={"rgba(69, 196, 176, 0.44)"}
+        style={"dark-content"}
+      />
       <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
       <TopBar />
       <WorkoutDaysModal

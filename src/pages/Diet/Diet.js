@@ -1,22 +1,10 @@
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  Text,
-} from "react-native";
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
-
-import { useNavigation } from "@react-navigation/native";
-
-import Modal from "react-native-modal";
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
+import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
-export default function UserAccount() {
+export default function Diet() {
   return (
     <>
       <StatusBarComponent
@@ -25,7 +13,7 @@ export default function UserAccount() {
       />
       <TopBar />
       <View style={styles.container}>
-        <Text style={styles.text}>Conta do Usuáriooo</Text>
+        <Text style={styles.text}>Dieta</Text>
       </View>
       <TabBar />
     </>
