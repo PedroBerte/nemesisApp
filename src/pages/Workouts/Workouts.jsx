@@ -72,10 +72,6 @@ export default function Workouts() {
 
   return (
     <>
-      <StatusBarComponent
-        color={"rgba(69, 196, 176, 0.44)"}
-        style={"dark-content"}
-      />
       <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
       <TopBar />
       <WorkoutDaysModal

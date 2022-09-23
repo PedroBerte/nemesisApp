@@ -16,10 +16,6 @@ import StatusBarComponent from "../../components/StatusBarComponent/StatusBarCom
 export default function Reminder() {
   return (
     <>
-      <StatusBarComponent
-        color={"rgba(69, 196, 176, 0.44)"}
-        style={"dark-content"}
-      />
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
         <TopBar />
         <View style={styles.container}>
