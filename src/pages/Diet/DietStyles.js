@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   nextMealTitle: {
     fontWeight: "bold",
     fontSize: 15,
+    color: "#303030",
   },
   nextMealContent: {
     display: "flex",
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
   },
   nextMealTime: {
     fontSize: 15,
+    color: "#303030",
   },
 });
 
