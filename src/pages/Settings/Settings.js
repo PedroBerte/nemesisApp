@@ -162,10 +162,6 @@ export default function Settings() {
 
   return (
     <>
-      <StatusBarComponent
-        color={"rgba(69, 196, 176, 0.44)"}
-        style={"dark-content"}
-      />
       <SafeAreaView style={SettingsStyles.container}>
         <TopBar />
         <Toast topOffset={10} config={toastConfig} />

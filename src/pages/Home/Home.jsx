@@ -148,10 +148,6 @@ export default function Home() {
 
   return (
     <>
-      <StatusBarComponent
-        color={"rgba(69, 196, 176, 0.44)"}
-        style={"dark-content"}
-      />
       <View>
         <TopBar />
         <UpdateModal set={setUpdateModalIsVisible} get={updateModalIsVisible} />

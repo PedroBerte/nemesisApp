@@ -37,15 +37,17 @@ export default function Diet() {
   }, [user]);
 
   useEffect(() => {
+    console.warn(moment().format("HH:mm"));
     if (userDiet != "") {
       if (
-        userDiet.filter((meal) => meal.time > moment().format("HH:mm")) == ""
+        userDiet.filter((meal) => meal.time < moment().format("HH:mm")) == ""
       ) {
         setNextMeal(userDiet[0]);
       } else {
-        setNextMeal(
-          userDiet.filter((meal) => meal.time > moment().format("HH:mm"))
+        const filtered = userDiet.filter(
+          (meal) => meal.time > moment().format("HH:mm")
         );
+        setNextMeal(filtered[0]);
       }
     }
   }, [userDiet]);

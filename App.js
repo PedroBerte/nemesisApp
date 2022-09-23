@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import TopBar from "./src/components/TopBar/TopBar";
 import { NavigationContainer } from "@react-navigation/native";
-// import StatusBarComponent from "./src/components/StatusBarComponent/StatusBarComponent";
+import StatusBarComponent from "./src/components/StatusBarComponent/StatusBarComponent";
 import Routes from "./src/Routes/Routes";
 import TabBar from "./src/components/TabBar/TabBar";
 import Register from "./src/pages/Register/Register";
@@ -16,7 +16,10 @@ export default function App() {
     <NavigationContainer>
       <AuthContextProvider>
         <SignUpContextProvider>
-          {/* <StatusBarComponent /> */}
+          <StatusBarComponent
+            color={"rgba(69, 196, 176, 0.44)"}
+            style={"dark-content"}
+          />
           <Routes />
         </SignUpContextProvider>
       </AuthContextProvider>
