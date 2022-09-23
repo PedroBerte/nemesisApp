@@ -18,7 +18,6 @@ const SplashScreen = () => {
 
   return (
     <>
-      <StatusBarComponent color={"#FFF"} style={"dark-content"} />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <LinearGradient
           start={{ x: 0, y: 0 }}
