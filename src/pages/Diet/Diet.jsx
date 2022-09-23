@@ -19,6 +19,7 @@ import styles from "./DietStyles";
 import { useAuthContext } from "../../context/AuthContext";
 
 import moment from "moment";
+import MealBox from "./components/MealBox";
 
 export default function Diet() {
   moment().format();
@@ -44,10 +45,10 @@ export default function Diet() {
       ) {
         setNextMeal(userDiet[0]);
       } else {
-        const filtered = userDiet.filter(
+        const mealsFiltered = userDiet.filter(
           (meal) => meal.time > moment().format("HH:mm")
         );
-        setNextMeal(filtered[0]);
+        setNextMeal(mealsFiltered[0]);
       }
     }
   }, [userDiet]);
@@ -87,6 +88,18 @@ export default function Diet() {
               )}
             </Text>
           </View>
+        </View>
+        <Text style={styles.text}>Todas as refeições: </Text>
+        <View style={styles.mealsBody}>
+          {userDiet != "" ? (
+            <>
+              {userDiet.map((meal) => {
+                return <MealBox meal={meal} />;
+              })}
+            </>
+          ) : (
+            <></>
+          )}
         </View>
       </ScrollView>
       <TabBar />
