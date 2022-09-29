@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  ScrollView,
+  Animated,
+} from "react-native";
 
-export default function MealBox({ meal }) {
-  const [isPressed, setIsPressed] = useState(false);
+export default function MealBox({ snack }) {
+  const [snackArrowIsPressed, setSnackArrowIsPressed] = useState(false);
   const [option, setOption] = useState(0);
   const [bodyWidth, setBodyWidth] = useState("");
 
+  const [snackHeight, setSnackHeight] = useState(new Animated.Value(70));
+
   function getIcon() {
-    switch (meal.meal) {
+    switch (snack.meal) {
       case "Café da manhã":
         return require("../../../assets/breakfastIcon.png");
       case "Lanche da manhã":
@@ -21,26 +30,47 @@ export default function MealBox({ meal }) {
     }
   }
 
-  function isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }) {
-    return layoutMeasurement.width + contentOffset.x >= contentSize.width - 20;
-  }
-  function isCloseToTop({ layoutMeasurement, contentOffset, contentSize }) {
-    return contentOffset.x == 0;
+  function checkScrollIndicatorPosition({ nativeEvent }) {
+    function isCloseToBottom({
+      layoutMeasurement,
+      contentOffset,
+      contentSize,
+    }) {
+      return (
+        layoutMeasurement.width + contentOffset.x >= contentSize.width - 20
+      );
+    }
+    function isCloseToTop({ contentOffset }) {
+      return contentOffset.x == 0;
+    }
+    if (isCloseToTop(nativeEvent)) {
+      setOption(0);
+    }
+    if (isCloseToBottom(nativeEvent)) {
+      setOption(1);
+    }
   }
 
+  const handleSnackButtonPress = () => {
+    if (!snackArrowIsPressed) {
+      Animated.timing(snackHeight, {
+        toValue: 200,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(snackHeight, {
+        toValue: 70,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    }
+    setSnackArrowIsPressed(!snackArrowIsPressed);
+  };
+
   return (
-    <View
-      style={{
-        marginTop: 20,
-        width: "100%",
-        height: isPressed ? "auto" : 70,
-        backgroundColor: "#F5F5F5",
-        borderColor: "#DCDCDC",
-        borderWidth: 1,
-        borderRadius: 10,
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
+    <Animated.View
+      style={[styles.body, { height: snackHeight }]}
       onLayout={(event) => {
         setBodyWidth(event.nativeEvent.layout);
       }}
@@ -48,29 +78,26 @@ export default function MealBox({ meal }) {
       <View style={styles.header}>
         <Image source={getIcon()} style={styles.icon} />
         <View style={styles.textsBody}>
-          <Text style={styles.mealName}>{meal.meal}</Text>
-          <Text style={styles.mealTime}>{meal.time}</Text>
+          <Text style={styles.mealName}>{snack.meal}</Text>
+          <Text style={styles.mealTime}>{snack.time}</Text>
         </View>
         <TouchableOpacity
           style={styles.arrowBody}
-          onPress={() => setIsPressed(!isPressed)}
+          onPress={() => handleSnackButtonPress()}
         >
           <Image source={require("../../../assets/downArrow.png")} />
         </TouchableOpacity>
       </View>
+
       <ScrollView
         disableIntervalMomentum={true}
         horizontal
         snapToInterval={bodyWidth.width}
-        onScroll={({ nativeEvent }) => {
-          if (isCloseToTop(nativeEvent)) {
-            setOption(0);
-          }
-          if (isCloseToBottom(nativeEvent)) {
-            setOption(1);
-          }
-        }}
         style={styles.content}
+        showsHorizontalScrollIndicator={false}
+        onScroll={({ nativeEvent }) =>
+          checkScrollIndicatorPosition({ nativeEvent })
+        }
       >
         <View
           style={{
@@ -78,13 +105,11 @@ export default function MealBox({ meal }) {
             width: bodyWidth.width,
           }}
         >
-          {meal.option[0].foods.map((food) => {
-            return (
-              <Text style={styles.foodName}>
-                - {food.name} - {food.quantity}
-              </Text>
-            );
-          })}
+          {snack.option[0].foods.map((food, index) => (
+            <Text key={index} style={styles.foodName}>
+              - {food.name} - {food.quantity}
+            </Text>
+          ))}
         </View>
         <View
           style={{
@@ -92,7 +117,7 @@ export default function MealBox({ meal }) {
             width: bodyWidth.width,
           }}
         >
-          {meal.option[1].foods.map((food) => {
+          {snack.option[1].foods.map((food) => {
             return (
               <Text style={styles.foodName}>
                 - {food.name} - {food.quantity}
@@ -121,11 +146,21 @@ export default function MealBox({ meal }) {
           }
         />
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = {
+  body: {
+    marginTop: 20,
+    width: "100%",
+    backgroundColor: "#F5F5F5",
+    borderColor: "#DCDCDC",
+    borderWidth: 1,
+    borderRadius: 10,
+    flexDirection: "column",
+    overflow: "hidden",
+  },
   header: {
     height: 70,
     width: "100%",

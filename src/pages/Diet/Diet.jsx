@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
@@ -28,6 +29,25 @@ export default function Diet() {
   const [userDiet, setUserDiet] = useState("");
   const [nextMeal, setNextMeal] = useState("");
   const [option, setOption] = useState(0);
+  const [seeMoreIsPressed, setSeeMoreIsPressed] = useState(false);
+  const [animation, setAnimation] = useState(new Animated.Value(100));
+
+  const handlePress = () => {
+    if (!seeMoreIsPressed) {
+      Animated.timing(animation, {
+        toValue: 200,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(animation, {
+        toValue: 100,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    }
+    setSeeMoreIsPressed(!seeMoreIsPressed);
+  };
 
   useEffect(() => {
     async function getDiet() {
@@ -40,14 +60,15 @@ export default function Diet() {
   useEffect(() => {
     if (userDiet != "") {
       if (
-        userDiet.filter((meal) => meal.time < moment().format("HH:mm")) == ""
+        userDiet.filter((meal) => meal.time > moment().format("HH:mm"))
+          .length == 0
       ) {
         setNextMeal(userDiet[0]);
       } else {
-        const mealsFiltered = userDiet.filter(
+        const dietFiltered = userDiet.filter(
           (meal) => meal.time > moment().format("HH:mm")
         );
-        setNextMeal(mealsFiltered[0]);
+        setNextMeal(dietFiltered[0]);
       }
     }
   }, [userDiet]);
@@ -58,7 +79,18 @@ export default function Diet() {
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Dieta</Text>
         <Text style={styles.text}>Próxima Refeição:</Text>
-        <View style={styles.nextMealBody}>
+        <Animated.View
+          style={{
+            marginTop: 20,
+            marginBottom: 20,
+            width: "100%",
+            height: animation,
+            backgroundColor: "#F5F5F5",
+            borderColor: "#DCDCDC",
+            borderWidth: 1,
+            borderRadius: 10,
+          }}
+        >
           <View style={styles.nextMealHeader}>
             <View style={{ flexDirection: "row", marginLeft: 15 }}>
               <Text style={styles.nextMealTitle}>
@@ -69,10 +101,12 @@ export default function Diet() {
                 - {nextMeal != "" ? nextMeal.time : <></>}
               </Text>
             </View>
-            <Image
-              style={{ marginRight: 15 }}
-              source={require("../../assets/downArrow.png")}
-            />
+            <TouchableOpacity onPress={() => handlePress()}>
+              <Image
+                style={{ marginRight: 15 }}
+                source={require("../../assets/downArrow.png")}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.nextMealContent}>
             <Text style={styles.nextMealText} numberOfLines={1}>
@@ -87,13 +121,13 @@ export default function Diet() {
               )}
             </Text>
           </View>
-        </View>
+        </Animated.View>
         <Text style={styles.text}>Todas as refeições: </Text>
         <View style={styles.mealsBody}>
           {userDiet != "" ? (
             <>
-              {userDiet.map((meal) => {
-                return <MealBox meal={meal} />;
+              {userDiet.map((meal, i) => {
+                return <MealBox key={i} snack={meal} />;
               })}
             </>
           ) : (
