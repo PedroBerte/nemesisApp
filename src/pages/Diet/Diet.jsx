@@ -38,7 +38,6 @@ export default function Diet() {
   }, [user]);
 
   useEffect(() => {
-    console.warn(moment().format("HH:mm"));
     if (userDiet != "") {
       if (
         userDiet.filter((meal) => meal.time < moment().format("HH:mm")) == ""
@@ -76,7 +75,7 @@ export default function Diet() {
             />
           </View>
           <View style={styles.nextMealContent}>
-            <Text style={styles.nextMealText}>
+            <Text style={styles.nextMealText} numberOfLines={1}>
               {nextMeal != "" ? (
                 <>
                   {nextMeal.option[option].foods.map((food, i) => {

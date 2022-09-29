@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
   nextMealText: {
     fontSize: 15,
+    marginRight: 25,
   },
   nextMealTime: {
     fontSize: 15,
