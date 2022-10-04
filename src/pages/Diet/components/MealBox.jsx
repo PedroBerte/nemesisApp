@@ -31,22 +31,16 @@ export default function MealBox({ snack }) {
   }
 
   function checkScrollIndicatorPosition({ nativeEvent }) {
-    function isCloseToBottom({
-      layoutMeasurement,
-      contentOffset,
-      contentSize,
-    }) {
-      return (
-        layoutMeasurement.width + contentOffset.x >= contentSize.width - 20
-      );
+    function isCloseToEnd({ layoutMeasurement, contentOffset, contentSize }) {
+      return layoutMeasurement.width + contentOffset.x >= contentSize.width;
     }
-    function isCloseToTop({ contentOffset }) {
+    function isCloseToStart({ contentOffset }) {
       return contentOffset.x == 0;
     }
-    if (isCloseToTop(nativeEvent)) {
+    if (isCloseToStart(nativeEvent)) {
       setOption(0);
     }
-    if (isCloseToBottom(nativeEvent)) {
+    if (isCloseToEnd(nativeEvent)) {
       setOption(1);
     }
   }
@@ -107,7 +101,7 @@ export default function MealBox({ snack }) {
         >
           {snack.option[0].foods.map((food, index) => (
             <Text key={index} style={styles.foodName}>
-              - {food.name} - {food.quantity}
+              {food.name} - {food.quantity}
             </Text>
           ))}
         </View>
@@ -117,10 +111,10 @@ export default function MealBox({ snack }) {
             width: bodyWidth.width,
           }}
         >
-          {snack.option[1].foods.map((food) => {
+          {snack.option[1].foods.map((food, index) => {
             return (
-              <Text style={styles.foodName}>
-                - {food.name} - {food.quantity}
+              <Text key={index} style={styles.foodName}>
+                {food.name} - {food.quantity}
               </Text>
             );
           })}

@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import { View, Text, ScrollView, Image, Pressable } from "react-native";
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
+
+import { useAnimationState, MotiView } from "moti";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
@@ -30,31 +24,15 @@ export default function Diet() {
   const [nextMeal, setNextMeal] = useState("");
   const [option, setOption] = useState(0);
   const [seeMoreIsPressed, setSeeMoreIsPressed] = useState(false);
-  const [animation, setAnimation] = useState(new Animated.Value(100));
 
-  const handlePress = () => {
-    if (!seeMoreIsPressed) {
-      Animated.timing(animation, {
-        toValue: 200,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    } else {
-      Animated.timing(animation, {
-        toValue: 100,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    }
-    setSeeMoreIsPressed(!seeMoreIsPressed);
-  };
+  const [bodyWidth, setBodyWidth] = useState(0);
 
   useEffect(() => {
-    async function getDiet() {
+    async function getUserDiet() {
       const userDocs = await getDoc(doc(db, "diets", user.uid));
       setUserDiet(userDocs.data().diet);
     }
-    getDiet();
+    getUserDiet();
   }, [user]);
 
   useEffect(() => {
@@ -73,25 +51,62 @@ export default function Diet() {
     }
   }, [userDiet]);
 
+  const heightAnimated = useAnimationState({
+    onOpen: {
+      height: 200,
+    },
+    onClose: {
+      height: 100,
+    },
+  });
+
+  const handlePress = () => {
+    if (seeMoreIsPressed) {
+      heightAnimated.transitionTo("onClose");
+      setSeeMoreIsPressed(false);
+    } else {
+      heightAnimated.transitionTo("onOpen");
+      setSeeMoreIsPressed(true);
+    }
+  };
+
+  function checkScrollIndicatorPosition({ nativeEvent }) {
+    function isCloseToBottom({
+      layoutMeasurement,
+      contentOffset,
+      contentSize,
+    }) {
+      return (
+        layoutMeasurement.width + contentOffset.x >= contentSize.width - 20
+      );
+    }
+    function isCloseToTop({ contentOffset }) {
+      return contentOffset.x == 0;
+    }
+    if (isCloseToTop(nativeEvent)) {
+      setOption(0);
+    }
+    if (isCloseToBottom(nativeEvent)) {
+      setOption(1);
+    }
+  }
+
   return (
     <>
       <TopBar />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Dieta</Text>
         <Text style={styles.text}>Próxima Refeição:</Text>
-        <Animated.View
-          style={{
-            marginTop: 20,
-            marginBottom: 20,
-            width: "100%",
-            height: animation,
-            backgroundColor: "#F5F5F5",
-            borderColor: "#DCDCDC",
-            borderWidth: 1,
-            borderRadius: 10,
+
+        <MotiView
+          transition={{
+            type: "timing",
+            duration: 700,
           }}
+          state={heightAnimated}
+          style={styles.nextMealBody}
         >
-          <View style={styles.nextMealHeader}>
+          <Pressable style={styles.nextMealHeader} onPressIn={handlePress}>
             <View style={{ flexDirection: "row", marginLeft: 15 }}>
               <Text style={styles.nextMealTitle}>
                 {nextMeal != "" ? nextMeal.meal : <></>}
@@ -101,27 +116,99 @@ export default function Diet() {
                 - {nextMeal != "" ? nextMeal.time : <></>}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => handlePress()}>
+            <View>
               <Image
                 style={{ marginRight: 15 }}
                 source={require("../../assets/downArrow.png")}
               />
-            </TouchableOpacity>
+            </View>
+          </Pressable>
+          <View
+            onLayout={(event) => setBodyWidth(event.nativeEvent.layout)}
+            style={styles.nextMealContent}
+          >
+            {nextMeal != "" ? (
+              <>
+                {seeMoreIsPressed ? (
+                  <>
+                    <ScrollView
+                      disableIntervalMomentum={true}
+                      horizontal
+                      snapToInterval={bodyWidth.width}
+                      style={{ flexDirection: "row", marginTop: 10 }}
+                      showsHorizontalScrollIndicator={false}
+                      onScroll={({ nativeEvent }) =>
+                        checkScrollIndicatorPosition({ nativeEvent })
+                      }
+                    >
+                      <ScrollView
+                        nestedScrollEnabled
+                        style={{
+                          marginBottom: 20,
+                          width: bodyWidth.width,
+                        }}
+                      >
+                        {nextMeal.option[0].foods.map((food, index) => (
+                          <Text key={index} style={styles.foodName}>
+                            {food.name} - {food.quantity}
+                          </Text>
+                        ))}
+                      </ScrollView>
+                      <ScrollView
+                        nestedScrollEnabled
+                        style={{
+                          marginBottom: 20,
+                          width: bodyWidth.width,
+                        }}
+                      >
+                        {nextMeal.option[1].foods.map((food, index) => {
+                          return (
+                            <Text key={index} style={styles.foodName}>
+                              {food.name} - {food.quantity}
+                            </Text>
+                          );
+                        })}
+                      </ScrollView>
+                    </ScrollView>
+
+                    <Text style={styles.optionText}>
+                      {option == 0 ? "Opção 1" : "Opção 2"}
+                    </Text>
+
+                    <View style={styles.elipseIndicator}>
+                      <Image
+                        source={
+                          option == 0
+                            ? require("./assets/ActiveElipse.png")
+                            : require("./assets/InactiveElipse.png")
+                        }
+                      />
+                      <Image
+                        style={{ marginLeft: 5 }}
+                        source={
+                          option == 1
+                            ? require("./assets/ActiveElipse.png")
+                            : require("./assets/InactiveElipse.png")
+                        }
+                      />
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.defaultText} numberOfLines={1}>
+                      {nextMeal.option[option].foods.map((food, index) => {
+                        return <Text key={index}>{food.name}, </Text>;
+                      })}
+                    </Text>
+                  </>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
           </View>
-          <View style={styles.nextMealContent}>
-            <Text style={styles.nextMealText} numberOfLines={1}>
-              {nextMeal != "" ? (
-                <>
-                  {nextMeal.option[option].foods.map((food, i) => {
-                    return <Text key={i}>{food.name}, </Text>;
-                  })}
-                </>
-              ) : (
-                <></>
-              )}
-            </Text>
-          </View>
-        </Animated.View>
+        </MotiView>
+
         <Text style={styles.text}>Todas as refeições: </Text>
         <View style={styles.mealsBody}>
           {userDiet != "" ? (
