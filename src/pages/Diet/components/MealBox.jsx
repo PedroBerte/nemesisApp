@@ -101,11 +101,13 @@ export default function MealBox({ snack }) {
         onScroll={({ nativeEvent }) =>
           checkScrollIndicatorPosition({ nativeEvent })
         }
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
       >
         <ScrollView
           nestedScrollEnabled
           style={{
-            marginBottom: 20,
             width: bodyWidth.width,
           }}
         >
@@ -118,7 +120,6 @@ export default function MealBox({ snack }) {
         <ScrollView
           nestedScrollEnabled
           style={{
-            marginBottom: 20,
             width: bodyWidth.width,
           }}
         >

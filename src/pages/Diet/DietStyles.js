@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     justifyContent: "center",
     marginLeft: 25,
+    marginRight: 25,
     color: "#303030",
   },
   optionText: {

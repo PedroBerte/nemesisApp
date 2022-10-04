@@ -168,7 +168,9 @@ export default function Diet() {
                         style={{
                           flexDirection: "row",
                           marginTop: 10,
-                          backgroundColor: "black",
+                        }}
+                        contentContainerStyle={{
+                          alignItems: "center",
                         }}
                         showsHorizontalScrollIndicator={false}
                         onScroll={({ nativeEvent }) =>
@@ -178,7 +180,6 @@ export default function Diet() {
                         <ScrollView
                           nestedScrollEnabled
                           style={{
-                            marginBottom: 20,
                             width: bodyWidth.width,
                           }}
                         >
@@ -191,7 +192,6 @@ export default function Diet() {
                         <ScrollView
                           nestedScrollEnabled
                           style={{
-                            marginBottom: 20,
                             width: bodyWidth.width,
                           }}
                         >
