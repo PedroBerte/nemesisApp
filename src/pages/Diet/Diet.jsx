@@ -15,6 +15,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 import moment from "moment";
 import MealBox from "./components/MealBox";
+import { Skeleton } from "moti/skeleton";
 
 export default function Diet() {
   moment().format();
@@ -24,6 +25,8 @@ export default function Diet() {
   const [nextMeal, setNextMeal] = useState("");
   const [option, setOption] = useState(0);
   const [seeMoreIsPressed, setSeeMoreIsPressed] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [bodyWidth, setBodyWidth] = useState(0);
 
@@ -50,6 +53,12 @@ export default function Diet() {
       }
     }
   }, [userDiet]);
+
+  useEffect(() => {
+    if (userDiet != "") {
+      setIsLoading(false);
+    }
+  }, [nextMeal]);
 
   const heightAnimated = useAnimationState({
     onOpen: {
@@ -91,123 +100,149 @@ export default function Diet() {
     }
   }
 
+  function getWeekSkeleton() {
+    const Spacer = () => <View style={{ marginBottom: 20 }} />;
+    const weekDays = Array.from({ length: 7 }).map(() => true);
+    return (
+      <>
+        {weekDays.map((day, index) => (
+          <>
+            <Skeleton
+              key={index}
+              show={isLoading}
+              colorMode="light"
+              height={70}
+              width={"100%"}
+            />
+            <Spacer />
+          </>
+        ))}
+      </>
+    );
+  }
+
   return (
     <>
       <TopBar />
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Dieta</Text>
         <Text style={styles.text}>Próxima Refeição:</Text>
-
-        <MotiView
-          transition={{
-            type: "timing",
-            duration: 700,
-          }}
-          state={heightAnimated}
-          style={styles.nextMealBody}
-        >
-          <Pressable style={styles.nextMealHeader} onPressIn={handlePress}>
-            <View style={{ flexDirection: "row", marginLeft: 15 }}>
-              <Text style={styles.nextMealTitle}>
-                {nextMeal != "" ? nextMeal.meal : <></>}
-              </Text>
-              <Text style={styles.nextMealTime}>
-                {" "}
-                - {nextMeal != "" ? nextMeal.time : <></>}
-              </Text>
-            </View>
-            <View>
-              <Image
-                style={{ marginRight: 15 }}
-                source={require("../../assets/downArrow.png")}
-              />
-            </View>
-          </Pressable>
-          <View
-            onLayout={(event) => setBodyWidth(event.nativeEvent.layout)}
-            style={styles.nextMealContent}
+        <Skeleton show={isLoading} colorMode="light" height={100}>
+          <MotiView
+            transition={{
+              type: "timing",
+              duration: 700,
+            }}
+            state={heightAnimated}
+            style={styles.nextMealBody}
           >
-            {nextMeal != "" ? (
-              <>
-                {seeMoreIsPressed ? (
-                  <>
-                    <ScrollView
-                      disableIntervalMomentum={true}
-                      horizontal
-                      snapToInterval={bodyWidth.width}
-                      style={{ flexDirection: "row", marginTop: 10 }}
-                      showsHorizontalScrollIndicator={false}
-                      onScroll={({ nativeEvent }) =>
-                        checkScrollIndicatorPosition({ nativeEvent })
-                      }
-                    >
+            <Pressable style={styles.nextMealHeader} onPressIn={handlePress}>
+              <View style={{ flexDirection: "row", marginLeft: 15 }}>
+                <Text style={styles.nextMealTitle}>
+                  {nextMeal != "" ? nextMeal.meal : <></>}
+                </Text>
+                <Text style={styles.nextMealTime}>
+                  {" "}
+                  - {nextMeal != "" ? nextMeal.time : <></>}
+                </Text>
+              </View>
+              <View>
+                <Image
+                  style={{ marginRight: 15 }}
+                  source={require("../../assets/downArrow.png")}
+                />
+              </View>
+            </Pressable>
+            <View
+              onLayout={(event) => setBodyWidth(event.nativeEvent.layout)}
+              style={styles.nextMealContent}
+            >
+              {nextMeal != "" ? (
+                <>
+                  {seeMoreIsPressed ? (
+                    <>
                       <ScrollView
-                        nestedScrollEnabled
+                        disableIntervalMomentum={true}
+                        horizontal
+                        snapToInterval={bodyWidth.width}
                         style={{
-                          marginBottom: 20,
-                          width: bodyWidth.width,
+                          flexDirection: "row",
+                          marginTop: 10,
+                          backgroundColor: "black",
                         }}
+                        showsHorizontalScrollIndicator={false}
+                        onScroll={({ nativeEvent }) =>
+                          checkScrollIndicatorPosition({ nativeEvent })
+                        }
                       >
-                        {nextMeal.option[0].foods.map((food, index) => (
-                          <Text key={index} style={styles.foodName}>
-                            {food.name} - {food.quantity}
-                          </Text>
-                        ))}
-                      </ScrollView>
-                      <ScrollView
-                        nestedScrollEnabled
-                        style={{
-                          marginBottom: 20,
-                          width: bodyWidth.width,
-                        }}
-                      >
-                        {nextMeal.option[1].foods.map((food, index) => {
-                          return (
+                        <ScrollView
+                          nestedScrollEnabled
+                          style={{
+                            marginBottom: 20,
+                            width: bodyWidth.width,
+                          }}
+                        >
+                          {nextMeal.option[0].foods.map((food, index) => (
                             <Text key={index} style={styles.foodName}>
                               {food.name} - {food.quantity}
                             </Text>
-                          );
-                        })}
+                          ))}
+                        </ScrollView>
+                        <ScrollView
+                          nestedScrollEnabled
+                          style={{
+                            marginBottom: 20,
+                            width: bodyWidth.width,
+                          }}
+                        >
+                          {nextMeal.option[1].foods.map((food, index) => {
+                            return (
+                              <Text key={index} style={styles.foodName}>
+                                {food.name} - {food.quantity}
+                              </Text>
+                            );
+                          })}
+                        </ScrollView>
                       </ScrollView>
-                    </ScrollView>
 
-                    <Text style={styles.optionText}>
-                      {option == 0 ? "Opção 1" : "Opção 2"}
-                    </Text>
+                      <Text style={styles.optionText}>
+                        {option == 0 ? "Opção 1" : "Opção 2"}
+                      </Text>
 
-                    <View style={styles.elipseIndicator}>
-                      <Image
-                        source={
-                          option == 0
-                            ? require("./assets/ActiveElipse.png")
-                            : require("./assets/InactiveElipse.png")
-                        }
-                      />
-                      <Image
-                        style={{ marginLeft: 5 }}
-                        source={
-                          option == 1
-                            ? require("./assets/ActiveElipse.png")
-                            : require("./assets/InactiveElipse.png")
-                        }
-                      />
-                    </View>
-                  </>
-                ) : (
-                  <>
-                    <Text style={styles.defaultText} numberOfLines={1}>
-                      {nextMeal.option[option].foods.map((food, index) => {
-                        return <Text key={index}>{food.name}, </Text>;
-                      })}
-                    </Text>
-                  </>
-                )}
-              </>
-            ) : (
-              <></>
-            )}
-          </View>
-        </MotiView>
+                      <View style={styles.elipseIndicator}>
+                        <Image
+                          source={
+                            option == 0
+                              ? require("./assets/ActiveElipse.png")
+                              : require("./assets/InactiveElipse.png")
+                          }
+                        />
+                        <Image
+                          style={{ marginLeft: 5 }}
+                          source={
+                            option == 1
+                              ? require("./assets/ActiveElipse.png")
+                              : require("./assets/InactiveElipse.png")
+                          }
+                        />
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={styles.defaultText} numberOfLines={1}>
+                        {nextMeal.option[option].foods.map((food, index) => {
+                          return <Text key={index}>{food.name}, </Text>;
+                        })}
+                      </Text>
+                    </>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+            </View>
+          </MotiView>
+        </Skeleton>
 
         <Text style={styles.text}>Todas as refeições: </Text>
         <View style={styles.mealsBody}>
@@ -218,7 +253,7 @@ export default function Diet() {
               })}
             </>
           ) : (
-            <></>
+            <>{getWeekSkeleton()}</>
           )}
         </View>
       </ScrollView>

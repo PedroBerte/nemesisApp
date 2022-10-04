@@ -6,14 +6,15 @@ import {
   Text,
   ScrollView,
   Animated,
+  Pressable,
 } from "react-native";
+
+import { useAnimationState, MotiView } from "moti";
 
 export default function MealBox({ snack }) {
   const [snackArrowIsPressed, setSnackArrowIsPressed] = useState(false);
   const [option, setOption] = useState(0);
-  const [bodyWidth, setBodyWidth] = useState("");
-
-  const [snackHeight, setSnackHeight] = useState(new Animated.Value(70));
+  const [bodyWidth, setBodyWidth] = useState(0);
 
   function getIcon() {
     switch (snack.meal) {
@@ -32,7 +33,9 @@ export default function MealBox({ snack }) {
 
   function checkScrollIndicatorPosition({ nativeEvent }) {
     function isCloseToEnd({ layoutMeasurement, contentOffset, contentSize }) {
-      return layoutMeasurement.width + contentOffset.x >= contentSize.width;
+      return (
+        layoutMeasurement.width + contentOffset.x >= contentSize.width - 150
+      );
     }
     function isCloseToStart({ contentOffset }) {
       return contentOffset.x == 0;
@@ -45,42 +48,48 @@ export default function MealBox({ snack }) {
     }
   }
 
+  const heightAnimated = useAnimationState({
+    onOpen: {
+      height: 200,
+    },
+    onClose: {
+      height: 70,
+    },
+  });
+
   const handleSnackButtonPress = () => {
-    if (!snackArrowIsPressed) {
-      Animated.timing(snackHeight, {
-        toValue: 200,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
+    if (snackArrowIsPressed) {
+      heightAnimated.transitionTo("onClose");
+      setSnackArrowIsPressed(false);
     } else {
-      Animated.timing(snackHeight, {
-        toValue: 70,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
+      heightAnimated.transitionTo("onOpen");
+      setSnackArrowIsPressed(true);
     }
-    setSnackArrowIsPressed(!snackArrowIsPressed);
   };
 
   return (
-    <Animated.View
-      style={[styles.body, { height: snackHeight }]}
-      onLayout={(event) => {
-        setBodyWidth(event.nativeEvent.layout);
+    <MotiView
+      style={styles.body}
+      state={heightAnimated}
+      transition={{
+        type: "timing",
+        duration: 500,
       }}
     >
-      <View style={styles.header}>
+      <View
+        onLayout={(event) => {
+          setBodyWidth(event.nativeEvent.layout);
+        }}
+        style={styles.header}
+      >
         <Image source={getIcon()} style={styles.icon} />
         <View style={styles.textsBody}>
           <Text style={styles.mealName}>{snack.meal}</Text>
           <Text style={styles.mealTime}>{snack.time}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.arrowBody}
-          onPress={() => handleSnackButtonPress()}
-        >
+        <Pressable style={styles.arrowBody} onPressIn={handleSnackButtonPress}>
           <Image source={require("../../../assets/downArrow.png")} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -93,7 +102,8 @@ export default function MealBox({ snack }) {
           checkScrollIndicatorPosition({ nativeEvent })
         }
       >
-        <View
+        <ScrollView
+          nestedScrollEnabled
           style={{
             marginBottom: 20,
             width: bodyWidth.width,
@@ -104,8 +114,9 @@ export default function MealBox({ snack }) {
               {food.name} - {food.quantity}
             </Text>
           ))}
-        </View>
-        <View
+        </ScrollView>
+        <ScrollView
+          nestedScrollEnabled
           style={{
             marginBottom: 20,
             width: bodyWidth.width,
@@ -118,7 +129,7 @@ export default function MealBox({ snack }) {
               </Text>
             );
           })}
-        </View>
+        </ScrollView>
       </ScrollView>
       <Text style={{ alignSelf: "center", color: "#303030", marginBottom: 4 }}>
         {option == 0 ? "Opção 1" : "Opção 2"}
@@ -140,13 +151,12 @@ export default function MealBox({ snack }) {
           }
         />
       </View>
-    </Animated.View>
+    </MotiView>
   );
 }
 
 const styles = {
   body: {
-    marginTop: 20,
     width: "100%",
     backgroundColor: "#F5F5F5",
     borderColor: "#DCDCDC",
@@ -154,6 +164,8 @@ const styles = {
     borderRadius: 10,
     flexDirection: "column",
     overflow: "hidden",
+    marginBottom: 20,
+    height: 70,
   },
   header: {
     height: 70,

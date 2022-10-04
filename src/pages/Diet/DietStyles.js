@@ -2,8 +2,6 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   nextMealBody: {
-    marginTop: 20,
-    marginBottom: 20,
     width: "100%",
     height: 100,
     backgroundColor: "#F5F5F5",
@@ -13,20 +11,21 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
-    marginBottom: 15,
     fontSize: 25,
     color: "#303030",
     fontWeight: "bold",
+  },
+  text: {
+    fontSize: 15,
+    color: "#303030",
+    marginBottom: 20,
+    marginTop: 20,
   },
   container: {
     flex: 1,
     backgroundColor: "#fff",
     paddingLeft: 25,
     paddingRight: 25,
-  },
-  text: {
-    fontSize: 15,
-    color: "#303030",
   },
   nextMealHeader: {
     marginTop: 10,
@@ -43,7 +42,6 @@ const styles = StyleSheet.create({
   nextMealContent: {
     display: "flex",
     flex: 1,
-    // paddingLeft: 25,
     justifyContent: "center",
   },
   nextMealText: {
