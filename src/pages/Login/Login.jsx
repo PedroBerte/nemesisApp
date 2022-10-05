@@ -15,8 +15,6 @@ import { useNavigation } from "@react-navigation/native";
 import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent.js";
 import BoxShadowStyle from "../../components/BoxShadowStyle/BoxShadowStyle.js";
 
-import { collection, getDocs } from "firebase/firestore";
-
 import styles from "./LoginStyles.js";
 
 import { AuthContext } from "../../context/AuthContext";

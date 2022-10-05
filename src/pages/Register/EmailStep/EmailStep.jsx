@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, TextInput, Image, Text } from "react-native";
+import { View, TextInput, Image, Text, TouchableOpacity } from "react-native";
 
 import Button from "../../../components/Button/Button";
 
@@ -44,13 +44,19 @@ export default function EmailStep({ registerUser }) {
         onChangeText={(text) => setRegisterConfirmPassword(text)}
       />
       <View style={styles.buttonsContainer}>
-        <View style={styles.googleButtonBody}>
+        <TouchableOpacity
+          onPress={() => {
+            promptAsync();
+          }}
+          disabled={!request}
+          style={styles.googleButtonBody}
+        >
           <Image
             style={styles.googleButtonImage}
             source={require("../../../assets/googleIcon.png")}
           />
           <Text style={styles.googleButtonText}>Login</Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.line}></View>
         <Button onPress={() => registerUser()}>Cadastrar</Button>
       </View>

@@ -9,12 +9,16 @@ import {
 import { auth, db } from "../services/firebase-config";
 import { collection, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 
 export const AuthContext = createContext({});
 
 function AuthContextProvider(props) {
   const [user, setUser] = useState("idle");
   const [animationIsEnded, setAnimationIsEnded] = useState(false);
+
+  const [defaultText, setDefaultText] = useState("");
+  const [toastWillHide, setToastWillHide] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -84,15 +88,61 @@ function AuthContextProvider(props) {
 
   const signIn = (email, password) => {
     if ((email, password == "")) {
+      Toast.show({
+        type: "error",
+        text1: "Não deixe campos vazios!",
+      });
       return;
     }
+    Toast.show({
+      type: "info",
+      text1: "⏳ Efetuando Login...",
+    });
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setUser(userCredential.user);
+        defaultText = "👍 Login efetuado com sucesso!";
+        setTimeout(() => {
+          setUser(userCredential.user);
+        }, 500);
       })
       .catch((error) => {
-        console.error(error.code);
-        console.error(error.message);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorCode == "auth/wrong-password") {
+          Toast.show({
+            type: "error",
+            text1: "❌ E-mail ou senha incorreta!",
+          });
+          return;
+        }
+        if (errorCode == "auth/user-not-found") {
+          Toast.show({
+            type: "error",
+            text1: "❌ E-mail não encontrado!",
+          });
+          return;
+        }
+        if (errorCode == "auth/invalid-email") {
+          Toast.show({
+            type: "error",
+            text1: "❌ Email inválido!",
+          });
+          return;
+        }
+        if (errorCode == "auth/too-many-requests") {
+          Toast.show({
+            type: "error",
+            text1: "❌ Muitas tentativas, tente novamente mais tarde!",
+          });
+          return;
+        }
+        if (errorCode == "auth/network-request-failed") {
+          Toast.show({
+            type: "error",
+            text1: "❌ Sem conexão com a internet!",
+          });
+          return;
+        }
       });
   };
   return (
