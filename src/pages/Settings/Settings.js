@@ -104,9 +104,6 @@ export default function Settings() {
     if (sex == "N") {
       setSex("Feminino");
     }
-    if (sex == "NA") {
-      setSex("Indefinido");
-    }
     if (goal == "P") {
       setGoal("Perda de Peso");
     }
@@ -131,6 +128,8 @@ export default function Settings() {
           return;
         });
       await deleteDoc(doc(db, "users", uid));
+      await deleteDoc(doc(db, "workouts", uid));
+      await deleteDoc(doc(db, "diets", uid));
       setTimeout(() => {
         () => navigation.navigate("Login");
       }, 1500);
