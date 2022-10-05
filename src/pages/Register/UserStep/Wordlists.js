@@ -199,6 +199,6 @@ export const gymFreq = [
 
 export const userRes = [
   { key: index++, label: "Sem restrição", value: "RES-N" },
-  { key: index++, label: "Intolerancia à Lactose", value: "RES-L" },
-  { key: index++, label: "Restrição de Glúten", value: "RES-G" },
+  { key: index++, label: "Intolerancia à Lactose", value: "RES-LAC" },
+  { key: index++, label: "Restrição de Glúten", value: "RES-GLU" },
 ];
