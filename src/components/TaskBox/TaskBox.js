@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 
+import { Skeleton } from "moti/skeleton";
+
 const TaskBox = (props) => {
+  const Spacer = ({ height }) => <View style={{ height: height }} />;
   return (
-    <View style={styles.tasks}>
-      <View style={styles.leftSide}>
-        <Image source={require("../../assets/Bell.png")} />
-        <Text style={styles.taskText}>{props.children}</Text>
-      </View>
-      <Text>{props.hour}</Text>
-    </View>
+    <>
+      <Spacer height={15} />
+      <Skeleton show={props.isLoading} colorMode="light">
+        <View style={styles.tasks}>
+          <View style={styles.leftSide}>
+            <Image source={require("../../assets/Bell.png")} />
+            <Text style={styles.taskText}>{props.children}</Text>
+          </View>
+          <Text>{props.hour}</Text>
+        </View>
+      </Skeleton>
+    </>
   );
 };
 
@@ -18,7 +26,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(29, 29, 29, 0.08)",
     height: 45,
     width: "100%",
-    marginTop: 15,
     borderRadius: 10,
     display: "flex",
     justifyContent: "space-between",

@@ -1,14 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  ScrollView,
-  Animated,
-} from "react-native";
-import UserAccount from "../UserAccount/UserAccount";
+import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import TopBar from "../../components/TopBar/TopBar";
 import TabBar from "../../components/TabBar/TabBar";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -20,20 +11,10 @@ import StatusBarComponent from "../../components/StatusBarComponent/StatusBarCom
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
-import {
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  deleteUser,
-} from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { Skeleton } from "moti/skeleton";
 
-import Skeleton from "../../components/Skeleton/Skeleton";
 import moment from "moment";
 
 export default function Home() {
@@ -73,12 +54,11 @@ export default function Home() {
   const [weightProgress, setWeightProgress] = useState(0);
   const [workout, setWorkout] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const [updateModalIsVisible, setUpdateModalIsVisible] = useState(false);
 
   const { user, setUser } = useContext(AuthContext);
-  const userCollectionRef = collection(db, "users");
-
-  const [scrollY, setScrollY] = useState(new Animated.Value(0));
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -95,6 +75,7 @@ export default function Home() {
         setHeight(userDocs.data().height);
         setWorkout(userDocs.data().workouts);
         setName(userDocs.data().name);
+        setIsLoading(false);
       }
     }
     getUserDocs();
@@ -146,6 +127,8 @@ export default function Home() {
     setWeightProgress(result);
   }
 
+  const Spacer = ({ height }) => <View style={{ height: height }} />;
+
   return (
     <>
       <View>
@@ -155,29 +138,24 @@ export default function Home() {
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
         <View style={styles.container}>
           <View style={{ paddingBottom: 30 }}>
-            {name == "" ? (
-              <>
-                <Skeleton
-                  width={170}
-                  height={30}
-                  marginBottom={10}
-                  borderRadius={8}
-                />
-                <Skeleton width={260} height={20} borderRadius={8} />
-              </>
-            ) : (
-              <>
-                <Text style={styles.text}>{`Olá, ${name.split(" ")[0]}`}</Text>
-                <Text style={styles.bottomText}>
-                  {dayWeeknd[now.getDay()]}, {dayMonth} de{" "}
-                  {monthName[now.getMonth()]} - Hoje é Leg Day!
-                </Text>
-              </>
-            )}
+            <Skeleton show={isLoading} colorMode="light">
+              <Text style={styles.text}>{`Olá, ${name.split(" ")[0]}`}</Text>
+            </Skeleton>
+
+            <Spacer height={isLoading ? 10 : 0} />
+
+            <Skeleton show={isLoading} colorMode="light">
+              <Text style={styles.bottomText}>
+                {dayWeeknd[now.getDay()]}, {dayMonth} de{" "}
+                {monthName[now.getMonth()]} - Hoje é Leg Day!
+              </Text>
+            </Skeleton>
           </View>
 
           <View style={{ flexDirection: "row" }}>
-            <Image source={require("../../assets/Man.png")} />
+            <Skeleton show={isLoading} colorMode="light">
+              <Image source={require("../../assets/Man.png")} />
+            </Skeleton>
 
             <View
               style={{
@@ -187,18 +165,32 @@ export default function Home() {
                 marginLeft: 30,
               }}
             >
-              <Text>Idade: {age} anos</Text>
-              <ProgressBar value={ageProgress} color="red" width="100%" />
-              <Text style={styles.dtText}>
-                Altura: {String(height / 100).replace(".", ",")} m
-              </Text>
-              <ProgressBar
-                value={heightProgress}
-                color="#05FF00"
-                width="100%"
-              />
-              <Text style={styles.dtText}>Peso {weight} Kg</Text>
-              <ProgressBar value={weightProgress} color="yellow" width="100%" />
+              <Skeleton show={isLoading} colorMode="light">
+                <Text>Idade: {age} anos</Text>
+                <ProgressBar value={ageProgress} color="red" width="100%" />
+              </Skeleton>
+
+              <Spacer height={15} />
+
+              <Skeleton show={isLoading} colorMode="light">
+                <Text>Altura: {String(height / 100).replace(".", ",")} m</Text>
+                <ProgressBar
+                  value={heightProgress}
+                  color="#05FF00"
+                  width="100%"
+                />
+              </Skeleton>
+
+              <Spacer height={15} />
+
+              <Skeleton show={isLoading} colorMode="light">
+                <Text>Peso {weight} Kg</Text>
+                <ProgressBar
+                  value={weightProgress}
+                  color="yellow"
+                  width="100%"
+                />
+              </Skeleton>
 
               <Button
                 style={styles.btnHome}
@@ -208,14 +200,24 @@ export default function Home() {
               </Button>
             </View>
           </View>
-
           <View style={styles.spacer} />
           <Text style={styles.title}>Central de Lembretes:</Text>
 
-          <TaskBox hour={"6:30"}>Café da Manhã</TaskBox>
-          <TaskBox hour={"6:30"}>Treino</TaskBox>
-          <TaskBox hour={"6:30"}>Colação - Pós treino</TaskBox>
-          <TaskBox hour={"6:30"}>Almoço</TaskBox>
+          <TaskBox isLoading={isLoading} hour={"6:30"}>
+            Café da Manhã
+          </TaskBox>
+
+          <TaskBox isLoading={isLoading} hour={"6:30"}>
+            Treino
+          </TaskBox>
+
+          <TaskBox isLoading={isLoading} hour={"6:30"}>
+            Colação - Pós treino
+          </TaskBox>
+
+          <TaskBox isLoading={isLoading} hour={"6:30"}>
+            Almoço
+          </TaskBox>
         </View>
       </ScrollView>
       <TabBar />
@@ -235,9 +237,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     color: "#303030",
-  },
-  dtText: {
-    paddingTop: 20,
   },
   btnHome: {
     width: "75%",

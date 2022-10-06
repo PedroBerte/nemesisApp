@@ -127,6 +127,7 @@ export default function Workouts() {
               />
             )}
           </View>
+
           <LineSpace lineWidth="80%" />
           <ScrollView nestedScrollEnabled style={styles.workoutsSelector}>
             {userWorkouts[workoutIndex] != undefined ? (
