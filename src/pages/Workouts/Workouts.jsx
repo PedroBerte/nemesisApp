@@ -3,14 +3,11 @@ import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
-import Skeleton from "../../components/Skeleton/Skeleton";
-import { WorkoutBox } from "./Components/WorkoutBox/WorkoutBox";
+import { Skeleton } from "moti/skeleton";
 import WeekBox from "./Components/WeekBox/WeekBox";
 import LineSpace from "../../components/LineSpace/LineSpace";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
 import WorkoutDaysModal from "./WorkoutDaysModal/WorkoutDaysModal";
-import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
-
 import { useAuthContext } from "../../context/AuthContext";
 
 import { db } from "../../services/firebase-config";
@@ -18,20 +15,32 @@ import { auth } from "../../services/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
+import Button from "../../components/Button/Button";
+
 import styles from "./WorkoutsStyles";
+
+import { useAnimationState, MotiView } from "moti";
+import WorkoutList from "./Components/WorkoutList/WorkoutList";
+import WorkoutMenu from "./Components/WorkoutMenu/WorkoutMenu";
 
 export default function Workouts() {
   const { user } = useAuthContext();
 
   const [userWorkouts, setUserWorkouts] = useState([]);
+  const [workoutTypeIndex, setWorkoutTypeIndex] = useState(0);
   const [workoutIndex, setWorkoutIndex] = useState(0);
 
   const [gymDays, setGymDays] = useState("");
   const [gymAvail, setGymAvail] = useState("");
 
   const [changeModalIsVisible, setChangeModalIsVisible] = useState(false);
+
+  const [workoutIsStarted, setWorkoutIsStarted] = useState(false);
+
   const [workoutDaysModalIsVisible, setWorkoutDaysModalIsVisible] =
     useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const monthNames = [
     "Janeiro",
@@ -70,10 +79,34 @@ export default function Workouts() {
     getWorkouts();
   }, [user]);
 
+  useEffect(() => {
+    if (userWorkouts.length > 0) {
+      setIsLoading(false);
+    }
+  }, [userWorkouts]);
+
+  const handleStartButtonPressed = () => {
+    setWorkoutIsStarted(!workoutIsStarted);
+    if (heightAnimated.current === "onOpen") {
+      heightAnimated.transitionTo("onClose");
+    } else {
+      heightAnimated.transitionTo("onOpen");
+    }
+  };
+
+  const heightAnimated = useAnimationState({
+    onOpen: {
+      height: 200,
+    },
+    onClose: {
+      height: 0,
+    },
+  });
+
   return (
     <>
-      <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
       <TopBar />
+      <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
       <WorkoutDaysModal
         userWorkouts={userWorkouts}
         gymDays={gymDays}
@@ -82,106 +115,67 @@ export default function Workouts() {
         get={workoutDaysModalIsVisible}
         uid={user.uid}
       />
+
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
-        <View style={styles.workoutMenu}>
-          {userWorkouts != [] ? (
-            <>
-              {userWorkouts
-                .filter((e) => e.workoutInfos.name != undefined)
-                .filter((e, i) => userWorkouts.indexOf(e) === i)
-                .sort((a, b) => a.workoutInfos.name > b.workoutInfos.name)
-                .map((workoutDay, i) => {
-                  return (
-                    <Text
-                      key={i}
-                      onPress={() => setWorkoutIndex(i)}
-                      style={
-                        workoutIndex == i ? styles.active : styles.inactive
-                      }
-                    >
-                      {workoutDay.workoutInfos.name}
-                    </Text>
-                  );
-                })}
-            </>
-          ) : (
-            <Skeleton width={350} height={40} borderRadius={10} marginX={10} />
-          )}
-        </View>
+        <WorkoutMenu
+          setWorkoutTypeIndex={setWorkoutTypeIndex}
+          userWorkouts={userWorkouts}
+          workoutTypeIndex={workoutTypeIndex}
+          isLoading={isLoading}
+        />
 
         <LineSpace lineWidth="80%" marginTop={-2} />
 
         <View style={styles.workoutListBody}>
           <View style={styles.workoutListHeader}>
-            {userWorkouts[workoutIndex] != undefined ? (
-              <>
-                <Text>{userWorkouts[workoutIndex].workoutInfos.muscles}</Text>
-              </>
-            ) : (
-              <Skeleton
-                alignSelf="center"
-                width={80}
-                height={15}
-                borderRadius={10}
-              />
-            )}
+            <Skeleton show={isLoading} colorMode="light">
+              <Text>
+                {!isLoading
+                  ? userWorkouts[workoutTypeIndex].workoutInfos.muscles
+                  : "Loading..."}
+              </Text>
+            </Skeleton>
           </View>
 
           <LineSpace lineWidth="80%" />
-          <ScrollView nestedScrollEnabled style={styles.workoutsSelector}>
-            {userWorkouts[workoutIndex] != undefined ? (
-              <>
-                {userWorkouts
-                  .filter((item) => item.workoutInfos.name != undefined)
-                  [workoutIndex].workoutInfos.workoutsList.map((workout, i) => {
-                    return (
-                      <WorkoutBox rep={workout.rep} key={i}>
-                        {workout.name}
-                      </WorkoutBox>
-                    );
-                  })}
-              </>
-            ) : (
-              <>
-                <Skeleton
-                  alignSelf="center"
-                  width="90%"
-                  height={45}
-                  borderRadius={10}
-                  marginX={10}
+
+          <Skeleton show={isLoading} colorMode="light">
+            <MotiView
+              transition={{
+                type: "spring",
+                duration: 300,
+              }}
+              state={heightAnimated}
+              style={styles.workoutImageBody}
+            >
+              {!isLoading ? (
+                <Image
+                  style={{ width: 200, flex: 1 }}
+                  resizeMode="contain"
+                  source={{
+                    uri: `${userWorkouts[workoutTypeIndex].workoutInfos.workoutsList[workoutIndex].gif}`,
+                  }}
                 />
-                <Skeleton
-                  alignSelf="center"
-                  width="90%"
-                  height={45}
-                  borderRadius={10}
-                  marginX={10}
-                />
-                <Skeleton
-                  alignSelf="center"
-                  width="90%"
-                  height={45}
-                  borderRadius={10}
-                  marginX={10}
-                />
-                <Skeleton
-                  alignSelf="center"
-                  width="90%"
-                  height={45}
-                  borderRadius={10}
-                  marginX={10}
-                />
-                <Skeleton
-                  alignSelf="center"
-                  width="90%"
-                  height={45}
-                  borderRadius={10}
-                  marginX={10}
-                />
-              </>
-            )}
-          </ScrollView>
+              ) : (
+                <></>
+              )}
+            </MotiView>
+          </Skeleton>
+
+          <WorkoutList
+            userWorkouts={userWorkouts}
+            workoutTypeIndex={workoutTypeIndex}
+            setWorkoutIndex={setWorkoutIndex}
+            workoutIndex={workoutIndex}
+            workoutIsStarted={workoutIsStarted}
+          />
+
+          <View style={styles.alignStartButton}>
+            <Button onPress={handleStartButtonPressed}>
+              <Text>COMEÇAR</Text>
+            </Button>
+          </View>
         </View>
         <View style={styles.workoutDaysBody}>
           <View style={styles.workoutDaysHeader}>
@@ -199,9 +193,9 @@ export default function Workouts() {
           </View>
           <LineSpace marginBottom={10} lineWidth="80%" />
           <ScrollView nestedScrollEnabled style={styles.workoutWeekList}>
-            {userWorkouts[workoutIndex] != undefined ? (
+            {userWorkouts[workoutTypeIndex] != undefined ? (
               <>
-                {userWorkouts.map((workoutDay, i) => {
+                {userWorkouts.map((workoutDay, index) => {
                   return (
                     <>
                       <WeekBox
@@ -210,7 +204,7 @@ export default function Workouts() {
                             ? false
                             : true
                         }
-                        key={i}
+                        key={index}
                       >
                         {workoutDay.day}
                       </WeekBox>
@@ -229,12 +223,7 @@ export default function Workouts() {
                 })}
               </>
             ) : (
-              <Skeleton
-                alignSelf="center"
-                width={80}
-                height={15}
-                borderRadius={10}
-              />
+              <></>
             )}
           </ScrollView>
         </View>

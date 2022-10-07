@@ -1,18 +1,31 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 export function WorkoutBox(props) {
   return (
-    <View style={styles.workoutBoxBody}>
+    <TouchableOpacity
+      {...props}
+      style={[
+        styles.workoutBoxBody,
+        props.isActive ? styles.active : styles.inative,
+      ]}
+    >
       <Text style={styles.workoutName}>{props.children}</Text>
       <Text style={styles.workoutRep}>{props.rep}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  workoutBoxBody: {
+  active: {
+    backgroundColor: "#ADEFB4",
+    color: "white",
+  },
+  inative: {
     backgroundColor: "#F5F5F5",
+    color: "white",
+  },
+  workoutBoxBody: {
     height: 45,
     marginLeft: 15,
     marginRight: 15,

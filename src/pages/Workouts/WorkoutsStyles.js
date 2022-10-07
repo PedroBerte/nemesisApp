@@ -18,14 +18,13 @@ const styles = StyleSheet.create({
     display: "flex",
     marginTop: 25,
   },
-  workoutMenu: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    zIndex: 1,
-  },
   workoutListHeader: {
     marginTop: 10,
     marginBottom: 10,
+  },
+  workoutImageBody: {
+    width: 200,
+    bnackgroundColor: "red",
   },
   workoutListBody: {
     display: "flex",
@@ -37,25 +36,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "#D7D7D7",
   },
-  workoutsSelector: {
-    display: "flex",
-    flexDirection: "column",
+  alignStartButton: {
     width: "100%",
-    maxHeight: 270,
-    minHeight: 270,
-    overflow: "scroll",
-  },
-
-  active: {
-    color: "#45C4B0",
-    fontWeight: "bold",
-    borderBottomColor: "#45C4B0",
-    paddingBottom: 5,
-    borderBottomWidth: 3,
-    zIndex: 1,
-  },
-  inactive: {
-    paddingBottom: 5,
+    alignItems: "center",
+    marginVertical: 10,
   },
   workoutDaysBody: {
     display: "flex",

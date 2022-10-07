@@ -44,13 +44,7 @@ export default function EmailStep({ registerUser }) {
         onChangeText={(text) => setRegisterConfirmPassword(text)}
       />
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            promptAsync();
-          }}
-          disabled={!request}
-          style={styles.googleButtonBody}
-        >
+        <TouchableOpacity style={styles.googleButtonBody}>
           <Image
             style={styles.googleButtonImage}
             source={require("../../../assets/googleIcon.png")}
