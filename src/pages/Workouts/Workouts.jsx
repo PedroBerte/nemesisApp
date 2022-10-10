@@ -15,13 +15,13 @@ import { auth } from "../../services/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
+import { useAnimationState, MotiView } from "moti";
+
+import WorkoutList from "./Components/WorkoutList/WorkoutList";
+import WorkoutMenu from "./Components/WorkoutMenu/WorkoutMenu";
 import Button from "../../components/Button/Button";
 
 import styles from "./WorkoutsStyles";
-
-import { useAnimationState, MotiView } from "moti";
-import WorkoutList from "./Components/WorkoutList/WorkoutList";
-import WorkoutMenu from "./Components/WorkoutMenu/WorkoutMenu";
 
 export default function Workouts() {
   const { user } = useAuthContext();
@@ -118,8 +118,10 @@ export default function Workouts() {
 
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
+
         <WorkoutMenu
           setWorkoutTypeIndex={setWorkoutTypeIndex}
+          setWorkoutIndex={setWorkoutIndex}
           userWorkouts={userWorkouts}
           workoutTypeIndex={workoutTypeIndex}
           isLoading={isLoading}
@@ -140,28 +142,30 @@ export default function Workouts() {
 
           <LineSpace lineWidth="80%" />
 
-          <Skeleton show={isLoading} colorMode="light">
-            <MotiView
-              transition={{
-                type: "spring",
-                duration: 300,
-              }}
-              state={heightAnimated}
-              style={styles.workoutImageBody}
-            >
-              {!isLoading ? (
-                <Image
-                  style={{ width: 200, flex: 1 }}
-                  resizeMode="contain"
-                  source={{
-                    uri: `${userWorkouts[workoutTypeIndex].workoutInfos.workoutsList[workoutIndex].gif}`,
-                  }}
-                />
-              ) : (
-                <></>
-              )}
-            </MotiView>
-          </Skeleton>
+          <MotiView
+            transition={{
+              type: "spring",
+              duration: 300,
+            }}
+            state={heightAnimated}
+            style={
+              heightAnimated.current === "onOpen"
+                ? styles.workoutImageBodyActive
+                : styles.workoutImageBodyInactive
+            }
+          >
+            {!isLoading ? (
+              <Image
+                style={{ flex: 1 }}
+                resizeMode="cover"
+                source={{
+                  uri: `${userWorkouts[workoutTypeIndex].workoutInfos.workoutsList[workoutIndex].gif}`,
+                }}
+              />
+            ) : (
+              <></>
+            )}
+          </MotiView>
 
           <WorkoutList
             userWorkouts={userWorkouts}

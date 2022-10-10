@@ -7,7 +7,12 @@ export default function WorkoutMenu({
   workoutTypeIndex,
   setWorkoutTypeIndex,
   isLoading,
+  setWorkoutIndex,
 }) {
+  function handleMenuItemPress(index) {
+    setWorkoutIndex(0);
+    setWorkoutTypeIndex(index);
+  }
   return (
     <Skeleton isLoading={isLoading}>
       <View style={styles.workoutMenu}>
@@ -21,7 +26,7 @@ export default function WorkoutMenu({
                 return (
                   <Text
                     key={index}
-                    onPress={() => setWorkoutTypeIndex(index)}
+                    onPress={() => handleMenuItemPress(index)}
                     style={
                       workoutTypeIndex == index
                         ? styles.active

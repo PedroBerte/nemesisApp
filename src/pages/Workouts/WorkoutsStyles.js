@@ -22,9 +22,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  workoutImageBody: {
+  workoutImageBodyActive: {
     width: 200,
-    bnackgroundColor: "red",
+    borderColor: "#DADADA",
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    backgroundColor: "#DADADA",
+  },
+  workoutImageBodyInactive: {
+    width: 200,
   },
   workoutListBody: {
     display: "flex",
