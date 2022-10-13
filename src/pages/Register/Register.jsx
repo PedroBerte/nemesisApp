@@ -32,41 +32,22 @@ const Register = () => {
   moment().format();
   const navigation = useNavigation();
 
-  const { user, setUser } = useAuthContext();
-
   const {
     registerName,
-    setRegisterName,
     registerEmail,
-    setRegisterEmail,
-    registerConfirmEmail,
-    setRegisterConfirmEmail,
     registerPassword,
-    setRegisterPassword,
     registerConfirmPassword,
-    setRegisterConfirmPassword,
     registerBornDate,
-    setRegisterBornDate,
     registerSex,
-    setRegisterSex,
     registerHeight,
-    setRegisterHeight,
     registerWeight,
-    setRegisterWeight,
     registerGoal,
-    setRegisterGoal,
     gymAvailability,
-    setGymAvailability,
     gymFreq,
     gymDays,
-    setGymDays,
     userRes,
-    setUserRes,
     step,
     setStep,
-    isLoggedWithGoogle,
-    setIsLoggedWithGoogle,
-    setGymFreq,
   } = useSignUp();
 
   function stringContainsNumber(_string) {
@@ -207,6 +188,32 @@ const Register = () => {
           gymFreq: gymFreq,
           gymDays: gymDays,
           userRes: userRes,
+          reminders: [
+            {
+              title: "Café da manhã",
+              time: "06:30",
+            },
+            {
+              title: "Treino",
+              time: "7:30 - 9:00",
+            },
+            {
+              title: "Lanche (Pós-Treino)",
+              time: "9:15",
+            },
+            {
+              title: "Almoço",
+              time: "12:30",
+            },
+            {
+              title: "Café da Tarde",
+              time: "16:00",
+            },
+            {
+              title: "Jantar",
+              time: "19:30",
+            },
+          ],
         });
         createWorkout(gymAvailability, gymDays, uid);
         createDiet(

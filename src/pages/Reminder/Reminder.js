@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,13 +7,52 @@ import {
   ScrollView,
 } from "react-native";
 
+import { db } from "../../services/firebase-config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import ReminderBox from "../../components/ReminderBox/ReminderBox";
-import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
+
+import * as Notifications from "expo-notifications";
+import { useEffect } from "react";
+import { useAuthContext } from "../../context/AuthContext";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function Reminder() {
+  const [userReminders, setUserReminders] = useState([]);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    if (user != undefined) {
+      async function getUserReminders() {
+        const userDocs = await getDoc(doc(db, "users", user.uid));
+        setUserReminders(userDocs.data().reminders);
+      }
+      getUserReminders();
+    }
+  }, []);
+
+  async function sendPushNotification() {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Remember to drink water!",
+        icon: "./assets/notificationIcon.png ",
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  }
+
   return (
     <>
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
@@ -36,13 +75,23 @@ export default function Reminder() {
           </View>
 
           <View>
-            <TaskBox hour={"6:30"}>Café da Manhã</TaskBox>
-            <TaskBox hour={"7:30 - 9:00"}>Treino</TaskBox>
-            <TaskBox hour={"9:15"}>Lanche (Pós-Treino)</TaskBox>
-            <TaskBox hour={"12:30"}>Almoço</TaskBox>
-            <TaskBox hour={"16:00"}>Café da Tarde</TaskBox>
-            <TaskBox hour={"19:30"}>Jantar</TaskBox>
-            <TaskBox hour={"22:00"}>Ceia</TaskBox>
+            {userReminders != [] ? (
+              <>
+                {userReminders.map((reminder, index) => (
+                  <TaskBox
+                    key={index}
+                    index={index}
+                    hour={reminder.time}
+                    userReminders={userReminders}
+                    set={setUserReminders}
+                  >
+                    {reminder.title}
+                  </TaskBox>
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
           </View>
 
           <View style={styles.spacer} />

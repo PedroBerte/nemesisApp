@@ -4,7 +4,16 @@
     "slug": "nemesisApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/notificationIcon.png",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notificationIcon.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/nemesisSplash.png",
@@ -23,8 +32,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/foregroundIcon.png",
+        "backgroundColor": "#5D9D89"
       },
       "package": "com.pedroberte.nemesisApp"
     },
