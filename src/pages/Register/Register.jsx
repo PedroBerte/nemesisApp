@@ -188,6 +188,9 @@ const Register = () => {
           gymFreq: gymFreq,
           gymDays: gymDays,
           userRes: userRes,
+          waterReminder: false,
+          mealReminder: false,
+          workoutReminder: false,
           reminders: [
             {
               title: "Café da manhã",

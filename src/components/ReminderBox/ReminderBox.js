@@ -1,13 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import * as Notifications from "expo-notifications";
+
+import { db } from "../../services/firebase-config";
+import { doc, updateDoc } from "firebase/firestore";
+import { useAuthContext } from "../../context/AuthContext";
 
 const ReminderBox = (props) => {
-  const [isSelected, setSelected] = useState(false);
+  const { user } = useAuthContext();
+  const [isSelected, setSelected] = useState(props.isChecked);
+
+  useEffect(() => {
+    console.log(isSelected);
+  }, [isSelected]);
+
+  async function handleCheck() {
+    setSelected(!isSelected);
+    props.set(!isSelected);
+    sendPushNotification(!isSelected);
+    switch (props.type) {
+      case "water":
+        await updateDoc(doc(db, "users", user.uid), {
+          waterReminder: !isSelected,
+        });
+        console.log("water");
+        break;
+      case "meal":
+        await updateDoc(doc(db, "users", user.uid), {
+          mealReminder: !isSelected,
+        });
+        console.log("meal");
+        break;
+      case "workout":
+        await updateDoc(doc(db, "users", user.uid), {
+          workoutReminder: !isSelected,
+        });
+        console.log("workout");
+        break;
+    }
+  }
+
+  async function sendPushNotification(bool) {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    // const identifier = "";
+    // if (bool) {
+    //   identifier = await Notifications.scheduleNotificationAsync({
+    //     content: {
+    //       title: "Hey! alo",
+    //     },
+    //     trigger: { seconds: 15, repeats: true },
+    //   });
+    // } else {
+    //   await Notifications.cancelScheduledNotificationAsync(identifier);
+    // }
+  }
 
   return (
     <TouchableOpacity
       onPress={() => {
-        setSelected(!isSelected);
+        handleCheck();
       }}
     >
       <View style={styles.tasks}>

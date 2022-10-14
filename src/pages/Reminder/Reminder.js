@@ -31,27 +31,26 @@ export default function Reminder() {
   const [userReminders, setUserReminders] = useState([]);
   const { user } = useAuthContext();
 
+  const [waterReminderIsCheked, setWaterReminderIsCheked] = useState(false);
+  const [mealReminderIsCheked, setMealReminderIsCheked] = useState(false);
+  const [workoutReminderIsCheked, setWorkoutReminderIsCheked] = useState(false);
+
   useEffect(() => {
     if (user != undefined) {
       async function getUserReminders() {
         const userDocs = await getDoc(doc(db, "users", user.uid));
         setUserReminders(userDocs.data().reminders);
       }
+      async function getReminders() {
+        const userDocs = await getDoc(doc(db, "users", user.uid));
+        setWaterReminderIsCheked(userDocs.data().waterReminder);
+        setMealReminderIsCheked(userDocs.data().mealReminder);
+        setWorkoutReminderIsCheked(userDocs.data().workoutReminder);
+      }
       getUserReminders();
+      getReminders();
     }
   }, []);
-
-  async function sendPushNotification() {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Remember to drink water!",
-        icon: "./assets/notificationIcon.png ",
-      },
-      trigger: {
-        seconds: 5,
-      },
-    });
-  }
 
   return (
     <>
@@ -107,9 +106,27 @@ export default function Reminder() {
             <Text style={styles.text}>Lembretes</Text>
           </View>
           <View style={{ paddingBottom: 50 }}>
-            <ReminderBox>Beber Água</ReminderBox>
-            <ReminderBox>Refeições</ReminderBox>
-            <ReminderBox>Treino</ReminderBox>
+            <ReminderBox
+              type={"water"}
+              isChecked={waterReminderIsCheked}
+              set={setWaterReminderIsCheked}
+            >
+              Beber Água
+            </ReminderBox>
+            <ReminderBox
+              isChecked={mealReminderIsCheked}
+              type={"meal"}
+              set={setMealReminderIsCheked}
+            >
+              Refeições
+            </ReminderBox>
+            <ReminderBox
+              isChecked={workoutReminderIsCheked}
+              type={"workout"}
+              set={setWorkoutReminderIsCheked}
+            >
+              Treino
+            </ReminderBox>
           </View>
         </View>
       </ScrollView>
