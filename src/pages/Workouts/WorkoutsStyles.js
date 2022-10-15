@@ -43,10 +43,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "#D7D7D7",
   },
+  endWorkoutButton: {
+    height: 40,
+    backgroundColor: "#E92B2B",
+    borderRadius: 10,
+    alignItens: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+  },
   alignStartButton: {
     width: "100%",
     alignItems: "center",
+    justifyContent: "center",
     marginVertical: 10,
+    flexDirection: "row",
   },
   workoutDaysBody: {
     display: "flex",

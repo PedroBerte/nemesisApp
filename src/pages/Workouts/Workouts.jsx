@@ -24,7 +24,7 @@ import Button from "../../components/Button/Button";
 import styles from "./WorkoutsStyles";
 
 export default function Workouts() {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
 
   const [userWorkouts, setUserWorkouts] = useState([]);
   const [workoutTypeIndex, setWorkoutTypeIndex] = useState(0);
@@ -92,6 +92,11 @@ export default function Workouts() {
     } else {
       heightAnimated.transitionTo("onOpen");
     }
+    if (workoutIsStarted) {
+      buttonAnimated.transitionTo("onClose");
+    } else {
+      buttonAnimated.transitionTo("onOpen");
+    }
   };
 
   const heightAnimated = useAnimationState({
@@ -100,6 +105,15 @@ export default function Workouts() {
     },
     onClose: {
       height: 0,
+    },
+  });
+
+  const buttonAnimated = useAnimationState({
+    onOpen: {
+      width: "40%",
+    },
+    onClose: {
+      width: 0,
     },
   });
 
@@ -176,9 +190,39 @@ export default function Workouts() {
           />
 
           <View style={styles.alignStartButton}>
-            <Button onPress={handleStartButtonPressed}>
-              <Text>COMEÇAR</Text>
+            <Button
+              onPress={
+                workoutIsStarted
+                  ? () => console.warn("leo viado")
+                  : handleStartButtonPressed
+              }
+            >
+              {workoutIsStarted ? "TIMER" : "COMEÇAR"}
             </Button>
+            <MotiView
+              transition={{
+                type: "timing",
+                duration: 200,
+              }}
+              state={buttonAnimated}
+              style={styles.endWorkoutButton}
+            >
+              <TouchableOpacity onPress={handleStartButtonPressed}>
+                <Text
+                  style={
+                    workoutIsStarted
+                      ? {
+                          alignSelf: "center",
+                          color: "#fff",
+                          fontWeight: "bold",
+                        }
+                      : { width: 0, height: 0, overflow: "hidden" }
+                  }
+                >
+                  TÁ PAGO
+                </Text>
+              </TouchableOpacity>
+            </MotiView>
           </View>
         </View>
         <View style={styles.workoutDaysBody}>
