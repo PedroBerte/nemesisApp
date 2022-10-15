@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import * as Notifications from "expo-notifications";
 
 import { db } from "../../services/firebase-config";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useAuthContext } from "../../context/AuthContext";
 
 const ReminderBox = (props) => {
@@ -11,8 +11,14 @@ const ReminderBox = (props) => {
   const [isSelected, setSelected] = useState(props.isChecked);
 
   useEffect(() => {
-    console.log(isSelected);
-  }, [isSelected]);
+    async function _getDocs() {
+      const userDocs = await getDoc(doc(db, "users", user.uid));
+      console.log(
+        userDocs.data().reminders[0].time.split(":")[0].replace("0", "")
+      );
+    }
+    _getDocs();
+  }, [user]);
 
   async function handleCheck() {
     setSelected(!isSelected);
@@ -41,18 +47,421 @@ const ReminderBox = (props) => {
   }
 
   async function sendPushNotification(bool) {
-    await Notifications.cancelAllScheduledNotificationsAsync();
-    // const identifier = "";
-    // if (bool) {
-    //   identifier = await Notifications.scheduleNotificationAsync({
-    //     content: {
-    //       title: "Hey! alo",
-    //     },
-    //     trigger: { seconds: 15, repeats: true },
-    //   });
-    // } else {
-    //   await Notifications.cancelScheduledNotificationAsync(identifier);
-    // }
+    switch (props.type) {
+      case "water":
+        if (bool) {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Melhor uma pedra no caminho, do que no rim! 🗣️",
+              body: "Beba seus 200ml de água!",
+            },
+            trigger: {
+              seconds: 7200,
+              repeats: true,
+            },
+          });
+        } else {
+          await Notifications.cancelAllScheduledNotificationsAsync();
+          const userDocs = await getDoc(doc(db, "users", user.uid));
+          if (userDocs.data().mealReminder) {
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Café da manhã: Bora bater seus macros. ☀️",
+                body: "Amigo, sua dieta não é da fé - come tudo e espera que um milagre se realize",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[0].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[0].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Lanche: Vamos, mais uma refeição. 😋",
+                body: "Coisas que não dispensamos: Wi-fi, dinheiro e comida!",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[2].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[2].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title:
+                  "Almoço: Se não comer, não cresce hein... Tá na hora. 🍽️ ",
+                body: "A maior prova de amor é quando a pessoa diz: não quero mais, pode comer.",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[3].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[3].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Café da tarde: Já tava com fome de novo né? 😵‍💫",
+                body: "Comida gordurosa é romântica. Vai direto para o coração.",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[4].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[4].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Confira no cardápio sua próxima refeição. 🤤",
+                body: "Quando digo que te amo, não é pelo que você é por fora, mas pelo seu interior. Obrigado por tudo… Geladeira.",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[5].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[5].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+          }
+          if (userDocs.data().workoutReminder) {
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title:
+                  "A vida é cheia de altos e baixos. Nós chamamos isso de: Agachamentos 🏋🏿‍♀️",
+                body: "Eu sei que sua motivação tá tão baixa quanto o saldo no banco, mas isso não é desculpa hein...",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[1].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[1].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+          }
+        }
+        break;
+      case "meal":
+        if (bool) {
+          const userDocs = await getDoc(doc(db, "users", user.uid));
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Café da manhã: Bora bater seus macros. ☀️",
+              body: "Amigo, sua dieta não é da fé - come tudo e espera que um milagre se realize",
+            },
+            trigger: {
+              hour: Number(
+                userDocs.data().reminders[0].time.split(":")[0].replace("0", "")
+              ),
+              minute: Number(
+                userDocs.data().reminders[0].time.split(":")[1].replace("0", "")
+              ),
+              repeats: true,
+            },
+          });
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Lanche: Vamos, mais uma refeição. 😋",
+              body: "Coisas que não dispensamos: Wi-fi, dinheiro e comida!",
+            },
+            trigger: {
+              hour: Number(
+                userDocs.data().reminders[2].time.split(":")[0].replace("0", "")
+              ),
+              minute: Number(
+                userDocs.data().reminders[2].time.split(":")[1].replace("0", "")
+              ),
+              repeats: true,
+            },
+          });
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Almoço: Se não comer, não cresce hein... Tá na hora. 🍽️ ",
+              body: "A maior prova de amor é quando a pessoa diz: não quero mais, pode comer.",
+            },
+            trigger: {
+              hour: Number(
+                userDocs.data().reminders[3].time.split(":")[0].replace("0", "")
+              ),
+              minute: Number(
+                userDocs.data().reminders[3].time.split(":")[1].replace("0", "")
+              ),
+              repeats: true,
+            },
+          });
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Café da tarde: Já tava com fome de novo né? 😵‍💫",
+              body: "Comida gordurosa é romântica. Vai direto para o coração.",
+            },
+            trigger: {
+              hour: Number(
+                userDocs.data().reminders[4].time.split(":")[0].replace("0", "")
+              ),
+              minute: Number(
+                userDocs.data().reminders[4].time.split(":")[1].replace("0", "")
+              ),
+              repeats: true,
+            },
+          });
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Confira no cardápio sua próxima refeição. 🤤",
+              body: "Quando digo que te amo, não é pelo que você é por fora, mas pelo seu interior. Obrigado por tudo… Geladeira.",
+            },
+            trigger: {
+              hour: Number(
+                userDocs.data().reminders[5].time.split(":")[0].replace("0", "")
+              ),
+              minute: Number(
+                userDocs.data().reminders[5].time.split(":")[1].replace("0", "")
+              ),
+              repeats: true,
+            },
+          });
+        } else {
+          await Notifications.cancelAllScheduledNotificationsAsync();
+          const userDocs = await getDoc(doc(db, "users", user.uid));
+          if (userDocs.data().workoutReminder) {
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title:
+                  "A vida é cheia de altos e baixos. Nós chamamos isso de: Agachamentos 🏋🏿‍♀️",
+                body: "Eu sei que sua motivação tá tão baixa quanto o saldo no banco, mas isso não é desculpa hein...",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[1].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[1].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+          }
+          if (userDocs.data().waterReminder) {
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Melhor uma pedra no caminho, do que no rim! 🗣️",
+                body: "Beba seus 200ml de água!",
+              },
+              trigger: {
+                minutes: 7200,
+                repeats: true,
+              },
+            });
+          }
+        }
+        break;
+      case "workout":
+        if (bool) {
+          const userDocs = await getDoc(doc(db, "users", user.uid));
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title:
+                "A vida é cheia de altos e baixos. Nós chamamos isso de: Agachamentos 🏋🏿‍♀️",
+              body: "Eu sei que sua motivação tá tão baixa quanto o saldo no banco, mas isso não é desculpa hein...",
+            },
+            trigger: {
+              hour: Number(
+                userDocs.data().reminders[1].time.split(":")[0].replace("0", "")
+              ),
+              minute: Number(
+                userDocs.data().reminders[1].time.split(":")[1].replace("0", "")
+              ),
+              repeats: true,
+            },
+          });
+        } else {
+          await Notifications.cancelAllScheduledNotificationsAsync();
+          const userDocs = await getDoc(doc(db, "users", user.uid));
+          if (userDocs.data().mealReminder) {
+            const userDocs = await getDoc(doc(db, "users", user.uid));
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Café da manhã: Bora bater seus macros. ☀️",
+                body: "Amigo, sua dieta não é da fé - come tudo e espera que um milagre se realize",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[0].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[0].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Lanche: Vamos, mais uma refeição. 😋",
+                body: "Coisas que não dispensamos: Wi-fi, dinheiro e comida!",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[2].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[2].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title:
+                  "Almoço: Se não comer, não cresce hein... Tá na hora. 🍽️ ",
+                body: "A maior prova de amor é quando a pessoa diz: não quero mais, pode comer.",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[3].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[3].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Café da tarde: Já tava com fome de novo né? 😵‍💫",
+                body: "Comida gordurosa é romântica. Vai direto para o coração.",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[4].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[4].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Confira no cardápio sua próxima refeição. 🤤",
+                body: "Quando digo que te amo, não é pelo que você é por fora, mas pelo seu interior. Obrigado por tudo… Geladeira.",
+              },
+              trigger: {
+                hour: Number(
+                  userDocs
+                    .data()
+                    .reminders[5].time.split(":")[0]
+                    .replace("0", "")
+                ),
+                minute: Number(
+                  userDocs
+                    .data()
+                    .reminders[5].time.split(":")[1]
+                    .replace("0", "")
+                ),
+                repeats: true,
+              },
+            });
+          }
+          if (userDocs.data().waterReminder) {
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Melhor uma pedra no caminho, do que no rim! 🗣️",
+                body: "Beba seus 200ml de água!",
+              },
+              trigger: {
+                minutes: 7200,
+                repeats: true,
+              },
+            });
+          }
+        }
+        break;
+    }
   }
 
   return (
