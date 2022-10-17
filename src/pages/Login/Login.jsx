@@ -19,7 +19,6 @@ import styles from "./LoginStyles.js";
 
 import { AuthContext } from "../../context/AuthContext";
 import Button from "../../components/Button/Button.jsx";
-
 export default function Login() {
   const navigation = useNavigation();
 
@@ -32,9 +31,9 @@ export default function Login() {
   async function trySignIn() {
     await signIn(email, password);
   }
+
   return (
     <>
-      <StatusBarComponent color={"#EBEBEB"} style={"dark-content"} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.body}>
           <View style={styles.toast}>

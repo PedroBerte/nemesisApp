@@ -266,7 +266,6 @@ const Register = () => {
 
   return (
     <>
-      <StatusBarComponent color={"#EBEBEB"} style={"dark-content"} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.safeArea}>
           <Toast />

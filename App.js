@@ -1,13 +1,9 @@
-import React, { useEffect, useContext, useState, useRef } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import StatusBarComponent from "./src/components/StatusBarComponent/StatusBarComponent";
 import Routes from "./src/Routes/Routes";
 import AuthContextProvider from "./src/context/AuthContext";
 import SignUpContextProvider from "./src/context/SignUpContext";
-
-import { Text, View, Button, Platform } from "react-native";
-
-import * as Device from "expo-device";
 
 export default function App() {
   return (

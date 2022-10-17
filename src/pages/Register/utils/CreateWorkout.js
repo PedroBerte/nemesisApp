@@ -145,6 +145,22 @@ export default async function createWorkout(GymAvail, GymDays, uid) {
             day: "Quarta-Feira",
             workoutInfos: workC_noGym,
           },
+          {
+            day: "Quinta-Feira",
+            workoutInfos: {},
+          },
+          {
+            day: "Sexta-Feira",
+            workoutInfos: {},
+          },
+          {
+            day: "Sábado",
+            workoutInfos: {},
+          },
+          {
+            day: "Domingo",
+            workoutInfos: {},
+          },
         ],
       });
     }
