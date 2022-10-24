@@ -22,6 +22,7 @@ import WorkoutMenu from "./Components/WorkoutMenu/WorkoutMenu";
 import Button from "../../components/Button/Button";
 
 import styles from "./WorkoutsStyles";
+import StopWatch from "./Components/Stopwatch/Stopwatch";
 
 export default function Workouts() {
   const { user, setUser } = useAuthContext();
@@ -34,11 +35,11 @@ export default function Workouts() {
   const [gymAvail, setGymAvail] = useState("");
 
   const [changeModalIsVisible, setChangeModalIsVisible] = useState(false);
-
-  const [workoutIsStarted, setWorkoutIsStarted] = useState(false);
-
   const [workoutDaysModalIsVisible, setWorkoutDaysModalIsVisible] =
     useState(false);
+  const [timerModalIsVisible, setTimerModalIsVisible] = useState(false);
+
+  const [workoutIsStarted, setWorkoutIsStarted] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -99,6 +100,21 @@ export default function Workouts() {
     }
   };
 
+  function renderWeekBoxSkeletons() {
+    const Spacer = () => <View style={{ height: 5 }} />;
+    const arr = Array.from({ length: 5 }).map(() => true);
+    return arr.map((_, index) => (
+      <>
+        <Skeleton colorMode="light" height={30} width="80%" />
+        {arr.lastIndexOf(arr) == arr.length - 1 ? (
+          <></>
+        ) : (
+          <LineSpace lineWidth="80%" marginX={3} borderStyle="dotted" />
+        )}
+      </>
+    ));
+  }
+
   const heightAnimated = useAnimationState({
     onOpen: {
       height: 200,
@@ -119,6 +135,10 @@ export default function Workouts() {
 
   return (
     <>
+      <StopWatch
+        isOpen={timerModalIsVisible}
+        setClose={setTimerModalIsVisible}
+      />
       <TopBar />
       <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
       <WorkoutDaysModal
@@ -132,14 +152,15 @@ export default function Workouts() {
 
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
-
-        <WorkoutMenu
-          setWorkoutTypeIndex={setWorkoutTypeIndex}
-          setWorkoutIndex={setWorkoutIndex}
-          userWorkouts={userWorkouts}
-          workoutTypeIndex={workoutTypeIndex}
-          isLoading={isLoading}
-        />
+        <Skeleton colorMode="light" height={28} show={isLoading}>
+          <WorkoutMenu
+            setWorkoutTypeIndex={setWorkoutTypeIndex}
+            setWorkoutIndex={setWorkoutIndex}
+            userWorkouts={userWorkouts}
+            workoutTypeIndex={workoutTypeIndex}
+            isLoading={isLoading}
+          />
+        </Skeleton>
 
         <LineSpace lineWidth="80%" marginTop={-2} />
 
@@ -149,7 +170,7 @@ export default function Workouts() {
               <Text>
                 {!isLoading
                   ? userWorkouts[workoutTypeIndex].workoutInfos.muscles
-                  : "Loading..."}
+                  : "Carregando..."}
               </Text>
             </Skeleton>
           </View>
@@ -187,13 +208,14 @@ export default function Workouts() {
             setWorkoutIndex={setWorkoutIndex}
             workoutIndex={workoutIndex}
             workoutIsStarted={workoutIsStarted}
+            isLoading={isLoading}
           />
 
           <View style={styles.alignStartButton}>
             <Button
               onPress={
                 workoutIsStarted
-                  ? () => console.warn("leo viado")
+                  ? () => setTimerModalIsVisible(true)
                   : handleStartButtonPressed
               }
             >
@@ -271,7 +293,9 @@ export default function Workouts() {
                 })}
               </>
             ) : (
-              <></>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                {renderWeekBoxSkeletons()}
+              </View>
             )}
           </ScrollView>
         </View>

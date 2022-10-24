@@ -96,7 +96,11 @@ function UpdateModal({ get, set }) {
           </TouchableOpacity>
         </View>
         <View style={styles.selectorBox}>
-          <View style={{ flexDirection: "column" }}>
+          <View
+            style={{
+              flexDirection: "column",
+            }}
+          >
             <ModalSelector
               initValue="Altura"
               style={styles.selectModal}
@@ -216,7 +220,7 @@ const styles = {
     marginTop: 18,
   },
   selectModal: {
-    width: 130,
+    width: 140,
   },
   selectorBox: {
     justifyContent: "space-between",
