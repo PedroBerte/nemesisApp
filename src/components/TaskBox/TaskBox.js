@@ -4,14 +4,13 @@ import { auth, db } from "../../services/firebase-config";
 import { setDoc, doc, updateDoc } from "firebase/firestore";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
-import { Skeleton } from "moti/skeleton";
 import { useAuthContext } from "../../context/AuthContext";
 
 const TaskBox = (props) => {
   const { user } = useAuthContext();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [newReminders, setNewReminders] = useState(props.userReminders);
+
   const handleDatePickerVisibility = () => {
     setDatePickerVisibility(!isDatePickerVisible);
   };
@@ -45,18 +44,16 @@ const TaskBox = (props) => {
         onCancel={handleDatePickerVisibility}
       />
       <Spacer height={15} />
-      <Skeleton show={props.isLoading} colorMode="light">
-        <TouchableOpacity
-          onPress={() => handleDatePickerVisibility()}
-          style={styles.tasks}
-        >
-          <View style={styles.leftSide}>
-            <Image source={require("../../assets/Bell.png")} />
-            <Text style={styles.taskText}>{props.children}</Text>
-          </View>
-          <Text>{props.hour}</Text>
-        </TouchableOpacity>
-      </Skeleton>
+      <TouchableOpacity
+        onPress={() => handleDatePickerVisibility()}
+        style={styles.tasks}
+      >
+        <View style={styles.leftSide}>
+          <Image source={require("../../assets/Bell.png")} />
+          <Text style={styles.taskText}>{props.children}</Text>
+        </View>
+        <Text>{props.hour}</Text>
+      </TouchableOpacity>
     </>
   );
 };

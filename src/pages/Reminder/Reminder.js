@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,15 +8,17 @@ import {
 } from "react-native";
 
 import { db } from "../../services/firebase-config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 import TabBar from "../../components/TabBar/TabBar";
 import TopBar from "../../components/TopBar/TopBar";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import ReminderBox from "../../components/ReminderBox/ReminderBox";
 
+import { Skeleton } from "moti/skeleton";
+import Toast from "react-native-toast-message";
 import * as Notifications from "expo-notifications";
-import { useEffect } from "react";
+
 import { useAuthContext } from "../../context/AuthContext";
 
 Notifications.setNotificationHandler({
@@ -28,12 +30,22 @@ Notifications.setNotificationHandler({
 });
 
 export default function Reminder() {
-  const [userReminders, setUserReminders] = useState([]);
+  const [userReminders, setUserReminders] = useState("");
   const { user } = useAuthContext();
 
   const [waterReminderIsCheked, setWaterReminderIsCheked] = useState(false);
   const [mealReminderIsCheked, setMealReminderIsCheked] = useState(false);
   const [workoutReminderIsCheked, setWorkoutReminderIsCheked] = useState(false);
+
+  useEffect(() => {
+    if (user != undefined) {
+      async function getUserReminders() {
+        const userDocs = await getDoc(doc(db, "users", user.uid));
+        setUserReminders(userDocs.data().reminders);
+      }
+      getUserReminders();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user != undefined) {
@@ -52,11 +64,14 @@ export default function Reminder() {
     }
   }, []);
 
+  const Spacer = () => <View style={{ height: 15 }} />;
+
   return (
     <>
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
-        <TopBar />
+        <Toast />
         <View style={styles.container}>
+          <TopBar />
           <View
             style={{
               marginTop: 30,
@@ -74,7 +89,7 @@ export default function Reminder() {
           </View>
 
           <View>
-            {userReminders != [] ? (
+            {userReminders != "" ? (
               <>
                 {userReminders.map((reminder, index) => (
                   <TaskBox
@@ -89,7 +104,20 @@ export default function Reminder() {
                 ))}
               </>
             ) : (
-              <></>
+              <>
+                <Spacer />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer />
+                <Skeleton width="100%" height={45} colorMode="light" />
+              </>
             )}
           </View>
 

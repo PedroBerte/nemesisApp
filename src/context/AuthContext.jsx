@@ -17,9 +17,6 @@ function AuthContextProvider(props) {
   const [user, setUser] = useState("idle");
   const [animationIsEnded, setAnimationIsEnded] = useState(false);
 
-  const [defaultText, setDefaultText] = useState("");
-  const [toastWillHide, setToastWillHide] = useState(false);
-
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

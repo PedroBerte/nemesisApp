@@ -21,6 +21,7 @@ export default function WorkoutMenu({
             {userWorkouts
               .filter((e) => e.workoutInfos.name != undefined)
               .filter((e, index) => userWorkouts.indexOf(e) === index)
+              .filter((e, i) => userWorkouts.indexOf(e) == i)
               .sort((a, b) => a.workoutInfos.name > b.workoutInfos.name)
               .map((workoutDay, index) => {
                 return (

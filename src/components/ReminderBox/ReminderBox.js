@@ -6,18 +6,17 @@ import { db } from "../../services/firebase-config";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { useAuthContext } from "../../context/AuthContext";
 
+import Toast from "react-native-toast-message";
+
 const ReminderBox = (props) => {
   const { user } = useAuthContext();
   const [isSelected, setSelected] = useState(props.isChecked);
 
   useEffect(() => {
-    async function _getDocs() {
+    async function getReminders() {
       const userDocs = await getDoc(doc(db, "users", user.uid));
-      console.log(
-        userDocs.data().reminders[0].time.split(":")[0].replace("0", "")
-      );
     }
-    _getDocs();
+    getReminders();
   }, [user]);
 
   async function handleCheck() {
@@ -29,19 +28,16 @@ const ReminderBox = (props) => {
         await updateDoc(doc(db, "users", user.uid), {
           waterReminder: !isSelected,
         });
-        console.log("water");
         break;
       case "meal":
         await updateDoc(doc(db, "users", user.uid), {
           mealReminder: !isSelected,
         });
-        console.log("meal");
         break;
       case "workout":
         await updateDoc(doc(db, "users", user.uid), {
           workoutReminder: !isSelected,
         });
-        console.log("workout");
         break;
     }
   }

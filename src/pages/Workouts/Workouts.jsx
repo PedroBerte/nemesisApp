@@ -86,6 +86,11 @@ export default function Workouts() {
     }
   }, [userWorkouts]);
 
+  useEffect(() => {
+    buttonAnimated.transitionTo("onClose");
+    heightAnimated.transitionTo("onClose");
+  }, []);
+
   const handleStartButtonPressed = () => {
     setWorkoutIsStarted(!workoutIsStarted);
     if (heightAnimated.current === "onOpen") {
@@ -101,7 +106,6 @@ export default function Workouts() {
   };
 
   function renderWeekBoxSkeletons() {
-    const Spacer = () => <View style={{ height: 5 }} />;
     const arr = Array.from({ length: 5 }).map(() => true);
     return arr.map((_, index) => (
       <>
@@ -135,12 +139,15 @@ export default function Workouts() {
 
   return (
     <>
+      <TopBar />
+
       <StopWatch
         isOpen={timerModalIsVisible}
         setClose={setTimerModalIsVisible}
       />
-      <TopBar />
+
       <UpdateModal get={changeModalIsVisible} set={setChangeModalIsVisible} />
+
       <WorkoutDaysModal
         userWorkouts={userWorkouts}
         gymDays={gymDays}
@@ -152,17 +159,26 @@ export default function Workouts() {
 
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Treinos</Text>
-        <Skeleton colorMode="light" height={28} show={isLoading}>
-          <WorkoutMenu
-            setWorkoutTypeIndex={setWorkoutTypeIndex}
-            setWorkoutIndex={setWorkoutIndex}
-            userWorkouts={userWorkouts}
-            workoutTypeIndex={workoutTypeIndex}
-            isLoading={isLoading}
-          />
-        </Skeleton>
+        <View
+          style={{
+            alignSelf: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Skeleton colorMode="light" height={28} width="80%" show={isLoading}>
+            <WorkoutMenu
+              setWorkoutTypeIndex={setWorkoutTypeIndex}
+              setWorkoutIndex={setWorkoutIndex}
+              userWorkouts={userWorkouts}
+              workoutTypeIndex={workoutTypeIndex}
+              isLoading={isLoading}
+            />
+          </Skeleton>
+        </View>
 
-        <LineSpace lineWidth="80%" marginTop={-2} />
+        <LineSpace lineWidth="80%" marginTop={-4} />
 
         <View style={styles.workoutListBody}>
           <View style={styles.workoutListHeader}>
@@ -179,7 +195,7 @@ export default function Workouts() {
 
           <MotiView
             transition={{
-              type: "spring",
+              type: "timing",
               duration: 300,
             }}
             state={heightAnimated}

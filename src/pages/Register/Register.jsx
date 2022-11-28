@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Image,
@@ -19,10 +19,7 @@ import moment from "moment";
 import EmailStep from "./EmailStep/EmailStep";
 import UserStep from "./UserStep/UserStep";
 
-import { AuthContext } from "./../../context/AuthContext";
 import { useSignUp } from "./../../context/SignUpContext";
-import { useAuthContext } from "./../../context/AuthContext";
-import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 import { useNavigation } from "@react-navigation/native";
 
 import createWorkout from "./utils/CreateWorkout";

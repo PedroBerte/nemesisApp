@@ -7,6 +7,24 @@ import WorkoutDay from "./WorkoutDay";
 import { auth, db } from "../../../services/firebase-config";
 import { setDoc, doc, updateDoc } from "firebase/firestore";
 
+import {
+  workA_day3,
+  workB_day3,
+  workC_day3,
+  workA_day4,
+  workB_day4,
+  workC_day4,
+  workD_day4,
+  workA_day5,
+  workB_day5,
+  workC_day5,
+  workD_day5,
+  workE_day5,
+  workA_noGym,
+  workB_noGym,
+  workC_noGym,
+} from "../../Register/utils/workouts";
+
 export default function WorkoutDaysModal({
   gymDays,
   userWorkouts,
@@ -17,15 +35,92 @@ export default function WorkoutDaysModal({
 }) {
   const [dayInfos, setDayInfos] = useState(userWorkouts);
   const [newDayInfos, setNewDayInfos] = useState();
+  const [showedWorkoutDays, setShowedWorkoutDays] = useState([]);
 
   useEffect(() => {
     setDayInfos(userWorkouts);
+
+    const days = gymDays.replace("GYM-DAYS-", "");
+    switch (days) {
+      case "3":
+        setShowedWorkoutDays([
+          { key: 0, label: "Treino A", value: getDayToWorkout("A") },
+          { key: 1, label: "Treino B", value: getDayToWorkout("B") },
+          { key: 2, label: "Treino C", value: getDayToWorkout("C") },
+        ]);
+        break;
+      case "4":
+        setShowedWorkoutDays([
+          { key: 0, label: "Treino A", value: getDayToWorkout("A") },
+          { key: 1, label: "Treino B", value: getDayToWorkout("B") },
+          { key: 2, label: "Treino C", value: getDayToWorkout("C") },
+          { key: 3, label: "Treino D", value: getDayToWorkout("D") },
+        ]);
+        break;
+      case "5":
+        setShowedWorkoutDays([
+          { key: 0, label: "Treino A", value: getDayToWorkout("A") },
+          { key: 1, label: "Treino B", value: getDayToWorkout("B") },
+          { key: 2, label: "Treino C", value: getDayToWorkout("C") },
+          { key: 3, label: "Treino D", value: getDayToWorkout("D") },
+          { key: 4, label: "Treino E", value: getDayToWorkout("E") },
+        ]);
+        break;
+      default:
+        setShowedWorkoutDays([]);
+        break;
+    }
   }, [userWorkouts]);
+
+  function getDayToWorkout(workoutLetter) {
+    if (gymAvail == "GYM-S") {
+      if (gymDays == "GYM-DAYS-3") {
+        if (workoutLetter == "A") {
+          return workA_day3;
+        } else if (workoutLetter == "B") {
+          return workB_day3;
+        } else if (workoutLetter == "C") {
+          return workC_day3;
+        }
+      } else if (props.gymDays == "GYM-DAYS-4") {
+        if (workoutLetter == "A") {
+          return workA_day4;
+        } else if (workoutLetter == "B") {
+          return workB_day4;
+        } else if (workoutLetter == "C") {
+          return workC_day4;
+        } else if (workoutLetter == "D") {
+          return workD_day4;
+        }
+      } else if (props.gymDays == "GYM-DAYS-5") {
+        if (workoutLetter == "A") {
+          return workA_day5;
+        } else if (workoutLetter == "B") {
+          return workB_day5;
+        } else if (workoutLetter == "C") {
+          return workC_day5;
+        } else if (workoutLetter == "D") {
+          return workD_day5;
+        } else if (workoutLetter == "E") {
+          return workE_day5;
+        }
+      }
+    } else {
+      if (workoutLetter == "A") {
+        return workA_noGym;
+      } else if (workoutLetter == "B") {
+        return workB_noGym;
+      } else if (workoutLetter == "C") {
+        return workC_noGym;
+      }
+    }
+  }
 
   async function handleChangeWorkout() {
     await updateDoc(doc(db, "workouts", uid), {
       workouts: newDayInfos.filter((element) => element.day != undefined),
     });
+    console.log(newDayInfos);
     set(false);
   }
 
@@ -59,6 +154,7 @@ export default function WorkoutDaysModal({
           {userWorkouts.map((workoutDay, i) => {
             return (
               <WorkoutDay
+                typeList={showedWorkoutDays}
                 list={dayInfos}
                 setNewList={setNewDayInfos}
                 index={i}
