@@ -83,6 +83,7 @@ export default function Workouts() {
   useEffect(() => {
     if (userWorkouts.length > 0) {
       setIsLoading(false);
+      console.log(userWorkouts);
     }
   }, [userWorkouts]);
 

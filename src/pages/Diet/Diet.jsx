@@ -39,6 +39,10 @@ export default function Diet() {
   }, [user]);
 
   useEffect(() => {
+    heightAnimated.transitionTo("onClose");
+  }, [user]);
+
+  useEffect(() => {
     if (userDiet != "") {
       if (
         userDiet.filter((meal) => meal.time > moment().format("HH:mm"))

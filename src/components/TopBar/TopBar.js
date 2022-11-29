@@ -36,6 +36,7 @@ export default function TopBar() {
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
+  const [userPhotoBase64, setUserPhotoBase64] = useState(undefined);
 
   const userCollectionRef = collection(db, "users");
 
@@ -51,6 +52,7 @@ export default function TopBar() {
         const userDocs = await getDoc(doc(db, "users", user.uid));
         setName(userDocs.data().name);
         setGoal(userDocs.data().goal);
+        setUserPhotoBase64(userDocs.data().userPhotoBase64);
       }
     }
     getUserDocs();
@@ -80,8 +82,12 @@ export default function TopBar() {
         }}
       >
         <Image
-          source={require("../../assets/user.png")}
-          style={{ width: 40, height: 40 }}
+          source={
+            userPhotoBase64 == undefined
+              ? require("../../assets/user.png")
+              : { uri: userPhotoBase64 }
+          }
+          style={{ width: 40, height: 40, borderRadius: 40 }}
           resizeMode="contain"
         />
       </TouchableOpacity>
@@ -111,8 +117,12 @@ export default function TopBar() {
           >
             <View style={{ paddingEnd: 10 }}>
               <Image
-                source={require("../../assets/PerfilIcon.png")}
-                style={{ width: 60, height: 60 }}
+                source={
+                  userPhotoBase64 == undefined
+                    ? require("../../assets/PerfilIcon.png")
+                    : { uri: userPhotoBase64 }
+                }
+                style={{ width: 60, height: 60, borderRadius: 60 }}
                 resizeMode="contain"
               />
             </View>

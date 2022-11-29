@@ -38,6 +38,7 @@ function UpdateModal({ get, set }) {
   const [freq, setFreq] = useState(0);
   const [rightFreq, setRightFreq] = useState(0);
   const [newFreq, setNewFreq] = useState(0);
+  const [gymAvailability, setGymAvailability] = useState(false);
 
   const [gymDays, setGymDays] = useState("GYM-DAYS-3");
 
@@ -59,6 +60,7 @@ function UpdateModal({ get, set }) {
         setHeight(userDocs.data().height);
         setFreq(userDocs.data().gymFreq);
         setGymDays(userDocs.data().gymDays);
+        setGymAvailability(userDocs.data().gymAvail);
       }
     }
     getUserDocs();
@@ -70,7 +72,7 @@ function UpdateModal({ get, set }) {
     } else {
       setRightFreq("Não");
     }
-  });
+  }, []);
 
   return (
     <Modal
@@ -111,7 +113,7 @@ function UpdateModal({ get, set }) {
             />
             <View style={{ flexDirection: "row", paddingLeft: 5 }}>
               <Text>Atual: </Text>
-              <Text style={{ fontWeight: "bold" }}> {height}cm</Text>
+              <Text style={{ fontWeight: "bold" }}>{height}cm</Text>
             </View>
           </View>
           <View style={{ flexDirection: "column" }}>
@@ -125,7 +127,7 @@ function UpdateModal({ get, set }) {
             />
             <View style={{ flexDirection: "row", paddingLeft: 5 }}>
               <Text>Atual: </Text>
-              <Text style={{ fontWeight: "bold" }}> {weight}Kg</Text>
+              <Text style={{ fontWeight: "bold" }}>{weight}Kg</Text>
             </View>
           </View>
         </View>
@@ -142,10 +144,10 @@ function UpdateModal({ get, set }) {
           data={gymAvail}
           onChange={(v) => setGymAvailability(v.value)}
         />
-        <View style={{}}>
+        <View>
           <View style={{ flexDirection: "row", paddingLeft: "8%" }}>
             <Text>Atual: </Text>
-            <Text style={{ fontWeight: "bold" }}> {rightFreq}</Text>
+            <Text style={{ fontWeight: "bold" }}>{rightFreq}</Text>
           </View>
         </View>
         <View style={{ marginTop: 20 }}>
@@ -156,7 +158,11 @@ function UpdateModal({ get, set }) {
             <LinearGradient
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              colors={["#4DFD7E", "#EFFD4D", "#FD4D4D"]}
+              colors={
+                gymAvailability == "GYM-N"
+                  ? ["#BABABA", "#C8C8C8", "#E3E3E3"]
+                  : ["#4DFD7E", "#EFFD4D", "#FD4D4D"]
+              }
               style={{
                 width: "90%",
                 height: 15,
@@ -170,7 +176,11 @@ function UpdateModal({ get, set }) {
               <Slider
                 style={styles.gymDaysSlider}
                 minimumValue={3}
-                maximumValue={5}
+                maximumValue={
+                  gymAvailability == "GYM-N"
+                    ? Number(gymDays.replace("GYM-DAYS-", ""))
+                    : 5
+                }
                 step={1}
                 minimumTrackTintColor="transparent"
                 maximumTrackTintColor="transparent"
@@ -186,7 +196,7 @@ function UpdateModal({ get, set }) {
           style={{
             alignSelf: "flex-end",
             paddingRight: "7%",
-            paddingTop: 35,
+            paddingTop: 15,
             paddingBottom: 20,
           }}
         >
@@ -220,7 +230,8 @@ const styles = {
     marginTop: 18,
   },
   selectModal: {
-    width: 140,
+    width: 150,
+    height: 50,
   },
   selectorBox: {
     justifyContent: "space-between",

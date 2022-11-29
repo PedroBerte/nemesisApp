@@ -44,14 +44,14 @@ export default function EmailStep({ registerUser }) {
         onChangeText={(text) => setRegisterConfirmPassword(text)}
       />
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.googleButtonBody}>
+        {/* <TouchableOpacity style={styles.googleButtonBody}>
           <Image
             style={styles.googleButtonImage}
             source={require("../../../assets/googleIcon.png")}
           />
           <Text style={styles.googleButtonText}>Login</Text>
         </TouchableOpacity>
-        <View style={styles.line}></View>
+        <View style={styles.line}></View> */}
         <Button onPress={() => registerUser()}>Cadastrar</Button>
       </View>
     </View>

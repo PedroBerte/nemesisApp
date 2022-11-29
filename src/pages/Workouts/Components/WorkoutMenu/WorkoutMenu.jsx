@@ -9,19 +9,27 @@ export default function WorkoutMenu({
   isLoading,
   setWorkoutIndex,
 }) {
+  const setWorkouts = new Set();
+
   function handleMenuItemPress(index) {
     setWorkoutIndex(0);
     setWorkoutTypeIndex(index);
   }
+
+  const filterWorkouts = userWorkouts.filter((workouts) => {
+    const duplicatedWorkout = setWorkouts.has(workouts.workoutInfos.name);
+    setWorkouts.add(workouts.workoutInfos.name);
+    return !duplicatedWorkout;
+  });
+
   return (
     <Skeleton isLoading={isLoading}>
       <View style={styles.workoutMenu}>
         {!isLoading ? (
           <>
-            {userWorkouts
+            {filterWorkouts
               .filter((e) => e.workoutInfos.name != undefined)
               .filter((e, index) => userWorkouts.indexOf(e) === index)
-              .filter((e, i) => userWorkouts.indexOf(e) == i)
               .sort((a, b) => a.workoutInfos.name > b.workoutInfos.name)
               .map((workoutDay, index) => {
                 return (

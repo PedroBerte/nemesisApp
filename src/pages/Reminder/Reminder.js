@@ -70,8 +70,8 @@ export default function Reminder() {
     <>
       <ScrollView style={{ flex: 1, backgroundColor: "#FFF" }}>
         <Toast />
+        <TopBar />
         <View style={styles.container}>
-          <TopBar />
           <View
             style={{
               marginTop: 30,

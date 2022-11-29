@@ -265,8 +265,8 @@ const Register = () => {
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.safeArea}>
-          <Toast />
           <View style={styles.container}>
+            <Toast />
             <View style={styles.header}>
               <Image
                 source={require("../../assets/NemesisV1.1.png")}

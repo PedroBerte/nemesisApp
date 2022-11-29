@@ -502,7 +502,7 @@ export default async function createDiet(
           diet: [
             {
               meal: "Café da manhã",
-              time: "07",
+              time: "07:00",
               option: [
                 {
                   id: 1,

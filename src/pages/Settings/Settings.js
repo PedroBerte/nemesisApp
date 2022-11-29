@@ -25,7 +25,6 @@ import {
   deleteUser,
 } from "firebase/auth";
 import { collection, deleteDoc, doc, getDoc } from "firebase/firestore";
-import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
 
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { AuthContext } from "../../context/AuthContext";
@@ -33,7 +32,7 @@ import { AuthContext } from "../../context/AuthContext";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import IconAnt from "react-native-vector-icons/Fontisto";
 import Modal from "react-native-modal";
-import Toast, { BaseToast } from "react-native-toast-message";
+import Toast from "react-native-toast-message";
 import moment from "moment";
 
 export default function Settings() {
@@ -51,28 +50,12 @@ export default function Settings() {
   const [email, setEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [sex, setSex] = useState("");
+  const [userPhotoBase64, setUserPhotoBase64] = useState(undefined);
 
-  const [shadowColor, setShadowColor] = useState("#b3b3b3");
   const [textColor, setTextColor] = useState("#000");
   const { user, setUser } = useContext(AuthContext);
 
-  const toastConfig = {
-    success: (props) => (
-      <BaseToast
-        {...props}
-        style={{ borderLeftColor: "#EBE143" }}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-        text1Style={{
-          fontSize: 17,
-          fontWeight: "bold",
-        }}
-        text2Style={{
-          fontSize: 13,
-          fontWeight: "400",
-        }}
-      />
-    ),
-  };
+  const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -92,6 +75,7 @@ export default function Settings() {
         setWorkout(userDocs.data().workouts);
         setGoal(userDocs.data().goal);
         setSex(userDocs.data().sex);
+        setUserPhotoBase64(userDocs.data().userPhotoBase64);
       }
     }
     getUserDocs();
@@ -116,54 +100,49 @@ export default function Settings() {
     setUser(auth.currentUser);
     const uid = user.uid;
     if (confirmEmail == email) {
-      deleteUser(user)
-        .then(() => {
-          Toast.show({
-            type: "success",
-            text1: "Conta Apagada com Sucesso!",
-          });
-        })
-        .catch((error) => {
-          console.warn(error);
-          return;
+      try {
+        deleteUser(user);
+        Toast.show({
+          type: "success",
+          text1: "Conta Apagada com Sucesso!",
         });
+      } catch (error) {
+        if (error.code == "auth/requires-recent-login") {
+          setErrorText("Por favor, faça o login novamente para continuar.");
+        }
+        throw error;
+      }
       await deleteDoc(doc(db, "users", uid));
-      await deleteDoc(doc(db, "workouts", uid));
       await deleteDoc(doc(db, "diets", uid));
+      await deleteDoc(doc(db, "workouts", uid));
       setTimeout(() => {
         () => navigation.navigate("Login");
       }, 1500);
     } else {
-      IncorrectEmail();
+      setErrorText("E-mail não é igual ao cadastrado!");
     }
   }
 
   function changePassword() {
     sendPasswordResetEmail(auth, email).then(() => {
       Toast.show({
-        type: "success",
-        text1: "Um email foi lhe enviado",
-        text2: "Siga as instruçôes para alterar sua senha",
+        type: "info",
+        text1: "E-mail trocador de senhas enviado! 😎",
+        text2: "Por favor, Verifique sua caixa de entrada/spam!",
       });
     });
   }
 
   function closeModal() {
     setDeleteVisible(false);
-    setShadowColor("#b3b3b3");
     setTextColor("#000");
-  }
-
-  function IncorrectEmail() {
-    setShadowColor("#C44545");
-    setTextColor("#C44545");
   }
 
   return (
     <>
       <SafeAreaView style={SettingsStyles.container}>
+        <Toast topOffset={10} />
         <TopBar />
-        <Toast topOffset={10} config={toastConfig} />
         <Modal
           isVisible={userVisible}
           onBackdropPress={() => setUserVisible(false)}
@@ -195,8 +174,17 @@ export default function Settings() {
 
             <View style={SettingsStyles.modalImage}>
               <Image
-                source={require("../../assets/PerfilIcon.png")}
-                style={{ width: 105, height: 105, marginBottom: 5 }}
+                source={
+                  userPhotoBase64 == undefined
+                    ? require("../../assets/PerfilIcon.png")
+                    : { uri: userPhotoBase64 }
+                }
+                style={{
+                  width: 105,
+                  height: 105,
+                  marginBottom: 5,
+                  borderRadius: 105,
+                }}
                 resizeMode="contain"
               />
               <Text
@@ -265,7 +253,6 @@ export default function Settings() {
                   Se você apagar a sua conta, nunca mais terá acesso à ela!
                 </Text>
 
-                <View style={{}}></View>
                 <View
                   style={{
                     alignContent: "center",
@@ -274,52 +261,68 @@ export default function Settings() {
                   }}
                 >
                   <TextInput
-                    placeholder={email}
+                    placeholder="Insira seu Email para confirmar a exclusão."
                     placeholderTextColor="#b3b3b3"
                     style={{
                       width: "90%",
-                      height: 50,
+                      marginTop: -8,
+                      height: 40,
                       backgroundColor: "#FFFFFF",
                       borderRadius: 10,
                       alignSelf: "center",
-                      shadowColor: shadowColor,
                       paddingLeft: 10,
-                      shadowOffset: {
-                        width: 6,
-                        height: 6,
-                      },
-                      elevation: 10,
-                      shadowOpacity: 0.2,
-                      borderColor: shadowColor,
+                      borderColor: "#b3b3b3",
                       borderWidth: 1,
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 1,
+                        height: 3,
+                      },
+                      shadowOpacity: 0.25,
+                      shadowRadius: 3.84,
+
+                      elevation: 5,
                     }}
                     onChangeText={(text) => setConfirmEmail(text)}
                   />
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      marginLeft: 20,
-                      paddingTop: 3,
-                      color: textColor,
-                    }}
-                  >
-                    Insira seu Email para confirmar a exclusão.
-                  </Text>
+                  <Text style={SettingsStyles.errorText}>{errorText}</Text>
                 </View>
-                <TouchableOpacity onPress={() => handleDeleteUser()}>
-                  <Text
-                    style={{
-                      color: "#45C4B0",
-                      fontSize: 18,
-                      alignSelf: "flex-end",
-                      marginTop: 20,
-                      marginBottom: -25,
-                      marginRight: 20,
-                    }}
-                  >
-                    Confirmar
-                  </Text>
-                </TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <TouchableOpacity onPress={() => closeModal()}>
+                    <Text
+                      style={{
+                        color: "#1E88E5",
+                        fontSize: 18,
+                        alignSelf: "flex-end",
+                        marginTop: 6,
+                        marginBottom: -30,
+                        marginRight: 20,
+                      }}
+                    >
+                      Cancelar
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDeleteUser()}>
+                    <Text
+                      style={{
+                        color: "#E92B2B",
+                        fontSize: 18,
+                        alignSelf: "flex-end",
+                        marginTop: 6,
+                        marginBottom: -25,
+                        marginRight: 20,
+                      }}
+                    >
+                      Confirmar
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
@@ -331,7 +334,9 @@ export default function Settings() {
           <View style={SettingsStyles.personalInformationView}>
             {name == "" ? (
               <>
-                <Skeleton width={105} height={105} borderRadius={53} />
+                <View style={{ marginRight: 25 }}>
+                  <Skeleton width={105} height={105} borderRadius={53} />
+                </View>
                 <View
                   style={{
                     flexDirection: "column",
@@ -356,7 +361,11 @@ export default function Settings() {
             ) : (
               <>
                 <Image
-                  source={require("../../assets/PerfilIcon.png")}
+                  source={
+                    userPhotoBase64 == undefined
+                      ? require("../../assets/PerfilIcon.png")
+                      : { uri: userPhotoBase64 }
+                  }
                   style={SettingsStyles.userImage}
                   resizeMode="contain"
                 />
@@ -391,7 +400,7 @@ export default function Settings() {
               <TouchableOpacity onPress={() => changePassword()}>
                 <View style={{ flexDirection: "row" }}>
                   <Icon name="lock" size={20} />
-                  <Text style={SettingsStyles.tittleText}>Alterar senha</Text>
+                  <Text style={SettingsStyles.titleText}>Alterar senha</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -405,9 +414,14 @@ export default function Settings() {
                     setDeleteVisible(true);
                   }}
                 >
-                  <View style={{ flexDirection: "row" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <IconAnt name="close-a" size={20} />
-                    <Text style={SettingsStyles.tittleText}>Excluir conta</Text>
+                    <Text style={SettingsStyles.titleText}>Excluir conta</Text>
                   </View>
                 </TouchableOpacity>
               </View>

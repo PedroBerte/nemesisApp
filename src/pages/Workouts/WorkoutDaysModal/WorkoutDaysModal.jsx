@@ -82,7 +82,7 @@ export default function WorkoutDaysModal({
         } else if (workoutLetter == "C") {
           return workC_day3;
         }
-      } else if (props.gymDays == "GYM-DAYS-4") {
+      } else if (gymDays == "GYM-DAYS-4") {
         if (workoutLetter == "A") {
           return workA_day4;
         } else if (workoutLetter == "B") {
@@ -92,7 +92,7 @@ export default function WorkoutDaysModal({
         } else if (workoutLetter == "D") {
           return workD_day4;
         }
-      } else if (props.gymDays == "GYM-DAYS-5") {
+      } else if (gymDays == "GYM-DAYS-5") {
         if (workoutLetter == "A") {
           return workA_day5;
         } else if (workoutLetter == "B") {
@@ -120,7 +120,7 @@ export default function WorkoutDaysModal({
     await updateDoc(doc(db, "workouts", uid), {
       workouts: newDayInfos.filter((element) => element.day != undefined),
     });
-    console.log(newDayInfos);
+    console.log(newDayInfos.filter((element) => element.day != undefined));
     set(false);
   }
 

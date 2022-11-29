@@ -16,6 +16,10 @@ export default function MealBox({ snack }) {
   const [option, setOption] = useState(0);
   const [bodyWidth, setBodyWidth] = useState(0);
 
+  useEffect(() => {
+    heightAnimated.transitionTo("onClose");
+  }, [snack]);
+
   function getIcon() {
     switch (snack.meal) {
       case "Café da manhã":

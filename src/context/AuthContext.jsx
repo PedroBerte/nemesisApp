@@ -21,36 +21,36 @@ function AuthContextProvider(props) {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-    if (user != "idle" && user != null) {
-      async function verifyUserDocs() {
-        const userDocs = await getDoc(doc(db, "users", user.uid));
-        const userWorkouts = await getDoc(doc(db, "workouts", user.uid));
-        const userDiet = await getDoc(doc(db, "diets", user.uid));
-        setTimeout(() => {
-          if (
-            userDocs.data().name == undefined ||
-            userWorkouts.data().workouts == undefined ||
-            userDiet.data().diet == undefined
-          ) {
-            Alert.alert(
-              "Epa, temos algum problema! 🤔",
-              "Existe um problema interno com sua conta, por favor, crie uma nova conta ou entre em contato com o desenvolvedor.",
-              [
-                {
-                  text: "Excluir conta",
-                  onPress: () => handleDeleteBrokenUser(),
-                },
-                {
-                  text: "Ok",
-                  onPress: () => logout(),
-                },
-              ]
-            );
-          }
-        }, 300);
-      }
-      verifyUserDocs();
-    }
+    // if (user != "idle" && user != null) {
+    //   async function verifyUserDocs() {
+    //     const userDocs = await getDoc(doc(db, "users", user.uid));
+    //     const userWorkouts = await getDoc(doc(db, "workouts", user.uid));
+    //     const userDiet = await getDoc(doc(db, "diets", user.uid));
+    //     if (
+    //       userDocs.data().name == undefined ||
+    //       userWorkouts.data().workouts == undefined ||
+    //       userDiet.data().diet == undefined
+    //     ) {
+    //       Alert.alert(
+    //         "Epa, temos algum problema! 🤔",
+    //         "Existe um problema interno com sua conta, por favor, crie uma nova conta ou entre em contato com o desenvolvedor.",
+    //         [
+    //           {
+    //             text: "Excluir conta",
+    //             onPress: () => handleDeleteBrokenUser(),
+    //           },
+    //           {
+    //             text: "Ok",
+    //             onPress: () => logout(),
+    //           },
+    //         ]
+    //       );
+    //     }
+    //   }
+    //   setTimeout(() => {
+    //     verifyUserDocs();
+    //   }, 1000);
+    // }
   }, [user]);
 
   function logout() {

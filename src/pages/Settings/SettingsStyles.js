@@ -23,11 +23,14 @@ const SettingsStyles = StyleSheet.create({
     display: "flex",
     alignItems: "flex-start",
     marginTop: 30,
-    justifyContent: "space-around",
+    alignItems: "center",
+    justifyContent: "center",
   },
   userImage: {
     width: 105,
     height: 105,
+    marginRight: 25,
+    borderRadius: 105,
   },
   data: {
     alignItems: "flex-start",
@@ -63,7 +66,7 @@ const SettingsStyles = StyleSheet.create({
     marginLeft: 25,
     marginTop: 60,
   },
-  tittleText: {
+  titleText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#303030",
@@ -170,6 +173,10 @@ const SettingsStyles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     left: 0,
+  },
+  errorText: {
+    marginLeft: 20,
+    color: "red",
   },
 });
 

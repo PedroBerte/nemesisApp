@@ -7,7 +7,7 @@ import Button from "../../components/Button/Button";
 import TaskBox from "../../components/TaskBox/TaskBox";
 import { AuthContext } from "../../context/AuthContext";
 import UpdateModal from "../../components/UpdateModal/UpdateModal";
-import StatusBarComponent from "../../components/StatusBarComponent/StatusBarComponent";
+import { useNavigation } from "@react-navigation/native";
 
 import { db } from "../../services/firebase-config";
 import { auth } from "../../services/firebase-config";
@@ -19,6 +19,7 @@ import moment from "moment";
 
 export default function Home() {
   moment().format();
+  const navigation = useNavigation();
 
   const now = new Date();
   const dateArray = new Date();
@@ -52,7 +53,8 @@ export default function Home() {
   const [heightProgress, setHeightProgress] = useState(0);
   const [weight, setWeight] = useState(0);
   const [weightProgress, setWeightProgress] = useState(0);
-  const [workout, setWorkout] = useState([]);
+  const [workout, setWorkout] = useState();
+  const [userReminders, setUserReminders] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,12 +75,19 @@ export default function Home() {
         setBornDate(userDocs.data().date);
         setWeight(userDocs.data().weight);
         setHeight(userDocs.data().height);
-        setWorkout(userDocs.data().workouts);
         setName(userDocs.data().name);
+        setUserReminders(userDocs.data().reminders);
         setIsLoading(false);
       }
     }
+    async function getWorkout() {
+      if (user != undefined) {
+        const userDocs = await getDoc(doc(db, "workouts", user.uid));
+        setWorkout(userDocs.data().workouts);
+      }
+    }
     getUserDocs();
+    getWorkout();
   }, [user]);
 
   useEffect(() => {
@@ -147,7 +156,7 @@ export default function Home() {
             <Skeleton show={isLoading} colorMode="light">
               <Text style={styles.bottomText}>
                 {dayWeeknd[now.getDay()]}, {dayMonth} de{" "}
-                {monthName[now.getMonth()]} - Hoje é Leg Day!
+                {monthName[now.getMonth() - 2]} - Hoje é dia de treino!
               </Text>
             </Skeleton>
           </View>
@@ -202,22 +211,39 @@ export default function Home() {
           </View>
           <View style={styles.spacer} />
           <Text style={styles.title}>Central de Lembretes:</Text>
-
-          <TaskBox isLoading={isLoading} hour={"6:30"}>
-            Café da Manhã
-          </TaskBox>
-
-          <TaskBox isLoading={isLoading} hour={"6:30"}>
-            Treino
-          </TaskBox>
-
-          <TaskBox isLoading={isLoading} hour={"6:30"}>
-            Colação - Pós treino
-          </TaskBox>
-
-          <TaskBox isLoading={isLoading} hour={"6:30"}>
-            Almoço
-          </TaskBox>
+          <View style={{ paddingBottom: 20 }}>
+            {userReminders != undefined ? (
+              <>
+                {userReminders.map((reminder, index) => (
+                  <TaskBox
+                    key={index}
+                    index={index}
+                    hour={reminder.time}
+                    userReminders={userReminders}
+                    set={setUserReminders}
+                  >
+                    {reminder.title}
+                  </TaskBox>
+                ))}
+              </>
+            ) : (
+              <>
+                <Spacer height={15} />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer height={15} />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer height={15} />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer height={15} />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer height={15} />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer height={15} />
+                <Skeleton width="100%" height={45} colorMode="light" />
+                <Spacer height={15} />
+              </>
+            )}
+          </View>
         </View>
       </ScrollView>
       <TabBar />
